@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    password: postgres
+    schema: classpath:schema.sql
+    url: jdbc:postgresql://localhost:5432/postgresdb
+    username: postgres
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: none
+  kafka:
+    consumer:
+      bootstrap-servers: 127.0.0.1:29092
+  redis:
+    host: 127.0.0.1
+    password: SUPER_SECRET_PASSWORD
+    port: 6379
+  sql:
+    init:
+      mode: always
