@@ -8,6 +8,6 @@ CREATE TABLE IF NOT EXISTS Customer
 CREATE TABLE IF NOT EXISTS Orders
 (
 	id TEXT NOT NULL PRIMARY KEY,
-  	customerId TEXT NOT NULL,
+  	customer_id TEXT NOT NULL,
   	total NUMERIC(10,2) NOT NULL  	
 );
