@@ -15,6 +15,8 @@ public class SimpleAggregate implements AggregateRoot<String> {
     @AggregateIdentifier
     private String aggregateId;
 
+    public SimpleAggregate() {}
+
     @Override
     public String getIdentifier() {
         return aggregateId;

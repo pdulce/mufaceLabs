@@ -1,7 +1,6 @@
 server:
   port: 8086
 
-
 axon:
   eventhandling:
     processors:
@@ -10,11 +9,6 @@ axon:
         source: myKafkaEventProcessor
         initialSegmentCount: 1
         threadCount: 1
-
-
-mail:
-  password:
-    encoded: ewzqlzdstujochya
 
 spring:
   datasource:
@@ -26,6 +20,12 @@ spring:
   h2:
     console:
       enabled: true
+
+  data:
+    mongodb:
+      user: admin
+      password: passwd
+      uri: mongodb://192.168.56.1:27017/db
 
   kafka:
     topic: myTopic
@@ -58,3 +58,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+mail:
+  password:
+    encoded: ewzqlzdstujochya
