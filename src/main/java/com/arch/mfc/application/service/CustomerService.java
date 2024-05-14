@@ -1,4 +1,4 @@
-package com.arch.mfc.application;
+package com.arch.mfc.application.service;
 
 import com.arch.mfc.application.domain.Customer;
 import com.arch.mfc.infra.inputport.GenericInputPort;

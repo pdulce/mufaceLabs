@@ -1,10 +1,9 @@
-package com.arch.mfc.application.http;
+package com.arch.mfc.application.rest;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.arch.mfc.application.OrderService;
 import com.arch.mfc.application.domain.Customer;
 import jakarta.persistence.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +27,6 @@ public class OrderAPI {
     @Autowired
     @Qualifier("OrderService")
     GenericInputPort orderInputPort;
-
-    @Autowired
-    private OrderService customerRepository;
 
     @PostMapping(value = "create", produces=MediaType.APPLICATION_JSON_VALUE)
     public Entity create(@RequestParam Long customerId, @RequestParam BigDecimal total) {

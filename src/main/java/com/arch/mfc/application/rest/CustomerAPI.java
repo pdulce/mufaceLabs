@@ -1,4 +1,4 @@
-package com.arch.mfc.application.http;
+package com.arch.mfc.application.rest;
 
 
 import java.util.HashMap;

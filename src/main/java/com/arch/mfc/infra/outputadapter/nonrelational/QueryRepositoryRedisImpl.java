@@ -15,7 +15,7 @@ import com.arch.mfc.infra.outputport.QueryRepositoryInterface;
 import com.arch.mfc.infra.utils.ConversionUtils;
 
 @Component
-public class RedisQueryRepositoryImpl implements QueryRepositoryInterface {
+public class QueryRepositoryRedisImpl implements QueryRepositoryInterface {
 
     @Autowired
     RedisTemplate<String, String> redisTemplate;

@@ -1,4 +1,4 @@
-package com.arch.mfc.application;
+package com.arch.mfc.application.service;
 
 import java.math.BigDecimal;
 import java.util.List;
