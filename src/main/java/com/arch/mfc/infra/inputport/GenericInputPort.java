@@ -9,9 +9,11 @@ import jakarta.persistence.Entity;
 
 public interface GenericInputPort {
 
-    public BaseEntity create(Map<String, Object> mapParams);
+    public BaseEntity create(BaseEntity baseEntity);
 
-    public BaseEntity update(BaseEntity customer);
+    public BaseEntity update(BaseEntity baseEntity);
+
+    public BaseEntity delete(BaseEntity baseEntity);
 
     public BaseEntity getById(Long id);
 

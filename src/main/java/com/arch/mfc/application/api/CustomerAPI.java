@@ -1,15 +1,13 @@
-package com.arch.mfc.application.rest;
+package com.arch.mfc.application.api;
 
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.arch.mfc.application.domain.Customer;
 import com.arch.mfc.application.service.CustomerService;
 import com.arch.mfc.infra.domain.BaseEntity;
-import com.arch.mfc.infra.inputport.GenericInputPort;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,24 +21,22 @@ import com.arch.mfc.infra.inputport.CQRSMessageBrokerInputPort;
 public class CustomerAPI {
 
     @Autowired
-    //@Qualifier("com.arch.mfc.application.service.CustomerService")
-    //GenericInputPort customerInputPort;
-    CustomerService customerInputPort;
+    CustomerService customerService;
 
     @Autowired
     CQRSMessageBrokerInputPort messageBrokerInputPort;
 
     @PostMapping(value = "create", produces=MediaType.APPLICATION_JSON_VALUE)
     public BaseEntity create(@RequestParam String name, @RequestParam String country ) {
-        Map<String, Object> mapObj = new HashMap<>();
-        mapObj.put("name", name);
-        mapObj.put("country", country);
-        return customerInputPort.create(mapObj);
+        Customer customer = new Customer();
+        customer.setName(name);
+        customer.setCountry(country);
+        return customerService.create(customer);
     }
 
     @PostMapping(value = "getallWithoutCQRS", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<BaseEntity> getAllWithoutCQRS() {
-        return customerInputPort.getAll();
+        return customerService.getAll();
     }
 
     @PostMapping(value = "getallCustomerCQRS", produces=MediaType.APPLICATION_JSON_VALUE)
@@ -50,7 +46,7 @@ public class CustomerAPI {
 
     @PostMapping(value = "get", produces=MediaType.APPLICATION_JSON_VALUE)
     public BaseEntity get( @RequestParam Long customerId ) {
-        return customerInputPort.getById(customerId);
+        return customerService.getById(customerId);
     }
 
 

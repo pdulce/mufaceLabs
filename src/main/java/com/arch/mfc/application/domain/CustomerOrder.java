@@ -20,13 +20,5 @@ public class CustomerOrder extends BaseEntity {
     @Column
     private BigDecimal total;
 
-    @Override
-    public String name() {
-        return "CustomerOrder";
-    }
 
-    @Override
-    public Class<? extends Annotation> annotationType() {
-        return CustomerOrder.class;
-    }
 }

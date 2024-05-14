@@ -22,14 +22,5 @@ public class Customer extends BaseEntity {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<CustomerOrder> customerOrders;
 
-    @Override
-    public String name() {
-        return "Customer";
-    }
-
-    @Override
-    public Class<? extends Annotation> annotationType() {
-        return Customer.class;
-    }
 
 }
