@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.arch.mfc.application.domain.Customer;
-import com.arch.mfc.application.service.CustomerOperation;
+import com.arch.mfc.application.service.CustomerService;
 import com.arch.mfc.infra.domain.BaseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -21,7 +21,7 @@ import com.arch.mfc.infra.inputport.CQRSMessageBrokerInputPort;
 public class CustomerAPI {
 
     @Autowired
-    CustomerOperation customerService;
+    CustomerService customerService;
 
     @Autowired
     CQRSMessageBrokerInputPort messageBrokerInputPort;

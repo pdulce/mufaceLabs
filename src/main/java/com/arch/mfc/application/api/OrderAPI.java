@@ -5,8 +5,8 @@ import java.util.UUID;
 
 import com.arch.mfc.application.domain.Customer;
 import com.arch.mfc.application.domain.CustomerOrder;
-import com.arch.mfc.application.service.CustomerOrderOperation;
-import com.arch.mfc.application.service.CustomerOperation;
+import com.arch.mfc.application.service.CustomerOrderService;
+import com.arch.mfc.application.service.CustomerService;
 import jakarta.persistence.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderAPI {
 
     @Autowired
-    CustomerOperation customerService;
+    CustomerService customerService;
 
     @Autowired
-    CustomerOrderOperation customerOrderService;
+    CustomerOrderService customerOrderService;
 
     @PostMapping(value = "create", produces=MediaType.APPLICATION_JSON_VALUE)
     public Entity create(@RequestParam Long customerId, @RequestParam BigDecimal total) {
