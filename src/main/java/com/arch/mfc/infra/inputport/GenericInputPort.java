@@ -5,18 +5,22 @@ import java.util.Map;
 
 import com.arch.mfc.infra.domain.BaseEntity;
 import jakarta.persistence.Entity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 
 public interface GenericInputPort {
 
-    public BaseEntity create(BaseEntity baseEntity);
+    BaseEntity create(BaseEntity baseEntity);
 
-    public BaseEntity update(BaseEntity baseEntity);
+    BaseEntity update(BaseEntity baseEntity);
 
-    public BaseEntity delete(BaseEntity baseEntity);
+    BaseEntity delete(BaseEntity baseEntity);
 
-    public BaseEntity getById(Long id);
+    BaseEntity getById(Long id);
 
-    public List<BaseEntity> getAll();
+    List<BaseEntity> getAll();
+
+    Page<BaseEntity> getAllPaged(Pageable pageable);
 
 }

@@ -1,13 +1,15 @@
-package com.arch.mfc.infra.service;
+package com.arch.mfc.infra.outputadapter.relational;
 
 import com.arch.mfc.infra.domain.BaseEntity;
 import com.arch.mfc.infra.inputport.GenericInputPort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.UUID;
 
-public abstract class BaseService implements GenericInputPort {
+public abstract class CrudOperation implements GenericInputPort {
 
     public abstract JpaRepository<BaseEntity, Long> getJPaRepository();
 
@@ -36,5 +38,9 @@ public abstract class BaseService implements GenericInputPort {
     public List<BaseEntity> getAll() {
         return getJPaRepository().findAll();
     }
+
+    @Override
+    public Page<BaseEntity> getAllPaged(Pageable pageable) { return getJPaRepository().findAll(pageable); }
+
 
 }
