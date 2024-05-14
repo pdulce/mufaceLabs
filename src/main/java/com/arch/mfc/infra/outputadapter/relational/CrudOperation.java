@@ -24,7 +24,7 @@ public abstract class CrudOperation implements GenericInputPort {
         BaseEntity saved = getJPaRepository().save(baseEntity);
         if (saved != null) {
             // aplicamos el patrón CQRS vía AXON
-            commandGateway.send(new Command("create", saved));
+            commandGateway.send(new Command("create_".concat(String.valueOf(saved.getId())), saved));
         }
         return saved;
     }
@@ -34,7 +34,7 @@ public abstract class CrudOperation implements GenericInputPort {
         BaseEntity deleted = getJPaRepository().save(baseEntity);
         if (deleted != null) {
             // aplicamos el patrón CQRS vía AXON
-            commandGateway.send(new Command("delete", deleted));
+            commandGateway.send(new Command("delete_".concat(String.valueOf(deleted.getId())), deleted));
         }
         return deleted;
     }
@@ -44,7 +44,7 @@ public abstract class CrudOperation implements GenericInputPort {
         BaseEntity updated = getJPaRepository().save(baseEntity);
         if (updated != null) {
             // aplicamos el patrón CQRS vía AXON
-            commandGateway.send(new Command("update", updated));
+            commandGateway.send(new Command("update_".concat(String.valueOf(updated.getId())), updated));
         }
         return updated;
     }

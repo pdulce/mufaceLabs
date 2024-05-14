@@ -10,8 +10,9 @@ import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.commandhandling.gateway.DefaultCommandGateway;
 import org.axonframework.eventsourcing.AggregateFactory;
 import org.axonframework.eventsourcing.GenericAggregateFactory;
-import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore;
-import org.axonframework.eventsourcing.eventstore.inmemory.InMemoryEventStorageEngine;
+import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
+import org.axonframework.extensions.mongo.MongoTemplate;
+import org.axonframework.extensions.mongo.eventsourcing.eventstore.MongoEventStorageEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
@@ -23,6 +24,7 @@ import org.springframework.kafka.core.ProducerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+
 
 @Configuration
 public class AxonConfig {
@@ -52,6 +54,9 @@ public class AxonConfig {
         return new KafkaTemplate<>(producerFactory());
     }
 
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
     @Bean
     public ProducerFactory<String, Object> producerFactory() {
         Map<String, Object> producerConfig = new HashMap<>();
@@ -61,14 +66,22 @@ public class AxonConfig {
         return new DefaultKafkaProducerFactory<>(producerConfig);
     }
 
-    @Bean
+    /*@Bean
     public EmbeddedEventStore eventStorageEngine() {
         return EmbeddedEventStore.builder().storageEngine(inMemoryEventStorageEngine()).build();
     }
-
     @Bean
     public InMemoryEventStorageEngine inMemoryEventStorageEngine() {
         return new InMemoryEventStorageEngine();
+    }*/
+
+    @Bean
+    public EventStorageEngine eventStorageEngine() {
+        return MongoEventStorageEngine.builder()
+                .mongoTemplate(mongoTemplate)
+                // Configuración opcional
+                // .eventSerializer(eventSerializer()) // Personalizar el serializador de eventos si es necesario
+                .build();
     }
 
 
