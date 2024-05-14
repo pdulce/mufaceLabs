@@ -1,7 +1,7 @@
 package com.arch.mfc.infra.utils;
 
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.net.ssl.SSLContext;
@@ -15,8 +15,7 @@ import java.security.cert.X509Certificate;
 @Component
 public class TrustMgr implements X509TrustManager {
 
-    @Autowired
-    private Logger logger;
+    Logger logger = LoggerFactory.getLogger(TrustMgr.class);
 
     @Override
     public void checkClientTrusted(final X509Certificate[] x509Certificates, final String s)

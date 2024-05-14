@@ -3,18 +3,20 @@ package com.arch.mfc.application.service;
 import com.arch.mfc.application.domain.Customer;
 import com.arch.mfc.infra.domain.BaseEntity;
 import com.arch.mfc.infra.inputport.GenericInputPort;
-import com.arch.mfc.infra.outputport.CommandRepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 @Component
-public abstract class CustomerService implements GenericInputPort {
+public class CustomerService implements GenericInputPort {
 
     @Autowired
-    CommandRepositoryInterface entityRepository;
+    JpaRepository<BaseEntity, Long> entityRepository;
 
     @Override
     public BaseEntity create(Map<String, Object> params) {
@@ -33,6 +35,11 @@ public abstract class CustomerService implements GenericInputPort {
     @Override
     public BaseEntity getById(Long id) {
         return entityRepository.findById(id).get();
+    }
+
+    @Override
+    public List<BaseEntity> getAll() {
+        return entityRepository.findAll();
     }
 
 }

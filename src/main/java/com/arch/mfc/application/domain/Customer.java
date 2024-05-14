@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.lang.annotation.Annotation;
 import java.util.List;
 
 @Entity
@@ -20,5 +21,15 @@ public class Customer extends BaseEntity {
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<CustomerOrder> customerOrders;
+
+    @Override
+    public String name() {
+        return "Customer";
+    }
+
+    @Override
+    public Class<? extends Annotation> annotationType() {
+        return Customer.class;
+    }
 
 }

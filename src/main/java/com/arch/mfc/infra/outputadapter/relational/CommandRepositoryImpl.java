@@ -1,59 +1,20 @@
 package com.arch.mfc.infra.outputadapter.relational;
 
 import com.arch.mfc.infra.domain.BaseEntity;
-import com.arch.mfc.infra.outputport.CommandRepositoryInterface;
 import org.apache.poi.ss.formula.eval.NotImplementedFunctionException;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.FluentQuery;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class CommandRepositoryImpl implements CommandRepositoryInterface {
+@Component
+public class CommandRepositoryImpl implements JpaRepository<BaseEntity, Long>  {
 
     /*** architecture adhoc methods ***/
-
-    public BaseEntity grabar(BaseEntity entity) {
-        return save(entity);
-    }
-
-    public List<BaseEntity> buscarTodos() {
-        return findAll();
-    }
-
-    public BaseEntity buscarPorId(Long id) {
-        return findById(id).get();
-    }
-
-    public List<BaseEntity> buscarPorCriterios(BaseEntity entity) {
-        Example<BaseEntity> criteria = new Example<BaseEntity>() {
-            @Override
-            public BaseEntity getProbe() {
-                return this.getProbe();
-            }
-
-            @Override
-            public ExampleMatcher getMatcher() {
-                return this.getMatcher();
-            }
-
-            @Override
-            public Class<BaseEntity> getProbeType() {
-                return Example.super.getProbeType();
-            }
-        };
-        return findAll(criteria);
-    }
-
-    public BaseEntity borrarPorId(Long id) {
-        BaseEntity entity = getById(id);
-        if (entity != null) {
-            deleteById(id);
-            return entity;
-        }
-        return null;
-    }
 
     @Override
     public void flush() {

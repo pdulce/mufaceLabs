@@ -1,6 +1,10 @@
 server:
   port: 8086
 
+mail:
+  password:
+    encoded: ewzqlzdstujochya
+
 spring:
   datasource:
     driverClassName: org.h2.Driver

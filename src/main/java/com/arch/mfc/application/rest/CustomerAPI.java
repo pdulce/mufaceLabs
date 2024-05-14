@@ -5,12 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.arch.mfc.application.service.CustomerService;
 import com.arch.mfc.infra.domain.BaseEntity;
 import com.arch.mfc.infra.inputport.GenericInputPort;
-import jakarta.persistence.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,13 +23,12 @@ import com.arch.mfc.infra.inputport.CQRSMessageBrokerInputPort;
 public class CustomerAPI {
 
     @Autowired
-    GenericInputPort customerInputPort;
+    //@Qualifier("com.arch.mfc.application.service.CustomerService")
+    //GenericInputPort customerInputPort;
+    CustomerService customerInputPort;
 
     @Autowired
     CQRSMessageBrokerInputPort messageBrokerInputPort;
-
-    @Autowired
-    JdbcTemplate jdbcTemplate;    
 
     @PostMapping(value = "create", produces=MediaType.APPLICATION_JSON_VALUE)
     public BaseEntity create(@RequestParam String name, @RequestParam String country ) {

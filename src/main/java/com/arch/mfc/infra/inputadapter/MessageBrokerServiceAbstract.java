@@ -3,10 +3,12 @@ package com.arch.mfc.infra.inputadapter;
 import com.arch.mfc.infra.inputport.CQRSMessageBrokerInputPort;
 import com.arch.mfc.infra.outputport.QueryRepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
+@Service
 public abstract class MessageBrokerServiceAbstract implements CQRSMessageBrokerInputPort {
 
     @Autowired

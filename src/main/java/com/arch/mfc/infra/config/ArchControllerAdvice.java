@@ -1,7 +1,7 @@
 package com.arch.mfc.infra.config;
 
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +19,7 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class ArchControllerAdvice {
 
-    @Autowired
-    private Logger logger;
+    Logger logger = LoggerFactory.getLogger(ArchControllerAdvice.class);
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({MethodArgumentNotValidException.class})

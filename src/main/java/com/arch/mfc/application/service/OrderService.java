@@ -8,18 +8,17 @@ import java.util.UUID;
 import com.arch.mfc.application.domain.Customer;
 import com.arch.mfc.application.domain.CustomerOrder;
 import com.arch.mfc.infra.domain.BaseEntity;
-import com.arch.mfc.infra.outputport.CommandRepositoryInterface;
-import jakarta.persistence.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.arch.mfc.infra.inputport.GenericInputPort;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class OrderService implements GenericInputPort {
 
     @Autowired
-    CommandRepositoryInterface entityRepository;
+    JpaRepository<BaseEntity, Long> entityRepository;
 
     @Override
     public BaseEntity create(Map<String, Object> params) {

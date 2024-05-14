@@ -1,5 +1,6 @@
 package com.arch.mfc.application.domain;
 
+import java.lang.annotation.Annotation;
 import java.math.BigDecimal;
 
 import com.arch.mfc.infra.domain.BaseEntity;
@@ -19,4 +20,13 @@ public class CustomerOrder extends BaseEntity {
     @Column
     private BigDecimal total;
 
+    @Override
+    public String name() {
+        return "CustomerOrder";
+    }
+
+    @Override
+    public Class<? extends Annotation> annotationType() {
+        return CustomerOrder.class;
+    }
 }
