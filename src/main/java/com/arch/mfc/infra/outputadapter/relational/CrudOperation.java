@@ -22,19 +22,31 @@ public abstract class CrudOperation implements GenericInputPort {
     public BaseEntity create(BaseEntity baseEntity) {
         baseEntity.setId(UUID.randomUUID().getMostSignificantBits());
         BaseEntity saved = getJPaRepository().save(baseEntity);
-        // aplicamos el patrón CQRS vía AXON
-        commandGateway.send(new Command("create", "Datos de prueba"));
+        if (saved != null) {
+            // aplicamos el patrón CQRS vía AXON
+            commandGateway.send(new Command("create", saved));
+        }
         return saved;
     }
 
     @Override
     public BaseEntity delete(BaseEntity baseEntity) {
-        return getJPaRepository().save(baseEntity);
+        BaseEntity deleted = getJPaRepository().save(baseEntity);
+        if (deleted != null) {
+            // aplicamos el patrón CQRS vía AXON
+            commandGateway.send(new Command("delete", deleted));
+        }
+        return deleted;
     }
 
     @Override
     public BaseEntity update(BaseEntity baseEntity) {
-        return getJPaRepository().save(baseEntity);
+        BaseEntity updated = getJPaRepository().save(baseEntity);
+        if (updated != null) {
+            // aplicamos el patrón CQRS vía AXON
+            commandGateway.send(new Command("update", updated));
+        }
+        return updated;
     }
 
     @Override

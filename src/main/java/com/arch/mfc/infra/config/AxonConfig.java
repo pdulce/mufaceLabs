@@ -10,6 +10,8 @@ import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.commandhandling.gateway.DefaultCommandGateway;
 import org.axonframework.eventsourcing.AggregateFactory;
 import org.axonframework.eventsourcing.GenericAggregateFactory;
+import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore;
+import org.axonframework.eventsourcing.eventstore.inmemory.InMemoryEventStorageEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
@@ -59,17 +61,15 @@ public class AxonConfig {
         return new DefaultKafkaProducerFactory<>(producerConfig);
     }
 
-    /*@Bean
-    public TokenStore tokenStore() {
-        return JpaTokenStore.builder()
-                .entityManagerProvider(new EntityManagerProvider() {
-                    @Override
-                    public EntityManager getEntityManager() {
-                        return super.entityManager;
-                    }
-                })
-                .serializer(serializer())
-                .build();
-    }*/
+    @Bean
+    public EmbeddedEventStore eventStorageEngine() {
+        return EmbeddedEventStore.builder().storageEngine(inMemoryEventStorageEngine()).build();
+    }
+
+    @Bean
+    public InMemoryEventStorageEngine inMemoryEventStorageEngine() {
+        return new InMemoryEventStorageEngine();
+    }
+
 
 }
