@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public abstract class CrudOperation implements GenericInputPort {
 
-    public abstract JpaRepository<BaseEntity, Long> getJPaRepository();
+    protected abstract JpaRepository<BaseEntity, Long> getJPaRepository();
 
     @Override
     public BaseEntity create(BaseEntity baseEntity) {

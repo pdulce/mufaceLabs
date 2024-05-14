@@ -1,14 +1,13 @@
 package com.arch.mfc.application.service;
 
-
 import java.util.Map;
 
 import com.arch.mfc.application.domain.Customer;
 import com.arch.mfc.application.domain.CustomerOrder;
 import com.arch.mfc.infra.inputadapter.MessageBrokerServiceAbstract;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class MessageBrokerService extends MessageBrokerServiceAbstract {
 
 

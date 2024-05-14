@@ -118,7 +118,9 @@
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <scope>runtime</scope>
-    </dependency>-->
+    </dependency>
+    oracle, mysql o el motor de persistencia relacional que sea
+    -->
 
     <dependency>
       <groupId>com.h2database</groupId>
@@ -128,11 +130,11 @@
 
     <!-- added dependencies -->
 
-    <!--<dependency>
+    <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>${jackson.version}</version>
-    </dependency>-->
+      <version>2.13.4</version>
+    </dependency>
     <dependency>
       <groupId>jakarta.validation</groupId>
       <artifactId>jakarta.validation-api</artifactId>

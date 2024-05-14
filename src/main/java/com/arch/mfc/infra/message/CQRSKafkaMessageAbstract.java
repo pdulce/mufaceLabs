@@ -15,7 +15,9 @@ public class CQRSKafkaMessageAbstract {
     CQRSMessageBrokerInputPort messageBrokerInputPort;
 
     protected void consumeEvent( @Payload( required = false ) String eventMsg ) {
-        if ( eventMsg == null ) return;
+        if ( eventMsg == null ) {
+            return;
+        }
 
         Map<String, Object> event = ConversionUtils.jsonstring2Map( eventMsg );
 

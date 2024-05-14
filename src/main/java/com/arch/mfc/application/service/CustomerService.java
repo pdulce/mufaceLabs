@@ -15,7 +15,7 @@ public class CustomerService extends CrudOperation {
     CustomerRepository entityRepository;
 
     @Override
-    public JpaRepository getJPaRepository() {
+    protected JpaRepository getJPaRepository() {
         return entityRepository;
     }
 
