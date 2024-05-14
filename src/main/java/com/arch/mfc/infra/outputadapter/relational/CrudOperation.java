@@ -15,7 +15,7 @@ public abstract class CrudOperation implements GenericInputPort {
 
     @Override
     public BaseEntity create(BaseEntity baseEntity) {
-        baseEntity.setId(UUID.randomUUID().timestamp());
+        baseEntity.setId(UUID.randomUUID().getMostSignificantBits());
         return getJPaRepository().save(baseEntity);
     }
 
