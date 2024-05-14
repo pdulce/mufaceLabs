@@ -1,13 +1,23 @@
+server:
+  port: 8086
+
 spring:
   datasource:
-    password: postgres
-    schema: classpath:schema.sql
-    url: jdbc:postgresql://localhost:5432/postgresdb
-    username: postgres
-  jpa:
-    defer-datasource-initialization: true
-    hibernate:
-      ddl-auto: none
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:file:/home/ubuntu/usr/develop/data/bd/h2/db;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password: password
+    #password: postgres
+    #schema: classpath:schema.sql
+    #url: jdbc:postgresql://localhost:5432/postgresdb
+    #username: postgres
+
+  h2:
+    console:
+      enabled: true
+
+
+
   kafka:
     consumer:
       bootstrap-servers: 127.0.0.1:29092
@@ -18,3 +28,11 @@ spring:
   sql:
     init:
       mode: always
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      show-sql: true
+    properties:
+      hibernate:
+        format_sql: true

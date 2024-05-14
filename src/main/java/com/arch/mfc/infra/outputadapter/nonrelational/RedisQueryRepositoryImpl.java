@@ -1,21 +1,21 @@
-package com.arch.mfc.infra.outputadapter.nonrelational.repository;
+package com.arch.mfc.infra.outputadapter.nonrelational;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.arch.mfc.domain.Customer;
-import com.arch.mfc.domain.Order;
+import com.arch.mfc.application.domain.Customer;
+import com.arch.mfc.application.domain.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import com.arch.mfc.infra.outputport.QueryRepository;
+import com.arch.mfc.infra.outputport.QueryRepositoryInterface;
 import com.arch.mfc.infra.utils.ConversionUtils;
 
 @Component
-public class RedisRepository implements QueryRepository {
+public class RedisQueryRepositoryImpl implements QueryRepositoryInterface {
 
     @Autowired
     RedisTemplate<String, String> redisTemplate;

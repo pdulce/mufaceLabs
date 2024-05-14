@@ -3,7 +3,7 @@ package com.arch.mfc.infra.inputport;
 import java.util.List;
 import java.util.Map;
 
-public interface MessageBrokerInputPort {
+public interface CQRSMessageBrokerInputPort {
     
     public void deleteReg( String table, Map<String, Object> reg );
     public void updateReg( String table, Map<String, Object> reg );

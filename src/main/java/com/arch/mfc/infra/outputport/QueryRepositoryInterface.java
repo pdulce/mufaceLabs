@@ -3,7 +3,7 @@ package com.arch.mfc.infra.outputport;
 import java.util.List;
 import java.util.Map;
 
-public interface QueryRepository {
+public interface QueryRepositoryInterface {
 
     public void save( Map<String,Object> reg, Class<?> clazz );
 

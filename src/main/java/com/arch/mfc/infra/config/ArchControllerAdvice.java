@@ -1,7 +1,6 @@
-package com.arch.mfc.config;
+package com.arch.mfc.infra.config;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

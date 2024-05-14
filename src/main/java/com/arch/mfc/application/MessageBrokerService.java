@@ -3,19 +3,19 @@ package com.arch.mfc.application;
 import java.util.List;
 import java.util.Map;
 
-import com.arch.mfc.domain.Customer;
-import com.arch.mfc.domain.Order;
+import com.arch.mfc.application.domain.Customer;
+import com.arch.mfc.application.domain.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.arch.mfc.infra.inputport.MessageBrokerInputPort;
-import com.arch.mfc.infra.outputport.QueryRepository;
+import com.arch.mfc.infra.inputport.CQRSMessageBrokerInputPort;
+import com.arch.mfc.infra.outputport.QueryRepositoryInterface;
 
 @Component
-public class MessageBrokerUseCase implements MessageBrokerInputPort {
+public class MessageBrokerService implements CQRSMessageBrokerInputPort {
 
     @Autowired
-    QueryRepository queryRepository;
+    QueryRepositoryInterface queryRepository;
 
     Map<String,Class<?>> classes = Map.of(
         "customer", Customer.class,

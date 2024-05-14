@@ -1,4 +1,4 @@
-package com.arch.mfc.domain;
+package com.arch.mfc.application.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;

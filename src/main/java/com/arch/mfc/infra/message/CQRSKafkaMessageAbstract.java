@@ -1,23 +1,20 @@
-package com.arch.mfc.infra.inputadapter.message;
+package com.arch.mfc.infra.message;
 
-import java.util.Map;
-
+import com.arch.mfc.infra.inputport.CQRSMessageBrokerInputPort;
+import com.arch.mfc.infra.utils.ConversionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
-import com.arch.mfc.infra.inputport.MessageBrokerInputPort;
-import com.arch.mfc.infra.utils.ConversionUtils;
+import java.util.Map;
 
 @Service
-public class KafkaMessage {
+public class CQRSKafkaMessageAbstract {
 
     @Autowired
-    MessageBrokerInputPort messageBrokerInputPort;
+    CQRSMessageBrokerInputPort messageBrokerInputPort;
 
-    @KafkaListener(topicPattern = "dbserver1.public.*", groupId = "group1")
-    public void consumeEvent( @Payload( required = false ) String eventMsg ) {
+    protected void consumeEvent( @Payload( required = false ) String eventMsg ) {
         if ( eventMsg == null ) return;
 
         Map<String, Object> event = ConversionUtils.jsonstring2Map( eventMsg );
