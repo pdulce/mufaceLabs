@@ -9,10 +9,7 @@ import com.arch.mfc.application.service.CustomerService;
 import com.arch.mfc.infra.domain.BaseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.arch.mfc.infra.inputport.CQRSMessageBrokerInputPort;
 
@@ -34,17 +31,17 @@ public class CustomerAPI {
         return customerService.create(customer);
     }
 
-    @PostMapping(value = "getallWithoutCQRS", produces=MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "getallWithoutCQRS", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<BaseEntity> getAllWithoutCQRS() {
         return customerService.getAll();
     }
 
-    @PostMapping(value = "getallCustomerCQRS", produces=MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "getallCustomerCQRS", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Map<String,Object>> getallNonCQRS() {
         return messageBrokerInputPort.getAll( "customer" );
     }
 
-    @PostMapping(value = "get", produces=MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "get", produces=MediaType.APPLICATION_JSON_VALUE)
     public BaseEntity get( @RequestParam Long customerId ) {
         return customerService.getById(customerId);
     }
