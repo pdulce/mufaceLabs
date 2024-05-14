@@ -60,6 +60,20 @@
       <artifactId>spring-boot-testcontainers</artifactId>
       <scope>test</scope>
     </dependency>
+    <!-- Dependencias de Axon Framework -->
+    <dependency>
+      <groupId>org.axonframework</groupId>
+      <artifactId>axon-spring-boot-starter</artifactId>
+      <version>4.9.3</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.axonframework/axon-kafka -->
+    <dependency>
+      <groupId>org.axonframework</groupId>
+      <artifactId>axon-kafka</artifactId>
+      <version>3.4.4</version>
+    </dependency>
+
+
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-tx</artifactId>
@@ -130,11 +144,11 @@
 
     <!-- added dependencies -->
 
-    <dependency>
+    <!--<dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
       <version>2.13.4</version>
-    </dependency>
+    </dependency>-->
     <dependency>
       <groupId>jakarta.validation</groupId>
       <artifactId>jakarta.validation-api</artifactId>

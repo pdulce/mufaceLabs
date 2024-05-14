@@ -1,6 +1,17 @@
 server:
   port: 8086
 
+
+axon:
+  eventhandling:
+    processors:
+      kafkaProcessor:
+        mode: tracking
+        source: myKafkaEventProcessor
+        initialSegmentCount: 1
+        threadCount: 1
+
+
 mail:
   password:
     encoded: ewzqlzdstujochya
@@ -11,18 +22,25 @@ spring:
     url: jdbc:h2:file:/home/ubuntu/usr/develop/data/bd/h2/db;DB_CLOSE_ON_EXIT=FALSE
     username: sa
     password: password
-    #password: postgres
-    #schema: classpath:schema.sql
-    #url: jdbc:postgresql://localhost:5432/postgresdb
-    #username: postgres
 
   h2:
     console:
       enabled: true
 
   kafka:
+    topic: myTopic
     consumer:
       bootstrap-servers: 127.0.0.1:9092
+      group-id: my-group
+      auto-offset-reset: earliest
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: '*'
+      producer:
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
   redis:
     host: 127.0.0.1
