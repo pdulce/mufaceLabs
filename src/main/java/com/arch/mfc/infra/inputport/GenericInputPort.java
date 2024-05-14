@@ -3,17 +3,18 @@ package com.arch.mfc.infra.inputport;
 import java.util.List;
 import java.util.Map;
 
+import com.arch.mfc.infra.domain.BaseEntity;
 import jakarta.persistence.Entity;
-import org.apache.poi.ss.formula.functions.T;
+
 
 public interface GenericInputPort {
 
-    public Entity create(Map<String, Object> mapParams);
+    public BaseEntity create(Map<String, Object> mapParams);
 
-    public Entity update(Entity customer);
+    public BaseEntity update(BaseEntity customer);
 
-    public Entity getById(Long id);
+    public BaseEntity getById(Long id);
 
-    public List<Entity> getAll();
+    public List<BaseEntity> getAll();
 
 }

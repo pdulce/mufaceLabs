@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.arch.mfc.infra.domain.BaseEntity;
 import com.arch.mfc.infra.inputport.GenericInputPort;
 import jakarta.persistence.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class CustomerAPI {
     JdbcTemplate jdbcTemplate;    
 
     @PostMapping(value = "create", produces=MediaType.APPLICATION_JSON_VALUE)
-    public Entity create(@RequestParam String name, @RequestParam String country ) {
+    public BaseEntity create(@RequestParam String name, @RequestParam String country ) {
         Map<String, Object> mapObj = new HashMap<>();
         mapObj.put("name", name);
         mapObj.put("country", country);
@@ -39,7 +40,7 @@ public class CustomerAPI {
     }
 
     @PostMapping(value = "getallWithoutCQRS", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Entity> getAllWithoutCQRS() {
+    public List<BaseEntity> getAllWithoutCQRS() {
         return customerInputPort.getAll();
     }
 
@@ -49,7 +50,7 @@ public class CustomerAPI {
     }
 
     @PostMapping(value = "get", produces=MediaType.APPLICATION_JSON_VALUE)
-    public Entity get( @RequestParam Long customerId ) {
+    public BaseEntity get( @RequestParam Long customerId ) {
         return customerInputPort.getById(customerId);
     }
 

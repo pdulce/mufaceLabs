@@ -1,9 +1,9 @@
 package com.arch.mfc.application.service;
 
 import com.arch.mfc.application.domain.Customer;
+import com.arch.mfc.infra.domain.BaseEntity;
 import com.arch.mfc.infra.inputport.GenericInputPort;
 import com.arch.mfc.infra.outputport.CommandRepositoryInterface;
-import jakarta.persistence.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,21 +17,21 @@ public abstract class CustomerService implements GenericInputPort {
     CommandRepositoryInterface entityRepository;
 
     @Override
-    public Entity create(Map<String, Object> params) {
+    public BaseEntity create(Map<String, Object> params) {
         Customer customer = new Customer();
         customer.setId(UUID.randomUUID().timestamp());
         customer.setName((String) params.get("name"));
         customer.setCountry((String) params.get("country"));
-        return entityRepository.save((Entity) customer);
+        return entityRepository.save((BaseEntity) customer);
     }
 
     @Override
-    public Entity update(Entity customer) {
+    public BaseEntity update(BaseEntity customer) {
         return entityRepository.save(customer);
     }
 
     @Override
-    public Entity getById(Long id) {
+    public BaseEntity getById(Long id) {
         return entityRepository.findById(id).get();
     }
 

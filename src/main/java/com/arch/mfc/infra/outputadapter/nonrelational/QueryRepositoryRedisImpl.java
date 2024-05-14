@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.arch.mfc.application.domain.Customer;
-import com.arch.mfc.application.domain.Order;
+import com.arch.mfc.application.domain.CustomerOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -28,12 +28,12 @@ public class QueryRepositoryRedisImpl implements QueryRepositoryInterface {
             ConversionUtils.map2Jsonstring( reg )
         );
 
-        if ( clazz.equals( Order.class ) ) addOrderToCustomer( reg, true );
+        if ( clazz.equals( CustomerOrder.class ) ) addOrderToCustomer( reg, true );
     }
 
     @Override
     public void delete(String id, Class<?> clazz) {
-        if ( clazz.equals( Order.class ) ) addOrderToCustomer( id, false );
+        if ( clazz.equals( CustomerOrder.class ) ) addOrderToCustomer( id, false );
 
         redisTemplate.opsForHash().delete( 
             getHashFromClass( clazz ), 
@@ -62,7 +62,7 @@ public class QueryRepositoryRedisImpl implements QueryRepositoryInterface {
 
     private void addOrderToCustomer( String orderId, boolean appendOrder ) {
         addOrderToCustomer(
-            getById( orderId, Order.class),
+            getById( orderId, CustomerOrder.class),
             appendOrder
         );
     }
