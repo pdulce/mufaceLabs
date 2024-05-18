@@ -21,16 +21,31 @@ spring:
     console:
       enabled: true
 
+  # MongoDB configuration
+  spring:
+    data:
+      mongodb:
+        uri: mongodb://192.168.1.128:27017/mi-event-db
+        database: eventStore
+
+  # Axon configuration
+  axon:
+    event-handling:
+      processors:
+        default:
+          mode: tracking
+          source: default
+
   data:
     mongodb:
-      user: admin
+      user: pedro
       password: passwd
-      uri: mongodb://192.168.56.1:27017/db
+      uri: mongodb://192.168.1.128:27017/db
 
   kafka:
     topic: myTopic
     consumer:
-      bootstrap-servers: 127.0.0.1:9092
+      bootstrap-servers: 192.168.1.128:9092
       group-id: my-group
       auto-offset-reset: earliest
       properties:
@@ -42,10 +57,10 @@ spring:
         key-serializer: org.apache.kafka.common.serialization.StringSerializer
         value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
-  redis:
-    host: 127.0.0.1
-    password: SUPER_SECRET_PASSWORD
-    port: 6379
+  #redis:
+   # host: 127.0.0.1
+   # password: SUPER_SECRET_PASSWORD
+   # port: 6379
 
   sql:
     init:

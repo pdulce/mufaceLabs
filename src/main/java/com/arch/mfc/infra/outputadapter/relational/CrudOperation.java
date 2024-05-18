@@ -1,7 +1,7 @@
 package com.arch.mfc.infra.outputadapter.relational;
 
 import com.arch.mfc.infra.domain.BaseEntity;
-import com.arch.mfc.infra.event.Command;
+import com.arch.mfc.infra.event.CommandGeneric;
 import com.arch.mfc.infra.inputport.GenericInputPort;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public abstract class CrudOperation implements GenericInputPort {
         BaseEntity saved = getJPaRepository().save(baseEntity);
         if (saved != null) {
             // aplicamos el patrón CQRS vía AXON
-            commandGateway.send(new Command("create_".concat(String.valueOf(saved.getId())), saved));
+            commandGateway.send(new CommandGeneric("create_".concat(String.valueOf(saved.getId())), saved));
         }
         return saved;
     }
@@ -34,7 +34,7 @@ public abstract class CrudOperation implements GenericInputPort {
         BaseEntity deleted = getJPaRepository().save(baseEntity);
         if (deleted != null) {
             // aplicamos el patrón CQRS vía AXON
-            commandGateway.send(new Command("delete_".concat(String.valueOf(deleted.getId())), deleted));
+            commandGateway.send(new CommandGeneric("delete_".concat(String.valueOf(deleted.getId())), deleted));
         }
         return deleted;
     }
@@ -44,7 +44,7 @@ public abstract class CrudOperation implements GenericInputPort {
         BaseEntity updated = getJPaRepository().save(baseEntity);
         if (updated != null) {
             // aplicamos el patrón CQRS vía AXON
-            commandGateway.send(new Command("update_".concat(String.valueOf(updated.getId())), updated));
+            commandGateway.send(new CommandGeneric("update_".concat(String.valueOf(updated.getId())), updated));
         }
         return updated;
     }
