@@ -1,14 +1,15 @@
 server:
   port: 8086
 
+# Axon configuration
 axon:
   eventhandling:
     processors:
-      kafkaProcessor:
+      default:
         mode: tracking
-        source: myKafkaEventProcessor
-        initialSegmentCount: 1
-        threadCount: 1
+        source: default
+  axonserver:
+    enabled: false
 
 spring:
   datasource:
@@ -22,30 +23,16 @@ spring:
       enabled: true
 
   # MongoDB configuration
-  spring:
-    data:
-      mongodb:
-        uri: mongodb://192.168.1.128:27017/mi-event-db
-        database: eventStore
-
-  # Axon configuration
-  axon:
-    event-handling:
-      processors:
-        default:
-          mode: tracking
-          source: default
-
   data:
     mongodb:
       user: pedro
       password: passwd
-      uri: mongodb://192.168.1.128:27017/db
+      uri: mongodb://192.168.1.128:27017/mi-event-db
 
   kafka:
     topic: myTopic
     consumer:
-      bootstrap-servers: 192.168.1.128:9092
+      bootstrap-servers: 127.0.0.1:9092
       group-id: my-group
       auto-offset-reset: earliest
       properties:
