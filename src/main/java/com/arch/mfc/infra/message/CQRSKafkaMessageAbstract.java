@@ -14,7 +14,7 @@ public class CQRSKafkaMessageAbstract {
     @Autowired
     CQRSMessageBrokerInputPort messageBrokerInputPort;
 
-    protected void consumeEvent( @Payload( required = false ) String eventMsg ) {
+    public void consumeEvent( @Payload( required = false ) String eventMsg ) {
         if ( eventMsg == null ) {
             return;
         }

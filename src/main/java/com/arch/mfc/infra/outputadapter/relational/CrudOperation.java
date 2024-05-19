@@ -1,7 +1,7 @@
 package com.arch.mfc.infra.outputadapter.relational;
 
 import com.arch.mfc.infra.domain.BaseEntity;
-import com.arch.mfc.infra.event.CommandGeneric;
+import com.arch.mfc.infra.event.commands.CommandGeneric;
 import com.arch.mfc.infra.inputport.GenericInputPort;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.beans.factory.annotation.Autowired;

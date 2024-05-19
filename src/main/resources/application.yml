@@ -1,6 +1,10 @@
 server:
   port: 8086
 
+mail:
+  password:
+    encoded: ewzqlzdstujochya
+
 # Axon configuration
 axon:
   eventhandling:
@@ -28,11 +32,13 @@ spring:
       user: pedro
       password: passwd
       uri: mongodb://192.168.1.128:27017/mi-event-db
+      database: eventStore
 
   kafka:
     topic: myTopic
     consumer:
-      bootstrap-servers: 127.0.0.1:9092
+      #bootstrap-servers: 127.0.0.1:9092
+      bootstrap-servers: 192.168.1.128:9092
       group-id: my-group
       auto-offset-reset: earliest
       properties:
@@ -60,7 +66,3 @@ spring:
     properties:
       hibernate:
         format_sql: true
-
-mail:
-  password:
-    encoded: ewzqlzdstujochya
