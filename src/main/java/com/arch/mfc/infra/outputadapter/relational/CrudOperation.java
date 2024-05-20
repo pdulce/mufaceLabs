@@ -3,6 +3,7 @@ package com.arch.mfc.infra.outputadapter.relational;
 import com.arch.mfc.infra.domain.BaseEntity;
 import com.arch.mfc.infra.event.commands.CommandGeneric;
 import com.arch.mfc.infra.inputport.GenericInputPort;
+import com.arch.mfc.infra.message.CommandProducerServiceBroker;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,8 @@ import java.util.UUID;
 public abstract class CrudOperation implements GenericInputPort {
 
     @Autowired
+    CommandProducerServiceBroker commandProducerServiceBroker;
+    @Autowired
     CommandGateway commandGateway;
     protected abstract JpaRepository<BaseEntity, Long> getJPaRepository();
 
@@ -25,7 +28,10 @@ public abstract class CrudOperation implements GenericInputPort {
         if (saved != null) {
             // aplicamos el patrón CQRS vía AXON
             commandGateway.send(new CommandGeneric("create_".concat(String.valueOf(saved.getId())), saved));
+            // cqrs casero
+            commandProducerServiceBroker.sendMessage("topicMyCQRS", "create_ " + saved.getId());
         }
+
         return saved;
     }
 
@@ -35,6 +41,8 @@ public abstract class CrudOperation implements GenericInputPort {
         if (deleted != null) {
             // aplicamos el patrón CQRS vía AXON
             commandGateway.send(new CommandGeneric("delete_".concat(String.valueOf(deleted.getId())), deleted));
+            // cqrs casero
+            commandProducerServiceBroker.sendMessage("topicMyCQRS", "delete_ " + deleted.getId());
         }
         return deleted;
     }
@@ -45,6 +53,8 @@ public abstract class CrudOperation implements GenericInputPort {
         if (updated != null) {
             // aplicamos el patrón CQRS vía AXON
             commandGateway.send(new CommandGeneric("update_".concat(String.valueOf(updated.getId())), updated));
+            // cqrs casero
+            commandProducerServiceBroker.sendMessage("topicMyCQRS", "update_ " + updated.getId());
         }
         return updated;
     }

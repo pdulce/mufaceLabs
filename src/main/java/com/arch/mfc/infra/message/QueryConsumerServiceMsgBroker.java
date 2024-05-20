@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 @Service
-public class CQRSKafkaMessageAbstract {
+public class QueryConsumerServiceMsgBroker {
 
     @Autowired
     CQRSMessageBrokerInputPort messageBrokerInputPort;

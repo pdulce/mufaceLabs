@@ -82,7 +82,7 @@ public class QueryRepositoryRedisImpl implements QueryRepositoryInterface {
         if ( orders == null ) orders = new ArrayList<>();
 
         orders = orders.stream()
-            .filter( el -> !((Map<String, Object>) el).get("id").equals( order.get("id") ) )
+            .filter( el -> !el.get("id").equals( order.get("id") ) )
             .collect( Collectors.toList() );
 
         if ( appendOrder ) orders.add( order );

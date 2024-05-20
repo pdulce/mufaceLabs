@@ -1,16 +1,14 @@
 package com.arch.mfc.infra.domain;
 
-import com.arch.mfc.application.domain.CustomerOrder;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+
 
 import java.lang.annotation.Annotation;
 
 
 @Entity
-@Getter
-@Setter
+@Data
 public abstract class BaseEntity implements Entity {
 
     @Id
