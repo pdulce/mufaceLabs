@@ -21,31 +21,19 @@ spring:
       uri: mongodb://sampleuser:samplepwd@192.168.1.128:27017/eventDbStore
 
   # Axon configuration
-  axon:
-    eventhandling:
-      processors:
-        default:
-          mode: tracking
-          source: default
-    eventstore:
-      mongo:
-        uri: mongodb://sampleuser:samplepwd@192.168.1.128:27017/eventDbStore
-        database: eventDbStore
-        storage-engine: default # Puedes usar 'default' o 'wiredTiger'
-        events-collection: domainEvents
-        snapshots-collection: snapshots
-    snapshot:
-      mongo:
-        uri: mongodb://sampleuser:samplepwd@192.168.1.128:27017/eventDbStore
-        database: eventDbStore
-        snapshots-collection: snapshots
-    tokenstore:
-      mongo:
-        uri: mongodb://sampleuser:samplepwd@192.168.1.128:27017/eventDbStore
-        database: eventDbStore
-        tokens-collection: trackingTokens
-    axonserver:
-      enabled: false
+axon:
+  eventhandling:
+    processors:
+      default:
+        mode: tracking
+        source: default
+  eventstore:
+    mongo:
+      uri: mongodb://sampleuser:samplepwd@192.168.1.128:27017/eventDbStore
+      database: eventDbStore
+      storage-engine: default # Puedes usar 'default' o 'wiredTiger'
+  axonserver:
+    enabled: false
 
   kafka:
     topic: myTopic
