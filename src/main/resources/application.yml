@@ -5,23 +5,12 @@ mail:
   password:
     encoded: ewzqlzdstujochya
 
-# Axon configuration
-axon:
-  eventhandling:
-    processors:
-      default:
-        mode: tracking
-        source: default
-  axonserver:
-    enabled: false
-
 spring:
   datasource:
     driverClassName: org.h2.Driver
     url: jdbc:h2:file:/home/ubuntu/usr/develop/data/bd/h2/db;DB_CLOSE_ON_EXIT=FALSE
     username: sa
     password: password
-
   h2:
     console:
       enabled: true
@@ -29,10 +18,34 @@ spring:
   # MongoDB configuration
   data:
     mongodb:
-      user: pedro
-      password: passwd
-      uri: mongodb://192.168.1.128:27017/mi-event-db
-      database: eventStore
+      uri: mongodb://sampleuser:samplepwd@192.168.1.128:27017/eventDbStore
+
+  # Axon configuration
+  axon:
+    eventhandling:
+      processors:
+        default:
+          mode: tracking
+          source: default
+    eventstore:
+      mongo:
+        uri: mongodb://sampleuser:samplepwd@192.168.1.128:27017/eventDbStore
+        database: eventDbStore
+        storage-engine: default # Puedes usar 'default' o 'wiredTiger'
+        events-collection: domainEvents
+        snapshots-collection: snapshots
+    snapshot:
+      mongo:
+        uri: mongodb://sampleuser:samplepwd@192.168.1.128:27017/eventDbStore
+        database: eventDbStore
+        snapshots-collection: snapshots
+    tokenstore:
+      mongo:
+        uri: mongodb://sampleuser:samplepwd@192.168.1.128:27017/eventDbStore
+        database: eventDbStore
+        tokens-collection: trackingTokens
+    axonserver:
+      enabled: false
 
   kafka:
     topic: myTopic
