@@ -20,7 +20,6 @@ public class CustomerAPI {
 
     @Autowired
     CustomerService customerService;
-
     @Autowired
     CQRSMessageBrokerInputPort messageBrokerInputPort;
 
@@ -34,18 +33,19 @@ public class CustomerAPI {
     }
 
     @GetMapping(value = "getAllFromCommandDB", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Customer> getAllWithoutCQRS() {
+    public List<Customer> getAllFromCommandDB() {
         return customerService.findAll();
-    }
-
-    @GetMapping(value = "getAllFromQueryDB", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Map<String,Object>> getallNonCQRS() {
-        return messageBrokerInputPort.getAll( "customer" );
     }
 
     @GetMapping(value = "get", produces=MediaType.APPLICATION_JSON_VALUE)
     public Customer get( @RequestParam Long customerId ) {
         return customerService.findById(customerId);
+    }
+
+
+    @GetMapping(value = "getAllFromQueryDB", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<Map<String,Object>> getAllFromQueryDB() {
+        return messageBrokerInputPort.getAll( "customer" );
     }
 
 

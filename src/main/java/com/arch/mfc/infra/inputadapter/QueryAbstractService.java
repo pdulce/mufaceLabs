@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public abstract class QueryAbstractService implements CQRSMessageBrokerInputPort {
 
     @Autowired
@@ -17,23 +18,23 @@ public abstract class QueryAbstractService implements CQRSMessageBrokerInputPort
     public abstract Map<String,Class<?>> getClasses();
 
     @Override
-    public void deleteReg(String table, Map<String, Object> reg) {
-        queryRepository.delete( (String) reg.get("id"), getClasses().get( table ) );
+    public void deleteReg(String almacen, Map<String, Object> reg) {
+        queryRepository.delete( (String) reg.get("id"), getClasses().get( almacen ) );
     }
 
     @Override
-    public void updateReg(String table, Map<String, Object> reg) {
-        queryRepository.save( reg, getClasses().get( table ) );
+    public void updateReg(String almacen, Map<String, Object> reg) {
+        queryRepository.save( reg, getClasses().get( almacen ) );
     }
 
     @Override
-    public void insertReg(String table, Map<String, Object> reg) {
-        queryRepository.save( reg, getClasses().get( table ) );
+    public void insertReg(String almacen, Map<String, Object> reg) {
+        queryRepository.save( reg, getClasses().get( almacen ) );
     }
 
     @Override
-    public List<Map<String, Object>> getAll(String table) {
-        return queryRepository.getAll( getClasses().get( table ) );
+    public List<Map<String, Object>> getAll(String almacen) {
+        return queryRepository.getAll( getClasses().get( almacen ) );
     }
 
 }

@@ -46,7 +46,20 @@ axon:
   eventstore:
     mongo:
       uri: mongodb://sampleuser:samplepwd@192.168.1.128:27017/eventDbStore
-      storage-engine: default
+      database: eventDbStore
+      storage-engine: default # Puedes usar 'default' o 'wiredTiger'
+      events-collection: domainevents
+      snapshots-collection: snapshots
+  snapshot:
+    mongo:
+      uri: mongodb://sampleuser:samplepwd@192.168.1.128:27017/eventDbStore
+      database: eventDbStore
+      snapshots-collection: snapshots
+  tokenstore:
+    mongo:
+      uri: mongodb://sampleuser:samplepwd@192.168.1.128:27017/eventDbStore
+      database: eventDbStore
+      tokens-collection: trackingtokens
   axonserver:
     enabled: false
 
