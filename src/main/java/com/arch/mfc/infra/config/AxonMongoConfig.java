@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Primary;
 
 import java.util.Collections;
 
-@Configuration
+//@Configuration
 public class AxonMongoConfig {
 
     @Value("${spring.data.mongodb.username}")

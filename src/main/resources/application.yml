@@ -22,10 +22,11 @@ spring:
     mongodb:
       host: 192.168.1.128
       port: 27017
-      database: eventDbStore
-      username: sampleuser
-      password: samplepwd
-      authentication-database: admin  # Si estás usando autenticación
+      uri: mongodb://sampleuser:samplepwd@192.168.1.128:27017/queryStore
+      #database: eventDbStore
+      #username: sampleuser
+      #password: samplepwd
+      authentication-database: admin  # Si estamos usando autenticación
     sql:
       init:
         mode: always
@@ -47,6 +48,8 @@ axon:
     mongo:
       uri: mongodb://sampleuser:samplepwd@192.168.1.128:27017/eventDbStore
       database: eventDbStore
+      username: sampleuser
+      password: samplepwd
       storage-engine: wiredTiger # Puedes usar 'default' o 'wiredTiger' for XFS filesystem
       events-collection: domainevents
       snapshots-collection: snapshots
@@ -54,11 +57,15 @@ axon:
     mongo:
       uri: mongodb://sampleuser:samplepwd@192.168.1.128:27017/eventDbStore
       database: eventDbStore
+      username: sampleuser
+      password: samplepwd
       snapshots-collection: snapshots
   tokenstore:
     mongo:
       uri: mongodb://sampleuser:samplepwd@192.168.1.128:27017/eventDbStore
       database: eventDbStore
+      username: sampleuser
+      password: samplepwd
       tokens-collection: trackingtokens
   axonserver:
     enabled: false

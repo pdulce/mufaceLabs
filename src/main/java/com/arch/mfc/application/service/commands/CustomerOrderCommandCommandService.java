@@ -1,4 +1,4 @@
-package com.arch.mfc.application.service;
+package com.arch.mfc.application.service.commands;
 
 import com.arch.mfc.application.domain.command.CustomerOrder;
 import com.arch.mfc.infra.outputadapter.relational.GenericJpaCommandService;

@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 
 import com.arch.mfc.application.domain.command.Customer;
 import com.arch.mfc.application.domain.command.CustomerOrder;
-import com.arch.mfc.application.service.CustomerOrderCommandCommandService;
-import com.arch.mfc.application.service.CustomerCommandCommandService;
+import com.arch.mfc.application.service.commands.CustomerOrderCommandCommandService;
+import com.arch.mfc.application.service.commands.CustomerCommandCommandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;

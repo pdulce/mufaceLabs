@@ -1,30 +1,31 @@
 package com.arch.mfc.application.service.mongo;
 
 import com.arch.mfc.application.domain.query.MongoCustomer;
-import com.arch.mfc.application.repository.CustomerQueryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.arch.mfc.infra.outputadapter.nonrelational.GenericQueryMongoImpl;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CustomerMongoService {
+public class CustomerMongoService extends GenericQueryMongoImpl<MongoCustomer> {
 
-    @Autowired
-    private CustomerQueryRepository customerQueryRepository;
+    public CustomerMongoService() {}
+    public CustomerMongoService(Class<MongoCustomer> entityClass) {
+        super(entityClass);
+    }
 
     public List<MongoCustomer> getAllUsers() {
-        return customerQueryRepository.findAll();
+        return repository.findAll();
     }
 
-    public MongoCustomer getUserByEmail(String name) {
-        return customerQueryRepository.findByName(name);
-    }
+    /*public MongoCustomer getUserByName(String name) {
+        return repository.findByName(name);
+    }*/
 
     public MongoCustomer saveUser(MongoCustomer user) {
-        return customerQueryRepository.save(user);
+        return repository.save(user);
     }
 
     public void deleteUser(String id) {
-        customerQueryRepository.deleteById(id);
+        repository.deleteById(id);
     }
 }

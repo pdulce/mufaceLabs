@@ -4,6 +4,7 @@ import com.arch.mfc.infra.outputport.QueryRepoInterface;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 import com.arch.mfc.infra.utils.ConversionUtils;
 
@@ -13,10 +14,19 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class GenericQueryMongoImpl implements QueryRepoInterface<T> {
+public class GenericQueryMongoImpl<T> implements QueryRepoInterface<T> {
 
     @Autowired
-    protected JpaRepository<T, String> repository;
+    protected MongoRepository<T, String> repository;
+
+    private Class<T> entityClass;
+
+    public GenericQueryMongoImpl() {}
+
+    public GenericQueryMongoImpl(Class<T> entityClass) {
+        this.entityClass = entityClass;
+    }
+
 
     @Override
     public void save(Map<String, Object> reg, Class<T> clazz) {

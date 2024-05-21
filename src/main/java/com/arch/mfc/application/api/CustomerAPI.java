@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.arch.mfc.application.domain.command.Customer;
-import com.arch.mfc.application.service.CustomerCommandCommandService;
+import com.arch.mfc.application.domain.query.MongoCustomer;
+import com.arch.mfc.application.service.commands.CustomerCommandCommandService;
+import com.arch.mfc.application.service.mongo.CustomerMongoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,10 @@ public class CustomerAPI {
     CustomerCommandCommandService customerCommandService;
     @Autowired
     CQRSMessageBrokerInputPort messageBrokerInputPort;
+
+    @Autowired
+    CustomerMongoService customerMongoService;
+
 
     @PostMapping(value = "create", produces=MediaType.APPLICATION_JSON_VALUE)
     public Customer create(@RequestParam String name, @RequestParam String country ) {
@@ -41,9 +47,15 @@ public class CustomerAPI {
     }
 
 
-    @GetMapping(value = "getAllFromQueryDB", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Map<String,Object>> getAllFromQueryDB() {
-        return messageBrokerInputPort.getAll( "Customer" );
+    @GetMapping(value = "getAllFromQueryRedirisDB", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<Map<String,Object>> getAllFromQueryRedirisDB() {
+        return messageBrokerInputPort.
+                getAll( "Customer" );
+    }
+
+    @GetMapping(value = "getAllFromQueryMongoDB", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<Map<String,Object>> getAllFromQueryMongoDB() {
+        return customerMongoService.getAll( MongoCustomer.class );
     }
 
 
