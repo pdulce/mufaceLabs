@@ -1,15 +1,13 @@
-package com.arch.mfc.application.domain;
+package com.arch.mfc.application.domain.command;
 
 import java.math.BigDecimal;
 
-import com.arch.mfc.infra.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
 @Data
-public class CustomerOrder extends BaseEntity {
-
+public class CustomerOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -21,15 +19,5 @@ public class CustomerOrder extends BaseEntity {
 
     @Column
     private BigDecimal total;
-
-    @Override
-    public void setId(Long idE) {
-        this.id = idE;
-    }
-
-    @Override
-    public Long getId() {
-        return this.id;
-    }
 
 }

@@ -5,11 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.arch.mfc.application.domain.Customer;
-import com.arch.mfc.application.domain.CustomerOrder;
+import com.arch.mfc.application.domain.command.Customer;
+import com.arch.mfc.application.domain.command.CustomerOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
 
 import com.arch.mfc.infra.outputport.QueryRepositoryInterface;
 import com.arch.mfc.infra.utils.ConversionUtils;

@@ -1,27 +1,21 @@
 package com.arch.mfc.infra.inputport;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
-import com.arch.mfc.infra.domain.BaseEntity;
-import com.arch.mfc.infra.domain.IEntity;
-import jakarta.persistence.Entity;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.apache.poi.ss.formula.functions.T;
 
 
-public interface GenericInputPort {
+public interface GenericInputPort<T> {
 
-    IEntity create(IEntity baseEntity);
+    public T save(T entity) throws NoSuchFieldException;
 
-    IEntity update(IEntity baseEntity);
+    public T update(T entity);
 
-    IEntity delete(IEntity baseEntity);
+    public void delete(T entity);
 
-    IEntity getById(Long id);
+    public T findById(Long id);
 
-    List<IEntity> getAll();
-
-    Page<IEntity> getAllPaged(Pageable pageable);
+    public List<T> findAll();
 
 }

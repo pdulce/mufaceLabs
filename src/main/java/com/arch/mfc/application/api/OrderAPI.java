@@ -3,8 +3,8 @@ package com.arch.mfc.application.api;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import com.arch.mfc.application.domain.Customer;
-import com.arch.mfc.application.domain.CustomerOrder;
+import com.arch.mfc.application.domain.command.Customer;
+import com.arch.mfc.application.domain.command.CustomerOrder;
 import com.arch.mfc.application.service.CustomerOrderService;
 import com.arch.mfc.application.service.CustomerService;
 import jakarta.persistence.Entity;
@@ -26,13 +26,13 @@ public class OrderAPI {
     CustomerOrderService customerOrderService;
 
     @PostMapping(value = "create", produces=MediaType.APPLICATION_JSON_VALUE)
-    public Entity create(@RequestParam Long customerId, @RequestParam BigDecimal total) {
-        Customer customer = (Customer) customerService.getById(customerId);
+    public CustomerOrder create(@RequestParam Long customerId, @RequestParam BigDecimal total) {
+        Customer customer = customerService.findById(customerId);
         CustomerOrder customerOrder = new CustomerOrder();
         customerOrder.setId(UUID.randomUUID().timestamp());
         customerOrder.setCustomer(customer);
         customerOrder.setTotal(total);
-        return customerOrderService.create(customerOrder);
+        return customerOrderService.save(customerOrder);
    }
     
 }

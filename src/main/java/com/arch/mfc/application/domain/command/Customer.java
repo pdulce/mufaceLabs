@@ -1,6 +1,5 @@
-package com.arch.mfc.application.domain;
+package com.arch.mfc.application.domain.command;
 
-import com.arch.mfc.infra.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -8,8 +7,7 @@ import java.util.List;
 
 @Entity
 @Data
-public class Customer extends BaseEntity {
-
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -24,13 +22,4 @@ public class Customer extends BaseEntity {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<CustomerOrder> customerOrders;
 
-    @Override
-    public void setId(Long idE) {
-        this.id = idE;
-    }
-
-    @Override
-    public Long getId() {
-        return this.id;
-    }
 }

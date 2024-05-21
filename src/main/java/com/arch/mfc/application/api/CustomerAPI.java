@@ -3,11 +3,11 @@ package com.arch.mfc.application.api;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
-import com.arch.mfc.application.domain.Customer;
+import com.arch.mfc.application.domain.command.Customer;
 import com.arch.mfc.application.service.CustomerService;
-import com.arch.mfc.infra.domain.BaseEntity;
-import com.arch.mfc.infra.domain.IEntity;
+import jakarta.persistence.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -25,16 +25,17 @@ public class CustomerAPI {
     CQRSMessageBrokerInputPort messageBrokerInputPort;
 
     @PostMapping(value = "create", produces=MediaType.APPLICATION_JSON_VALUE)
-    public IEntity create(@RequestParam String name, @RequestParam String country ) {
+    public Customer create(@RequestParam String name, @RequestParam String country ) {
         Customer customer = new Customer();
+        customer.setId(UUID.randomUUID().getMostSignificantBits());
         customer.setName(name);
         customer.setCountry(country);
-        return customerService.create(customer);
+        return customerService.save(customer);
     }
 
     @GetMapping(value = "getallWithoutCQRS", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<IEntity> getAllWithoutCQRS() {
-        return customerService.getAll();
+    public List<Customer> getAllWithoutCQRS() {
+        return customerService.findAll();
     }
 
     @GetMapping(value = "getallCustomerCQRS", produces=MediaType.APPLICATION_JSON_VALUE)
@@ -43,8 +44,8 @@ public class CustomerAPI {
     }
 
     @GetMapping(value = "get", produces=MediaType.APPLICATION_JSON_VALUE)
-    public IEntity get( @RequestParam Long customerId ) {
-        return customerService.getById(customerId);
+    public Customer get( @RequestParam Long customerId ) {
+        return customerService.findById(customerId);
     }
 
 
