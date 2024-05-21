@@ -16,17 +16,14 @@ import java.util.stream.Collectors;
 @Service
 public class GenericQueryMongoImpl<T> implements QueryRepoInterface<T> {
 
-    @Autowired
     protected MongoRepository<T, String> repository;
-
-    private Class<T> entityClass;
 
     public GenericQueryMongoImpl() {}
 
-    public GenericQueryMongoImpl(Class<T> entityClass) {
-        this.entityClass = entityClass;
-    }
+    public GenericQueryMongoImpl(MongoRepository<T, String> repository) {
 
+        this.repository = repository;
+    }
 
     @Override
     public void save(Map<String, Object> reg, Class<T> clazz) {

@@ -1,4 +1,4 @@
-package com.arch.mfc.application.repository;
+package com.arch.mfc.application.repository.command;
 
 import com.arch.mfc.application.domain.command.Customer;
 

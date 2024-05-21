@@ -1,10 +1,9 @@
 package com.arch.mfc.infra.message;
 
-import com.arch.mfc.application.domain.query.MongoCustomer;
 import com.arch.mfc.infra.inputport.CQRSMessageBrokerInputPort;
 import com.arch.mfc.infra.utils.ConversionUtils;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +19,8 @@ public class QueryConsumerServiceMsgBroker {
 
     protected static final String GROUP_ID = "group-id";
 
-   public void consumeEvent( @Payload( required = false ) String eventMsg ) {
+    @KafkaListener(topicPattern = TOPIC_PATTERN, groupId = GROUP_ID)
+    public void consumeEvent( @Payload( required = false ) String eventMsg ) {
         if ( eventMsg == null ) {
             return;
         }
