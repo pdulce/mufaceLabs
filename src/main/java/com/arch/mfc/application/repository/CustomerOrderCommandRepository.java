@@ -4,6 +4,6 @@ import com.arch.mfc.application.domain.command.CustomerOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
-public interface CustomerOrderRepository extends JpaRepository<CustomerOrder, Long> {
+public interface CustomerOrderCommandRepository extends JpaRepository<CustomerOrder, Long> {
 
 }

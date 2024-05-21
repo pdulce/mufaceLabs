@@ -24,12 +24,24 @@ public abstract class QueryAbstractService implements CQRSMessageBrokerInputPort
 
     @Override
     public void updateReg(String almacen, Map<String, Object> reg) {
-        queryRepository.save( reg, getClasses().get( almacen ) );
+        try {
+            queryRepository.save( reg, getClasses().get( almacen ) );
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void insertReg(String almacen, Map<String, Object> reg) {
-        queryRepository.save( reg, getClasses().get( almacen ) );
+        try {
+            queryRepository.save( reg, getClasses().get( almacen ) );
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

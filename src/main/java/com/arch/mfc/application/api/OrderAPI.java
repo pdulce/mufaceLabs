@@ -1,13 +1,11 @@
 package com.arch.mfc.application.api;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 import com.arch.mfc.application.domain.command.Customer;
 import com.arch.mfc.application.domain.command.CustomerOrder;
-import com.arch.mfc.application.service.CustomerOrderService;
-import com.arch.mfc.application.service.CustomerService;
-import jakarta.persistence.Entity;
+import com.arch.mfc.application.service.CustomerOrderCommandCommandService;
+import com.arch.mfc.application.service.CustomerCommandCommandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,19 +18,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderAPI {
 
     @Autowired
-    CustomerService customerService;
+    CustomerCommandCommandService customerCommandService;
 
     @Autowired
-    CustomerOrderService customerOrderService;
+    CustomerOrderCommandCommandService customerOrderCommandService;
 
     @PostMapping(value = "create", produces=MediaType.APPLICATION_JSON_VALUE)
     public CustomerOrder create(@RequestParam Long customerId, @RequestParam BigDecimal total) {
-        Customer customer = customerService.findById(customerId);
+        Customer customer = customerCommandService.findById(customerId);
         CustomerOrder customerOrder = new CustomerOrder();
         //customerOrder.setId(UUID.randomUUID().timestamp()); // NO LO NECESITAMOS YA QUE ESTA COMO AUTOINCREMENTAL
         customerOrder.setCustomer(customer);
         customerOrder.setTotal(total);
-        return customerOrderService.save(customerOrder);
+        return customerOrderCommandService.save(customerOrder);
    }
     
 }

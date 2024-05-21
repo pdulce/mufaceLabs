@@ -3,11 +3,9 @@ package com.arch.mfc.application.api;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import com.arch.mfc.application.domain.command.Customer;
-import com.arch.mfc.application.service.CustomerService;
-import jakarta.persistence.Entity;
+import com.arch.mfc.application.service.CustomerCommandCommandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +17,7 @@ import com.arch.mfc.infra.inputport.CQRSMessageBrokerInputPort;
 public class CustomerAPI {
 
     @Autowired
-    CustomerService customerService;
+    CustomerCommandCommandService customerCommandService;
     @Autowired
     CQRSMessageBrokerInputPort messageBrokerInputPort;
 
@@ -29,17 +27,17 @@ public class CustomerAPI {
         //customer.setId(UUID.randomUUID().getMostSignificantBits()); // NO LO NECESITAMOS YA QUE ESTA COMO AUTOINCR
         customer.setName(name);
         customer.setCountry(country);
-        return customerService.save(customer);
+        return customerCommandService.save(customer);
     }
 
     @GetMapping(value = "getAllFromCommandDB", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Customer> getAllFromCommandDB() {
-        return customerService.findAll();
+        return customerCommandService.findAll();
     }
 
     @GetMapping(value = "get", produces=MediaType.APPLICATION_JSON_VALUE)
     public Customer get( @RequestParam Long customerId ) {
-        return customerService.findById(customerId);
+        return customerCommandService.findById(customerId);
     }
 
 

@@ -5,7 +5,7 @@ import java.util.Map;
 
 public interface QueryRepositoryInterface {
 
-    void save( Map<String,Object> reg, Class<?> clazz );
+    void save( Map<String,Object> reg, Class<?> clazz ) throws InstantiationException, IllegalAccessException;
 
     void delete( String id, Class<?> clazz );
 

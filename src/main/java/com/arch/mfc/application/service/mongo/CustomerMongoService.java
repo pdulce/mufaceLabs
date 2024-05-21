@@ -1,7 +1,7 @@
 package com.arch.mfc.application.service.mongo;
 
 import com.arch.mfc.application.domain.query.MongoCustomer;
-import com.arch.mfc.application.repository.CustomersMongoRepository;
+import com.arch.mfc.application.repository.CustomerQueryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -10,21 +10,21 @@ import java.util.List;
 public class CustomerMongoService {
 
     @Autowired
-    private CustomersMongoRepository  customersMongoRepository;
+    private CustomerQueryRepository customerQueryRepository;
 
     public List<MongoCustomer> getAllUsers() {
-        return customersMongoRepository.findAll();
+        return customerQueryRepository.findAll();
     }
 
     public MongoCustomer getUserByEmail(String email) {
-        return customersMongoRepository.findByEmail(email);
+        return customerQueryRepository.findByEmail(email);
     }
 
     public MongoCustomer saveUser(MongoCustomer user) {
-        return customersMongoRepository.save(user);
+        return customerQueryRepository.save(user);
     }
 
     public void deleteUser(String id) {
-        customersMongoRepository.deleteById(id);
+        customerQueryRepository.deleteById(id);
     }
 }

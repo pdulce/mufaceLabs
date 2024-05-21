@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @Transactional
-public class GenericJpaService<T> implements GenericInputPort<T> {
+public class GenericJpaCommandService<T> implements GenericInputPort<T> {
 
     @Autowired
     CommandProducerServiceBroker commandProducerServiceBroker;
@@ -27,8 +27,8 @@ public class GenericJpaService<T> implements GenericInputPort<T> {
 
     private Class<T> entityClass;
 
-    public GenericJpaService() {}
-    public GenericJpaService(Class<T> entityClass) {
+    public GenericJpaCommandService() {}
+    public GenericJpaCommandService(Class<T> entityClass) {
         this.entityClass = entityClass;
     }
 

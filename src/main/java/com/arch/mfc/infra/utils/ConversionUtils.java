@@ -23,8 +23,25 @@ public class ConversionUtils {
         } catch (JsonProcessingException e) {
            e.printStackTrace();
         }
-
         return "{}";
+    }
+
+    public static <T> T jsonStringToObject(String json, Class<T> clazz) {
+        try {
+            return objectMapper.readValue(json, clazz);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static <T> Map<String, Object> objectToMap(T object) {
+        try {
+            return objectMapper.convertValue(object, Map.class);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
     
     public static Map<String, Object> jsonstring2Map( String json ) {
