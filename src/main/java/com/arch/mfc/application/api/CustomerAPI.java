@@ -33,12 +33,12 @@ public class CustomerAPI {
         return customerService.save(customer);
     }
 
-    @GetMapping(value = "getallWithoutCQRS", produces=MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "getAllFromCommandDB", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Customer> getAllWithoutCQRS() {
         return customerService.findAll();
     }
 
-    @GetMapping(value = "getallCustomerCQRS", produces=MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "getAllFromQueryDB", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Map<String,Object>> getallNonCQRS() {
         return messageBrokerInputPort.getAll( "customer" );
     }
