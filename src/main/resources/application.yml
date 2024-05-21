@@ -7,20 +7,33 @@ mail:
 
 spring:
   datasource:
-    driverClassName: org.h2.Driver
-    url: jdbc:h2:file:/home/ubuntu/usr/develop/data/bd/h2/db;DB_CLOSE_ON_EXIT=FALSE
-    username: sa
-    password: password
-  h2:
-    console:
-      enabled: true
+    driverClassName: com.mysql.jdbc.Driver
+    initial-size: 2
+    sql-script-encoding: UTF-8
+    url: jdbc:mysql://192.168.1.128:3306/sampleCommandDB
+    username: pedro
+    password: passwd
+    validation-query: SELECT 1;
+  #datasource:
+    #driverClassName: org.h2.Driver
+    #url: jdbc:h2:file:/home/ubuntu/usr/develop/data/bd/h2/db;DB_CLOSE_ON_EXIT=FALSE
+    #username: sa
+    #password: password
+  #h2:
+    #console:
+    #enabled: true
+
+  redis:
+    host: 127.0.0.1
+    password: samplepwd
+    port: 6379
 
   # MongoDB configuration
   data:
     mongodb:
-      uri: mongodb://sampleuser:samplepwd@192.168.1.128:27017/eventDbStore
+      uri: mongodb://sampleuser:samplepwd@192.168.1.128:27017/queryStore
 
-  # Axon configuration
+# Axon configuration
 axon:
   eventhandling:
     processors:
@@ -50,11 +63,6 @@ axon:
       producer:
         key-serializer: org.apache.kafka.common.serialization.StringSerializer
         value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-
-  #redis:
-   # host: 127.0.0.1
-   # password: SUPER_SECRET_PASSWORD
-   # port: 6379
 
   sql:
     init:

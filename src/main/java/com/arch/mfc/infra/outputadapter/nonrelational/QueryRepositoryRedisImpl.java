@@ -13,8 +13,9 @@ import org.springframework.stereotype.Component;
 
 import com.arch.mfc.infra.outputport.QueryRepositoryInterface;
 import com.arch.mfc.infra.utils.ConversionUtils;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class QueryRepositoryRedisImpl implements QueryRepositoryInterface {
 
     @Autowired

@@ -4,11 +4,11 @@ import java.util.Map;
 
 import com.arch.mfc.application.domain.Customer;
 import com.arch.mfc.application.domain.CustomerOrder;
-import com.arch.mfc.infra.inputadapter.MessageBrokerServiceAbstract;
+import com.arch.mfc.infra.inputadapter.QueryAbstractService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MessageBrokerService extends MessageBrokerServiceAbstract {
+public class QueryMessageBrokerService extends QueryAbstractService {
 
 
     public Map<String,Class<?>> getClasses() {

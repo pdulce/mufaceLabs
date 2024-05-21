@@ -8,8 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-@Service
-public abstract class MessageBrokerServiceAbstract implements CQRSMessageBrokerInputPort {
+public abstract class QueryAbstractService implements CQRSMessageBrokerInputPort {
 
     @Autowired
     QueryRepositoryInterface queryRepository;
