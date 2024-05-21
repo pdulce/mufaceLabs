@@ -1,5 +1,6 @@
 package com.arch.mfc.infra.utils;
 
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -36,6 +37,22 @@ public class ConversionUtils {
         }
 
         return new HashMap<String, Object>();
+    }
+
+    public static <T> Map<String, Object> convertToMap(T obj) {
+        Map<String, Object> resultMap = new HashMap<>();
+        Class<?> clazz = obj.getClass();
+
+        // Iterar sobre todos los campos declarados en la clase
+        for (Field field : clazz.getDeclaredFields()) {
+            field.setAccessible(true); // Permite el acceso a campos privados
+            try {
+                resultMap.put(field.getName(), field.get(obj));
+            } catch (IllegalAccessException e) {
+                e.printStackTrace(); // Manejar la excepción adecuadamente
+            }
+        }
+        return resultMap;
     }
 
     public static LocalDate addDaysToADate(final String fechaInicialString) {
