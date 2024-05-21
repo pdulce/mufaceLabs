@@ -1,5 +1,6 @@
 package com.arch.mfc.infra.message;
 
+import com.arch.mfc.application.domain.query.MongoCustomer;
 import com.arch.mfc.infra.inputport.CQRSMessageBrokerInputPort;
 import com.arch.mfc.infra.utils.ConversionUtils;
 import org.apache.poi.ss.formula.functions.T;
@@ -14,6 +15,10 @@ public class QueryConsumerServiceMsgBroker {
 
     @Autowired
     CQRSMessageBrokerInputPort messageBrokerInputPort;
+
+    protected static final String TOPIC_PATTERN = "topicCQRS*";
+
+    protected static final String GROUP_ID = "group-id";
 
    public void consumeEvent( @Payload( required = false ) String eventMsg ) {
         if ( eventMsg == null ) {

@@ -2,6 +2,7 @@ package com.arch.mfc.application.service.mongo;
 
 import com.arch.mfc.application.domain.query.MongoCustomer;
 import com.arch.mfc.infra.outputadapter.nonrelational.GenericQueryMongoImpl;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -17,9 +18,12 @@ public class CustomerMongoService extends GenericQueryMongoImpl<MongoCustomer> {
         return repository.findAll();
     }
 
-    /*public MongoCustomer getUserByName(String name) {
-        return repository.findByName(name);
-    }*/
+    public List<MongoCustomer> getByName(String name) {
+        MongoCustomer plantilla = new MongoCustomer();
+        plantilla.setName(name);
+        Example<MongoCustomer> filter = Example.of(plantilla);
+        return repository.findAll(filter);
+    }
 
     public MongoCustomer saveUser(MongoCustomer user) {
         return repository.save(user);

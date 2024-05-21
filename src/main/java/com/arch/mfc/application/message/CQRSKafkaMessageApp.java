@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CQRSKafkaMessageApp extends QueryConsumerServiceMsgBroker {
 
-    @KafkaListener(topicPattern = "topicCQRS*", groupId = "my-group")
+    @KafkaListener(topicPattern = TOPIC_PATTERN, groupId = GROUP_ID)
     public void consumeEvent( @Payload( required = false ) String eventMsg ) {
         super.consumeEvent(eventMsg);
     }
