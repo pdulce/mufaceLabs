@@ -9,7 +9,7 @@ import java.lang.annotation.Annotation;
 
 @Entity
 @Data
-public abstract class BaseEntity implements Entity {
+public abstract class BaseEntity implements IEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

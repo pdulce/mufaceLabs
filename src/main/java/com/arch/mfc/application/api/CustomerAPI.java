@@ -7,6 +7,7 @@ import java.util.Map;
 import com.arch.mfc.application.domain.Customer;
 import com.arch.mfc.application.service.CustomerService;
 import com.arch.mfc.infra.domain.BaseEntity;
+import com.arch.mfc.infra.domain.IEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class CustomerAPI {
     CQRSMessageBrokerInputPort messageBrokerInputPort;
 
     @PostMapping(value = "create", produces=MediaType.APPLICATION_JSON_VALUE)
-    public BaseEntity create(@RequestParam String name, @RequestParam String country ) {
+    public IEntity create(@RequestParam String name, @RequestParam String country ) {
         Customer customer = new Customer();
         customer.setName(name);
         customer.setCountry(country);
@@ -32,7 +33,7 @@ public class CustomerAPI {
     }
 
     @GetMapping(value = "getallWithoutCQRS", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<BaseEntity> getAllWithoutCQRS() {
+    public List<IEntity> getAllWithoutCQRS() {
         return customerService.getAll();
     }
 
@@ -42,7 +43,7 @@ public class CustomerAPI {
     }
 
     @GetMapping(value = "get", produces=MediaType.APPLICATION_JSON_VALUE)
-    public BaseEntity get( @RequestParam Long customerId ) {
+    public IEntity get( @RequestParam Long customerId ) {
         return customerService.getById(customerId);
     }
 

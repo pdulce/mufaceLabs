@@ -1,6 +1,7 @@
 package com.arch.mfc.infra.outputadapter.relational;
 
 import com.arch.mfc.infra.domain.BaseEntity;
+import com.arch.mfc.infra.domain.IEntity;
 import com.arch.mfc.infra.event.commands.CommandGeneric;
 import com.arch.mfc.infra.inputport.GenericInputPort;
 import com.arch.mfc.infra.message.CommandProducerServiceBroker;
@@ -19,12 +20,13 @@ public abstract class CrudOperation implements GenericInputPort {
     CommandProducerServiceBroker commandProducerServiceBroker;
     @Autowired
     CommandGateway commandGateway;
-    protected abstract JpaRepository<BaseEntity, Long> getJPaRepository();
+    protected abstract JpaRepository<IEntity, Long> getJPaRepository();
 
     @Override
-    public BaseEntity create(BaseEntity baseEntity) {
-        baseEntity.setId(UUID.randomUUID().getMostSignificantBits());
-        BaseEntity saved = getJPaRepository().save(baseEntity);
+    public BaseEntity create(IEntity baseEntity) {
+        BaseEntity baseEntity1 = (BaseEntity) baseEntity;
+        baseEntity1.setId(UUID.randomUUID().getMostSignificantBits());
+        BaseEntity saved = getJPaRepository().save(baseEntity1);
         if (saved != null) {
             // aplicamos el patrón CQRS vía AXON
             commandGateway.send(new CommandGeneric("create_".concat(String.valueOf(saved.getId())), saved));
@@ -36,8 +38,9 @@ public abstract class CrudOperation implements GenericInputPort {
     }
 
     @Override
-    public BaseEntity delete(BaseEntity baseEntity) {
-        BaseEntity deleted = getJPaRepository().save(baseEntity);
+    public BaseEntity delete(IEntity baseEntity) {
+        BaseEntity baseEntity1 = (BaseEntity) baseEntity;
+        BaseEntity deleted = getJPaRepository().save(baseEntity1);
         if (deleted != null) {
             // aplicamos el patrón CQRS vía AXON
             commandGateway.send(new CommandGeneric("delete_".concat(String.valueOf(deleted.getId())), deleted));
@@ -48,8 +51,9 @@ public abstract class CrudOperation implements GenericInputPort {
     }
 
     @Override
-    public BaseEntity update(BaseEntity baseEntity) {
-        BaseEntity updated = getJPaRepository().save(baseEntity);
+    public BaseEntity update(IEntity baseEntity) {
+        BaseEntity baseEntity1 = (BaseEntity) baseEntity;
+        BaseEntity updated = getJPaRepository().save(baseEntity1);
         if (updated != null) {
             // aplicamos el patrón CQRS vía AXON
             commandGateway.send(new CommandGeneric("update_".concat(String.valueOf(updated.getId())), updated));
@@ -60,17 +64,17 @@ public abstract class CrudOperation implements GenericInputPort {
     }
 
     @Override
-    public BaseEntity getById(Long id) {
+    public IEntity getById(Long id) {
         return getJPaRepository().findById(id).get();
     }
 
     @Override
-    public List<BaseEntity> getAll() {
+    public List<IEntity> getAll() {
         return getJPaRepository().findAll();
     }
 
     @Override
-    public Page<BaseEntity> getAllPaged(Pageable pageable) { return getJPaRepository().findAll(pageable); }
+    public Page<IEntity> getAllPaged(Pageable pageable) { return getJPaRepository().findAll(pageable); }
 
 
 }
