@@ -34,10 +34,10 @@ public class GenericJpaService<T> implements GenericInputPort<T> {
         T saved = repository.save(entity);
         if (saved != null) {
             // aplicamos el patrón CQRS vía AXON
-            commandGateway.send(new CommandGeneric("create_".concat(String.valueOf(getId(saved))), saved));
+            String idGot = String.valueOf(getId(saved));
+            commandGateway.send(new CommandGeneric("create_".concat(idGot), saved));
             // cqrs casero
-            commandProducerServiceBroker.sendMessage("topicMyCQRS", "create_ ".
-                    concat(String.valueOf(getId(saved))));
+            commandProducerServiceBroker.sendMessage("topicMyCQRS", "create_ ".concat(idGot));
         }
         return saved;
     }
@@ -47,10 +47,10 @@ public class GenericJpaService<T> implements GenericInputPort<T> {
         T updated =  repository.save(entity);
         if (updated != null) {
             // aplicamos el patrón CQRS vía AXON
-            commandGateway.send(new CommandGeneric("update_".concat(String.valueOf(getId(updated))), updated));
+            String idGot = String.valueOf(getId(updated));
+            commandGateway.send(new CommandGeneric("update_".concat(idGot), updated));
             // cqrs casero
-            commandProducerServiceBroker.sendMessage("topicMyCQRS", "update_ " +
-                    getId(updated));
+            commandProducerServiceBroker.sendMessage("topicMyCQRS", "update_ ".concat(idGot));
         }
         return updated;
     }
@@ -59,10 +59,10 @@ public class GenericJpaService<T> implements GenericInputPort<T> {
     public void delete(T entity) {
         repository.delete(entity);
         // aplicamos el patrón CQRS vía AXON
-        commandGateway.send(new CommandGeneric("delete_".concat(String.valueOf(getId(entity))), entity));
+        String idGot = String.valueOf(getId(entity));
+        commandGateway.send(new CommandGeneric("delete_".concat(idGot), entity));
         // cqrs casero
-        commandProducerServiceBroker.sendMessage("topicMyCQRS", "delete_ ".
-                concat(String.valueOf(getId(entity))));
+        commandProducerServiceBroker.sendMessage("topicMyCQRS", "delete_ ".concat(idGot));
     }
 
     @Override
