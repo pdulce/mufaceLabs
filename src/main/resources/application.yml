@@ -47,7 +47,7 @@ axon:
     mongo:
       uri: mongodb://sampleuser:samplepwd@192.168.1.128:27017/eventDbStore
       database: eventDbStore
-      storage-engine: default # Puedes usar 'default' o 'wiredTiger'
+      storage-engine: wiredTiger # Puedes usar 'default' o 'wiredTiger' for XFS filesystem
       events-collection: domainevents
       snapshots-collection: snapshots
   snapshot:
