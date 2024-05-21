@@ -77,7 +77,7 @@ public class GenericJpaService<T> implements GenericInputPort<T> {
 
     public Object getId(T entity) {
         try {
-            Field idField = entityClass.getDeclaredField("id");
+            Field idField = entity.getClass().getDeclaredField("id");
             idField.setAccessible(true);
             return idField.get(entity);
         } catch (NoSuchFieldException | IllegalAccessException e) {

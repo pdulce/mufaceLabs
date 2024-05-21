@@ -29,7 +29,7 @@ public class OrderAPI {
     public CustomerOrder create(@RequestParam Long customerId, @RequestParam BigDecimal total) {
         Customer customer = customerService.findById(customerId);
         CustomerOrder customerOrder = new CustomerOrder();
-        customerOrder.setId(UUID.randomUUID().timestamp());
+        //customerOrder.setId(UUID.randomUUID().timestamp()); // NO LO NECESITAMOS YA QUE ESTA COMO AUTOINCREMENTAL
         customerOrder.setCustomer(customer);
         customerOrder.setTotal(total);
         return customerOrderService.save(customerOrder);

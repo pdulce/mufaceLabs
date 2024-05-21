@@ -27,7 +27,7 @@ public class CustomerAPI {
     @PostMapping(value = "create", produces=MediaType.APPLICATION_JSON_VALUE)
     public Customer create(@RequestParam String name, @RequestParam String country ) {
         Customer customer = new Customer();
-        customer.setId(UUID.randomUUID().getMostSignificantBits());
+        //customer.setId(UUID.randomUUID().getMostSignificantBits()); // NO LO NECESITAMOS YA QUE ESTA COMO AUTOINCR
         customer.setName(name);
         customer.setCountry(country);
         return customerService.save(customer);

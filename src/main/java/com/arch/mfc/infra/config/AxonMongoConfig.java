@@ -12,6 +12,7 @@ import org.axonframework.extensions.mongo.MongoTemplate;
 import org.axonframework.extensions.mongo.eventsourcing.eventstore.MongoEventStorageEngine;
 import org.axonframework.extensions.mongo.eventsourcing.tokenstore.MongoTokenStore;
 import org.axonframework.serialization.Serializer;
+import org.axonframework.serialization.json.JacksonSerializer;
 import org.axonframework.serialization.xml.XStreamSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -37,24 +38,12 @@ public class AxonMongoConfig {
     @Value("${spring.data.mongodb.database}")
     private String mongoDbName;
 
-    @Bean
+    /*@Bean
     @Primary
-    public XStream xStream() {
-        XStream xStream = new XStream();
-        // Permitir las clases necesarias para la serialización
-        xStream.allowTypesByWildcard(new String[] {
-                "com.arch.mfc.**", // Cambia esto a tu paquete específico
-                "org.axonframework.**"
-        });
-        return xStream;
-    }
-    @Bean
-    @Primary
-    public Serializer serializer(XStream xStream) {
-        return XStreamSerializer.builder()
-                .xStream(xStream)
-                .build();
-    }
+    public Serializer axonJsonSerializer() {
+        return new JacksonSerializer.Builder().build();
+    }*/
+
     @Bean
     public MongoClient mongoClient() {
         MongoCredential credential = MongoCredential.
@@ -91,11 +80,5 @@ public class AxonMongoConfig {
                 .build();
     }
 
-
-    /*@Autowired
-    public void configure(EventProcessingConfigurer configurer, Serializer serializer) {
-        configurer.configureDefaultStreamableMessageSource(conf ->
-                (StreamableMessageSource<TrackedEventMessage<?>>) serializer);
-    }*/
 
 }
