@@ -10,6 +10,11 @@ import lombok.Data;
 @Data
 public class CustomerOrder extends BaseEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
@@ -17,5 +22,14 @@ public class CustomerOrder extends BaseEntity {
     @Column
     private BigDecimal total;
 
+    @Override
+    public void setId(Long idE) {
+        this.id = idE;
+    }
+
+    @Override
+    public Long getId() {
+        return this.id;
+    }
 
 }

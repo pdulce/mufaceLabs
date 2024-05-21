@@ -13,6 +13,7 @@ public class CustomerOrderService extends CrudOperation {
 
     @Override
     protected JpaRepository getJPaRepository() {
+
         return entityRepository;
     }
 

@@ -7,13 +7,10 @@ mail:
 
 spring:
   datasource:
-    driverClassName: com.mysql.jdbc.Driver
-    initial-size: 2
-    sql-script-encoding: UTF-8
+    driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://192.168.1.128:3306/sampleCommandDB
     username: pedro
     password: passwd
-    validation-query: SELECT 1;
 
   redis:
     host: 127.0.0.1
