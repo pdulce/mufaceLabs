@@ -13,7 +13,11 @@ import java.util.List;
 @Service
 public class CustomerService extends GenericJpaService<Customer> {
 
+    public CustomerService() {
+    }
+
     public CustomerService(Class<Customer> entityClass) {
+
         super(entityClass);
     }
 

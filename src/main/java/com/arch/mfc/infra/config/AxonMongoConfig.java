@@ -38,6 +38,7 @@ public class AxonMongoConfig {
     private String mongoDbName;
 
     @Bean
+    @Primary
     public XStream xStream() {
         XStream xStream = new XStream();
         // Permitir las clases necesarias para la serialización
@@ -47,9 +48,9 @@ public class AxonMongoConfig {
         });
         return xStream;
     }
-    //@Bean
-    //@Primary
-    public Serializer myserializer(XStream xStream) {
+    @Bean
+    @Primary
+    public Serializer serializer(XStream xStream) {
         return XStreamSerializer.builder()
                 .xStream(xStream)
                 .build();
@@ -78,7 +79,7 @@ public class AxonMongoConfig {
     public MongoEventStorageEngine eventStorageEngine(MongoTemplate mongoTemplate, Serializer serializer) {
         return MongoEventStorageEngine.builder()
                 .mongoTemplate(mongoTemplate)
-                .eventSerializer(myserializer(xStream()))
+                .eventSerializer(serializer)
                 .build();
     }
 
@@ -86,7 +87,7 @@ public class AxonMongoConfig {
     public TokenStore tokenStore(MongoTemplate mongoTemplate, Serializer serializer) {
         return MongoTokenStore.builder()
                 .mongoTemplate(mongoTemplate)
-                .serializer(myserializer(xStream()))
+                .serializer(serializer)
                 .build();
     }
 

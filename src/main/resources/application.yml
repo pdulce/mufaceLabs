@@ -6,17 +6,18 @@ mail:
     encoded: ewzqlzdstujochya
 
 spring:
+  # command domain
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://192.168.1.128:3306/sampleCommandDB
     username: pedro
     password: passwd
-
+  # query domain
   redis:
     host: 127.0.0.1
     password: samplepwd
     port: 6379
-
+  # event domain
   data:
     mongodb:
       host: 192.168.1.128
@@ -25,7 +26,16 @@ spring:
       username: sampleuser
       password: samplepwd
       authentication-database: admin  # Si estás usando autenticación
-
+    sql:
+      init:
+        mode: always
+    jpa:
+      hibernate:
+        ddl-auto: update
+        show-sql: true
+      properties:
+        hibernate:
+          format_sql: true
 # Axon configuration
 axon:
   eventhandling:
@@ -40,6 +50,7 @@ axon:
   axonserver:
     enabled: false
 
+# Event bus configuration
   kafka:
     topic: myTopic
     consumer:
@@ -56,14 +67,3 @@ axon:
         key-serializer: org.apache.kafka.common.serialization.StringSerializer
         value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
-  sql:
-    init:
-      mode: always
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-      show-sql: true
-    properties:
-      hibernate:
-        format_sql: true

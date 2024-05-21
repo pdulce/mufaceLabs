@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CustomerOrderService extends GenericJpaService<CustomerOrder> {
+
+    public CustomerOrderService() {}
     public CustomerOrderService(Class<CustomerOrder> entityClass) {
         super(entityClass);
     }

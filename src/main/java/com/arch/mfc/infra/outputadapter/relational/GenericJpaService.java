@@ -24,6 +24,7 @@ public class GenericJpaService<T> implements GenericInputPort<T> {
 
     private Class<T> entityClass;
 
+    public GenericJpaService() {}
     public GenericJpaService(Class<T> entityClass) {
         this.entityClass = entityClass;
     }
