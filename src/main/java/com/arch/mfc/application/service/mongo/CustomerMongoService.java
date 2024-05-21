@@ -16,8 +16,8 @@ public class CustomerMongoService {
         return customerQueryRepository.findAll();
     }
 
-    public MongoCustomer getUserByEmail(String email) {
-        return customerQueryRepository.findByEmail(email);
+    public MongoCustomer getUserByEmail(String name) {
+        return customerQueryRepository.findByName(name);
     }
 
     public MongoCustomer saveUser(MongoCustomer user) {
