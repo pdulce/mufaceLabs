@@ -45,7 +45,7 @@ public class CustomerAPI {
 
     @GetMapping(value = "getAllFromQueryDB", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Map<String,Object>> getAllFromQueryDB() {
-        return messageBrokerInputPort.getAll( "customer" );
+        return messageBrokerInputPort.getAll( "Customer" );
     }
 
 

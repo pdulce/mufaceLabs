@@ -8,13 +8,13 @@ import com.arch.mfc.infra.inputadapter.QueryAbstractService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class QueryMessageBrokerService extends QueryAbstractService {
+public class QueryStoresService extends QueryAbstractService {
 
 
     public Map<String,Class<?>> getClasses() {
         Map<String,Class<?>> classes = Map.of(
-                "customer", Customer.class,
-                "orders", CustomerOrder.class
+                "Customer", Customer.class,
+                "CustomerOrder", CustomerOrder.class
         );
         return classes;
     }
