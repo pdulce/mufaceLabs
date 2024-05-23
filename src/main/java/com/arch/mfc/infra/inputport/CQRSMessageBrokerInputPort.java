@@ -5,9 +5,9 @@ import java.util.Map;
 
 public interface CQRSMessageBrokerInputPort {
     
-    void deleteReg( String table, Map<String, Object> reg );
-    void updateReg( String table, Map<String, Object> reg );
-    void insertReg( String table, Map<String, Object> reg );
-    List<Map<String, Object>> getAll( String table );
+    void deleteReg( String almacen, Map<String, Object> reg );
+    void updateReg( String almacen, Map<String, Object> reg );
+    void insertReg( String almacen, Map<String, Object> reg );
+    List<Map<String, Object>> getAll( String almacen );
 
 }
