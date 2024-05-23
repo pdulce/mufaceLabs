@@ -1,14 +1,14 @@
-package com.arch.mfc.infra.message;
+package com.arch.mfc.infra.eventproducer;
 
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CommandProducerServiceBroker {
+public class CommandProducerService {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
 
-    public CommandProducerServiceBroker(KafkaTemplate<String, String> kafkaTemplate) {
+    public CommandProducerService(KafkaTemplate<String, String> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 

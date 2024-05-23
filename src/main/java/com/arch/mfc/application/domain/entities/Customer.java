@@ -1,4 +1,4 @@
-package com.arch.mfc.application.domain.command;
+package com.arch.mfc.application.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;

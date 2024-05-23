@@ -2,8 +2,8 @@ package com.arch.mfc.application.service.rediris;
 
 import java.util.Map;
 
-import com.arch.mfc.application.domain.command.Customer;
-import com.arch.mfc.application.domain.command.CustomerOrder;
+import com.arch.mfc.application.domain.entities.Customer;
+import com.arch.mfc.application.domain.entities.CustomerOrder;
 import com.arch.mfc.infra.inputadapter.QueryAbstractService;
 import org.springframework.stereotype.Service;
 

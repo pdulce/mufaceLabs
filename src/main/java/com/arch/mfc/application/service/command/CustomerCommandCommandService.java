@@ -1,6 +1,6 @@
-package com.arch.mfc.application.service.commands;
+package com.arch.mfc.application.service.command;
 
-import com.arch.mfc.application.domain.command.Customer;
+import com.arch.mfc.application.domain.entities.Customer;
 import com.arch.mfc.infra.outputadapter.relational.GenericJpaCommandService;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -10,11 +10,7 @@ import java.util.List;
 @Service
 public class CustomerCommandCommandService extends GenericJpaCommandService<Customer> {
 
-    public CustomerCommandCommandService() {
-    }
-
     public CustomerCommandCommandService(Class<Customer> entityClass) {
-
         super(entityClass);
     }
 

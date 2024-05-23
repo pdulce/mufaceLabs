@@ -1,7 +1,7 @@
 package com.arch.mfc.infra.outputadapter.relational;
 
-import com.arch.mfc.infra.inputport.GenericInputPort;
-import com.arch.mfc.infra.message.CommandProducerServiceBroker;
+import com.arch.mfc.infra.outputport.GenericCommandPort;
+import com.arch.mfc.infra.eventproducer.CommandProducerService;
 import com.arch.mfc.infra.utils.ConversionUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.Map;
 
 @Transactional
-public class GenericJpaCommandService<T> implements GenericInputPort<T> {
+public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
 
     @Autowired
-    CommandProducerServiceBroker commandProducerServiceBroker;
+    CommandProducerService commandProducerService;
     @Autowired
     protected JpaRepository<T, Long> repository;
 
@@ -31,14 +31,17 @@ public class GenericJpaCommandService<T> implements GenericInputPort<T> {
     public T save(T entity) {
         T saved = repository.save(entity);
         if (saved != null) {
-            // cqrs artesanal
             Map<String, Object> intercambio = new HashMap<>();
             intercambio.put("payload", new HashMap<String, Object>());
             ((Map<String, Object>) intercambio.get("payload")).put("op", "c");
             ((Map<String, Object>) intercambio.get("payload")).put("table", entity.getClass().getSimpleName());
             ((Map<String, Object>) intercambio.get("payload")).put("after", ConversionUtils.convertToMap(saved));
 
-            commandProducerServiceBroker.sendMessage("topicCQRS", ConversionUtils.map2Jsonstring(intercambio));
+            /*** Mando el evento al bus para que los recojan los dos consumers:
+             *  - el responsable del dominio de eventos que persiste en MongoDB (patrón Event-Sourcing)
+             *  - el responsable del dominio de consultas que persiste en Redis (patrón CQRS)
+             */
+            commandProducerService.sendMessage("topicCQRS", ConversionUtils.map2Jsonstring(intercambio));
         }
         return saved;
     }
@@ -54,7 +57,7 @@ public class GenericJpaCommandService<T> implements GenericInputPort<T> {
             ((Map<String, Object>) intercambio.get("payload")).put("table", entity.getClass().getSimpleName());
             ((Map<String, Object>) intercambio.get("payload")).put("after", ConversionUtils.convertToMap(updated));
 
-            commandProducerServiceBroker.sendMessage("topicCQRS", ConversionUtils.map2Jsonstring(intercambio));
+            commandProducerService.sendMessage("topicCQRS", ConversionUtils.map2Jsonstring(intercambio));
         }
         return updated;
     }
@@ -69,7 +72,7 @@ public class GenericJpaCommandService<T> implements GenericInputPort<T> {
         ((Map<String, Object>) intercambio.get("payload")).put("table", entity.getClass().getSimpleName());
         ((Map<String, Object>) intercambio.get("payload")).put("before", ConversionUtils.convertToMap(entity));
 
-        commandProducerServiceBroker.sendMessage("topicCQRS", ConversionUtils.map2Jsonstring(intercambio));
+        commandProducerService.sendMessage("topicCQRS", ConversionUtils.map2Jsonstring(intercambio));
     }
 
     @Override

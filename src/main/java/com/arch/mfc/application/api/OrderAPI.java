@@ -2,10 +2,10 @@ package com.arch.mfc.application.api;
 
 import java.math.BigDecimal;
 
-import com.arch.mfc.application.domain.command.Customer;
-import com.arch.mfc.application.domain.command.CustomerOrder;
-import com.arch.mfc.application.service.commands.CustomerOrderCommandCommandService;
-import com.arch.mfc.application.service.commands.CustomerCommandCommandService;
+import com.arch.mfc.application.domain.entities.Customer;
+import com.arch.mfc.application.domain.entities.CustomerOrder;
+import com.arch.mfc.application.service.command.CustomerOrderCommandCommandService;
+import com.arch.mfc.application.service.command.CustomerCommandCommandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;

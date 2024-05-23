@@ -1,4 +1,4 @@
-package com.arch.mfc.application.domain.query;
+package com.arch.mfc.application.domain.document;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 @Data
 @Document(collection = "orders")
-public class MongoCustomerOrder {
+public class CustomerOrderDocument {
 
     @Id
     private String id;

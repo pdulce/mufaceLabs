@@ -1,9 +1,9 @@
-package com.arch.mfc.infra.inputport;
+package com.arch.mfc.infra.outputport;
 
 import java.util.List;
 
 
-public interface GenericInputPort<T> {
+public interface GenericCommandPort<T> {
 
     public T save(T entity) throws NoSuchFieldException;
 

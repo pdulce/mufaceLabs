@@ -1,9 +1,6 @@
 package com.arch.mfc.application.repository.query;
 
-import com.arch.mfc.application.domain.query.MongoCustomerOrder;
-import org.springframework.data.mongodb.repository.MongoRepository;
-
-public interface CustomerOrderQueryRepository extends MongoRepository<MongoCustomerOrder, String> {
+public interface CustomerOrderEventRepository extends QueryRedisRepoInterface { //MongoRepository<MongoCustomerOrder, String> {
 
     /*
     @Override
