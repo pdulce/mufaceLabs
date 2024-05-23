@@ -9,23 +9,20 @@ spring:
   # command domain
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.1.128:3306/sampleCommandDB
-    username: pedro
-    password: passwd
+    url: jdbc:mysql://192.168.1.137:3306/sampleCommandDB
+    username: test
+    password: test
   # query domain
   redis:
     host: 127.0.0.1
     password: samplepwd
     port: 6379
-  # event domain
+  # event domaindoc
   data:
     mongodb:
-      host: 192.168.1.128
+      host: 192.168.1.137
       port: 27017
-      uri: mongodb://sampleuser:samplepwd@192.168.1.128:27017/queryStore
-      #database: eventDbStore
-      #username: sampleuser
-      #password: samplepwd
+      uri: mongodb://sampleuser:samplepwd@192.168.1.137:27017/queryStore
       authentication-database: admin  # Si estamos usando autenticación
     sql:
       init:
@@ -46,7 +43,7 @@ axon:
         source: default
   eventstore:
     mongo:
-      uri: mongodb://sampleuser:samplepwd@192.168.1.128:27017/eventDbStore
+      uri: mongodb://sampleuser:samplepwd@192.168.1.137:27017/eventDbStore
       database: eventDbStore
       username: sampleuser
       password: samplepwd
@@ -55,14 +52,14 @@ axon:
       snapshots-collection: snapshots
   snapshot:
     mongo:
-      uri: mongodb://sampleuser:samplepwd@192.168.1.128:27017/eventDbStore
+      uri: mongodb://sampleuser:samplepwd@192.168.1.137:27017/eventDbStore
       database: eventDbStore
       username: sampleuser
       password: samplepwd
       snapshots-collection: snapshots
   tokenstore:
     mongo:
-      uri: mongodb://sampleuser:samplepwd@192.168.1.128:27017/eventDbStore
+      uri: mongodb://sampleuser:samplepwd@192.168.1.137:27017/eventDbStore
       database: eventDbStore
       username: sampleuser
       password: samplepwd
@@ -74,9 +71,8 @@ axon:
   kafka:
     topic: myTopic
     consumer:
-      #bootstrap-servers: 192.168.1.128:9092
-      bootstrap-servers: 127.0.0.1:9092
-      group-id: my-group
+      bootstrap-servers: 192.168.1.137:9092
+      group-id: cqrs
       auto-offset-reset: earliest
       properties:
         spring:

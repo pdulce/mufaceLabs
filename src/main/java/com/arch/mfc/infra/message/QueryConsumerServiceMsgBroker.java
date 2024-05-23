@@ -17,7 +17,7 @@ public class QueryConsumerServiceMsgBroker {
 
     protected static final String TOPIC_PATTERN = "topicCQRS*";
 
-    protected static final String GROUP_ID = "group-id";
+    protected static final String GROUP_ID = "cqrs";
 
     @KafkaListener(topicPattern = TOPIC_PATTERN, groupId = GROUP_ID)
     public void consumeEvent( @Payload( required = false ) String eventMsg ) {
