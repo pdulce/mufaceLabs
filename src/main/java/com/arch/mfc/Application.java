@@ -1,8 +1,5 @@
 package com.arch.mfc;
 
-import org.axonframework.extensions.mongo.DefaultMongoTemplate;
-import org.axonframework.extensions.mongo.MongoTemplate;
-import org.axonframework.extensions.mongo.eventsourcing.eventstore.MongoFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

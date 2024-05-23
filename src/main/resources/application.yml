@@ -9,14 +9,16 @@ spring:
   # command domain
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.1.137:3306/sampleCommandDB
+    url: jdbc:mysql://192.168.1.137:3306/SAMPLECOMMANDDB
     username: test
     password: test
+
   # query domain
   redis:
-    host: 127.0.0.1
-    password: samplepwd
+    host: 192.168.1.137
+    #password: samplepwd
     port: 6379
+
   # event domaindoc
   data:
     mongodb:
@@ -34,42 +36,10 @@ spring:
       properties:
         hibernate:
           format_sql: true
-# Axon configuration
-axon:
-  eventhandling:
-    processors:
-      myProcessor:
-        mode: tracking  # O 'subscribing' dependiendo de tus necesidades
-        source: default
-  eventstore:
-    mongo:
-      uri: mongodb://sampleuser:samplepwd@192.168.1.137:27017/eventDbStore
-      database: eventDbStore
-      username: sampleuser
-      password: samplepwd
-      storage-engine: wiredTiger # Puedes usar 'default' o 'wiredTiger' for XFS filesystem
-      events-collection: domainevents
-      snapshots-collection: snapshots
-  snapshot:
-    mongo:
-      uri: mongodb://sampleuser:samplepwd@192.168.1.137:27017/eventDbStore
-      database: eventDbStore
-      username: sampleuser
-      password: samplepwd
-      snapshots-collection: snapshots
-  tokenstore:
-    mongo:
-      uri: mongodb://sampleuser:samplepwd@192.168.1.137:27017/eventDbStore
-      database: eventDbStore
-      username: sampleuser
-      password: samplepwd
-      tokens-collection: trackingtokens
-  axonserver:
-    enabled: false
 
 # Event bus configuration
   kafka:
-    topic: myTopic
+    topic: topicCQRS
     consumer:
       bootstrap-servers: 192.168.1.137:9092
       group-id: cqrs

@@ -59,37 +59,6 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
-
-    <!-- START AXON DEPENDENCIES -->
-    <dependency>
-      <groupId>org.axonframework</groupId>
-      <artifactId>axon-spring-boot-starter</artifactId>
-      <version>4.9.3</version>
-    </dependency>
-    <dependency>
-      <groupId>org.axonframework</groupId>
-      <artifactId>axon-spring-boot-autoconfigure</artifactId>
-      <version>4.9.3</version>
-    </dependency>
-    <dependency>
-      <groupId>org.axonframework.extensions.mongo</groupId>
-      <artifactId>axon-mongo</artifactId>
-      <version>4.9.0</version>
-    </dependency>
-    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>8.0.33</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.fasterxml.jackson.datatype</groupId>
-      <artifactId>jackson-datatype-jsr310</artifactId>
-      <version>2.6.5</version>
-    </dependency>
-
-    <!-- END - AXON DEPENDENCIES -->
-
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-testcontainers</artifactId>
@@ -104,6 +73,27 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-jms</artifactId>
       <version>6.1.1</version>
+    </dependency>
+
+    <!--databases -->
+    <dependency>
+      <groupId>redis.clients</groupId>
+      <artifactId>jedis</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>8.0.33</version>
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
@@ -144,34 +134,11 @@
       <artifactId>log4j-core</artifactId>
       <version>2.23.1</version>
     </dependency>
-
-    <!--databases -->
     <dependency>
-      <groupId>redis.clients</groupId>
-      <artifactId>jedis</artifactId>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
+      <version>2.6.5</version>
     </dependency>
-
-    <!--<dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    oracle, mysql o el motor de persistencia relacional que sea
-    -->
-
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-
-    <!-- added dependencies -->
-
-    <!--<dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>2.13.4</version>
-    </dependency>-->
     <dependency>
       <groupId>jakarta.validation</groupId>
       <artifactId>jakarta.validation-api</artifactId>
@@ -206,11 +173,7 @@
       <version>5.10.1</version>
       <scope>test</scope>
     </dependency>
-    <!--dependency>
-      <groupId>org.springframework.kafka</groupId>
-      <artifactId>spring-kafka-test</artifactId>
-      <scope>test</scope>
-    </dependency>-->
+
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>junit-jupiter</artifactId>
