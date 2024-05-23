@@ -1,8 +1,11 @@
 package com.arch.mfc.application.domain.document;
 
+import com.arch.mfc.application.domain.CustomerOrder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
         import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.List;
 
 
 @Data
@@ -13,6 +16,8 @@ public class CustomerDocument {
     private String id;
     private String name;
     private String country;
+
+    private List<CustomerOrderDocument> customerOrders;
 
 
 }

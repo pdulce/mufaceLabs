@@ -20,6 +20,6 @@ public class Customer {
     private String name;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private List<CustomerOrder> customerOrderEntities;
+    private List<CustomerOrder> customerOrders;
 
 }
