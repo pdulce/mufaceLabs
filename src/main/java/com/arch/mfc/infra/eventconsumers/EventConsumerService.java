@@ -18,7 +18,7 @@ public class EventConsumerService {
 
     protected static final String TOPIC_PATTERN = "topicCQRS*";
 
-    protected static final String GROUP_ID = "cqrs";
+    protected static final String GROUP_ID = "cqrs-1";
 
     @KafkaListener(topicPattern = TOPIC_PATTERN, groupId = GROUP_ID)
     public void consumeEvent( @Payload( required = false ) String eventMsg ) {
@@ -28,11 +28,11 @@ public class EventConsumerService {
         Map<String, Object> event = ConversionUtils.jsonstring2Map( eventMsg );
 
         Map<String, Object> payload = (Map<String, Object>) event.get("payload");
-        String classname = (String) payload.get("classname");
+        String documentClassname = (String) payload.get("document");
 
         try {
             eventSourcingBrokerInputPort.insertEvent((Map<String, Object>) payload.get("after"),
-                    (Class<T>) Class.forName(classname));
+                    (Class<T>) Class.forName(documentClassname));
         } catch (ClassNotFoundException exc) {
             throw new RuntimeException("fatal error ", exc);
         }

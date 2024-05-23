@@ -1,6 +1,5 @@
 package com.arch.mfc.application.service.query;
 
-import com.arch.mfc.application.domain.document.CustomerOrderDocument;
 import com.arch.mfc.infra.inputadapter.QueryCQRSService;
 import com.arch.mfc.infra.utils.ConversionUtils;
 import org.springframework.stereotype.Service;
