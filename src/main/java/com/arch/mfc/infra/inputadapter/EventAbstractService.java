@@ -18,11 +18,11 @@ public class EventAbstractService implements EventSourcingBrokerInputPort {
 
     @Override
     public void insertEvent(Map<String, Object> reg, Class<T> clazz) {
-
+        eventRepositoryInterface.save(reg, clazz);
     }
 
     @Override
     public List<Map<String, Object>> getAll(Class<T> clazz) {
-        return null;
+        return eventRepositoryInterface.getAll(clazz);
     }
 }

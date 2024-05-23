@@ -6,11 +6,10 @@ import java.util.Map;
 
 import com.arch.mfc.application.domain.entities.Customer;
 import com.arch.mfc.application.service.command.CustomerCommandCommandService;
+import com.arch.mfc.infra.inputport.QueryCQRSBrokerInputPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import com.arch.mfc.infra.inputport.QueryCQRSBrokerInputPort;
 
 @RestController
 @RequestMapping(value = "customer")
@@ -43,7 +42,7 @@ public class CustomerAPI {
 
     @GetMapping(value = "getAllFromQueryRedirisDB", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Map<String,Object>> getAllFromQueryRedirisDB() {
-        return messageBrokerInputPort.getAll( "customer" );
+        return messageBrokerInputPort.getAll( "customers" );
     }
 
 

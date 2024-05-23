@@ -28,11 +28,11 @@ public class EventConsumerService {
         Map<String, Object> event = ConversionUtils.jsonstring2Map( eventMsg );
 
         Map<String, Object> payload = (Map<String, Object>) event.get("payload");
-        String almacen = (String) payload.get("table");
+        String classname = (String) payload.get("classname");
 
         try {
             eventSourcingBrokerInputPort.insertEvent((Map<String, Object>) payload.get("after"),
-                    (Class<T>) Class.forName(almacen));
+                    (Class<T>) Class.forName(classname));
         } catch (ClassNotFoundException exc) {
             throw new RuntimeException("fatal error ", exc);
         }

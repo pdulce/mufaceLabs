@@ -10,6 +10,7 @@ import java.util.List;
 @Service
 public class CustomerCommandCommandService extends GenericJpaCommandService<Customer> {
 
+    public CustomerCommandCommandService() {}
     public CustomerCommandCommandService(Class<Customer> entityClass) {
         super(entityClass);
     }

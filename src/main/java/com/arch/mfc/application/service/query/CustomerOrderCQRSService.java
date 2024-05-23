@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Service
-public class CustomerOrderCQRSService extends QueryCQRSService {
+//@Service
+public class CustomerOrderCQRSService  { //extends QueryCQRSService {
 
     /*@Override
     public void save(Map<String, Object> reg, Class<CustomerOrderDocument> clazz) {

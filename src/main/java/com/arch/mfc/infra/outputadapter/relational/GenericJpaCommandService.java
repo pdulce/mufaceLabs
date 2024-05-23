@@ -34,7 +34,9 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
             Map<String, Object> intercambio = new HashMap<>();
             intercambio.put("payload", new HashMap<String, Object>());
             ((Map<String, Object>) intercambio.get("payload")).put("op", "c");
-            ((Map<String, Object>) intercambio.get("payload")).put("table", entity.getClass().getSimpleName());
+            ((Map<String, Object>) intercambio.get("payload")).put("almacen", entity.getClass().getSimpleName().
+                    toLowerCase().concat("s"));
+            ((Map<String, Object>) intercambio.get("payload")).put("classname", entity.getClass().getName());
             ((Map<String, Object>) intercambio.get("payload")).put("after", ConversionUtils.convertToMap(saved));
 
             /*** Mando el evento al bus para que los recojan los dos consumers:
@@ -54,7 +56,7 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
             Map<String, Object> intercambio = new HashMap<>();
             intercambio.put("payload", new HashMap<String, Object>());
             ((Map<String, Object>) intercambio.get("payload")).put("op", "u");
-            ((Map<String, Object>) intercambio.get("payload")).put("table", entity.getClass().getSimpleName());
+            ((Map<String, Object>) intercambio.get("payload")).put("almacen", entity.getClass().getSimpleName());
             ((Map<String, Object>) intercambio.get("payload")).put("after", ConversionUtils.convertToMap(updated));
 
             commandProducerService.sendMessage("topicCQRS", ConversionUtils.map2Jsonstring(intercambio));
@@ -69,7 +71,7 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
         Map<String, Object> intercambio = new HashMap<>();
         intercambio.put("payload", new HashMap<String, Object>());
         ((Map<String, Object>) intercambio.get("payload")).put("op", "d");
-        ((Map<String, Object>) intercambio.get("payload")).put("table", entity.getClass().getSimpleName());
+        ((Map<String, Object>) intercambio.get("payload")).put("almacen", entity.getClass().getSimpleName());
         ((Map<String, Object>) intercambio.get("payload")).put("before", ConversionUtils.convertToMap(entity));
 
         commandProducerService.sendMessage("topicCQRS", ConversionUtils.map2Jsonstring(intercambio));

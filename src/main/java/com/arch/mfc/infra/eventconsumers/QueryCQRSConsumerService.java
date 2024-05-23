@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 @Service
-public class QueryConsumerService {
+public class QueryCQRSConsumerService {
 
     @Autowired
     QueryCQRSBrokerInputPort messageBrokerInputPort;
@@ -28,7 +28,7 @@ public class QueryConsumerService {
 
         Map<String, Object> payload = (Map<String, Object>) event.get("payload");
         String operation = (String) payload.get("op");
-        String table = (String) payload.get("table");
+        String table = (String) payload.get("almacen");
 
         if ( operation.equals("u") ) {
             messageBrokerInputPort.updateReg(table, (Map<String, Object>) payload.get("after"));

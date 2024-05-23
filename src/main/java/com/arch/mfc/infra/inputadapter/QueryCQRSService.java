@@ -26,11 +26,13 @@ public class QueryCQRSService implements QueryCQRSBrokerInputPort {
 
     @Override
     public void insertReg(String almacen, Map<String, Object> reg) {
+
         queryRepository.save( reg, almacen );
     }
 
     @Override
     public List<Map<String, Object>> getAll(String almacen) {
+
         return queryRepository.getAll( almacen );
     }
 
