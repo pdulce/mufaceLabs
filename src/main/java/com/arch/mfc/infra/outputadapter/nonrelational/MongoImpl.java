@@ -1,6 +1,6 @@
 package com.arch.mfc.infra.outputadapter.nonrelational;
 
-import com.arch.mfc.infra.outputport.QueryRepositoryInterface;
+import com.arch.mfc.infra.outputport.EventRepositoryInterface;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 import com.arch.mfc.infra.utils.ConversionUtils;
@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class MongoImpl<T> implements QueryRepositoryInterface<T> {
+public class MongoImpl<T> implements EventRepositoryInterface<T> {
 
     protected MongoRepository<T, String> repository;
 
@@ -30,7 +30,7 @@ public class MongoImpl<T> implements QueryRepositoryInterface<T> {
     }
 
     @Override
-    public void delete(String id, Class<T> clazz) {
+    public void delete(String id) {
         repository.deleteById(id);
     }
 

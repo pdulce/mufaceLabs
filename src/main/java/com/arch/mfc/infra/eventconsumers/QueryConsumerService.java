@@ -1,6 +1,6 @@
 package com.arch.mfc.infra.eventconsumers;
 
-import com.arch.mfc.infra.inputport.QueryMessageBrokerInputPort;
+import com.arch.mfc.infra.inputport.QueryCQRSBrokerInputPort;
 import com.arch.mfc.infra.utils.ConversionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -13,7 +13,7 @@ import java.util.Map;
 public class QueryConsumerService {
 
     @Autowired
-    QueryMessageBrokerInputPort messageBrokerInputPort;
+    QueryCQRSBrokerInputPort messageBrokerInputPort;
 
     protected static final String TOPIC_PATTERN = "topicCQRS*";
 
@@ -31,11 +31,11 @@ public class QueryConsumerService {
         String table = (String) payload.get("table");
 
         if ( operation.equals("u") ) {
-            messageBrokerInputPort.updateReg(table, (Map<String, Class<?>>) payload.get("after"));
+            messageBrokerInputPort.updateReg(table, (Map<String, Object>) payload.get("after"));
         } else if ( operation.equals("c") ) {
-            messageBrokerInputPort.insertReg(table, (Map<String, Class<?>>) payload.get("after"));
+            messageBrokerInputPort.insertReg(table, (Map<String, Object>) payload.get("after"));
         } else if ( operation.equals("d") ) {
-            messageBrokerInputPort.deleteReg(table, (Map<String, Class<?>>) payload.get("before"));
+            messageBrokerInputPort.deleteReg(table, (Map<String, Object>) payload.get("before"));
         } 
     }
     

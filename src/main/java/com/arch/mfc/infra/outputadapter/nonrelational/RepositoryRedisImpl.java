@@ -15,52 +15,38 @@ import org.springframework.stereotype.Service;
 
 @RedisHash
 @Service
-public class RepositoryRedisImpl<T> implements QueryRepositoryInterface<T> {
+public class RepositoryRedisImpl implements QueryRepositoryInterface {
 
     @Autowired
     protected RedisTemplate<String, String> redisTemplate;
 
 
     @Override
-    public void save(Map<String, Object> reg, Class<T> clazz) {
-        redisTemplate.opsForHash().put(
-                getHashFromClass( clazz ),
-                reg.get("id"),
-                ConversionUtils.map2Jsonstring( reg )
+    public void save(Map<String, Object> reg, String almacen) {
+        redisTemplate.opsForHash().put(almacen, reg.get("id"), ConversionUtils.map2Jsonstring( reg )
         );
     }
 
     @Override
-    public void delete(String id, Class<T> clazz) {
-        redisTemplate.opsForHash().delete(
-            getHashFromClass( clazz ), 
-            id
-        );
+    public void delete(String id, String almacen) {
+        redisTemplate.opsForHash().delete(almacen, id);
     }
 
     @Override
-    public Map<String, Object> getById(String id, Class<T> clazz) {
+    public Map<String, Object> getById(String id, String almacen) {
         return ConversionUtils.jsonstring2Map(
-            (String) redisTemplate.opsForHash().get( 
-                getHashFromClass( clazz ), 
-                id 
-            )
+            (String) redisTemplate.opsForHash().get(almacen, id)
         );
     }
 
     @Override
-    public List<Map<String, Object>> getAll(Class<T> clazz) {
+    public List<Map<String, Object>> getAll(String almacen) {
         return redisTemplate.opsForHash()
-            .values( getHashFromClass( clazz ) )
+            .values( almacen )
             .stream()
             .map( el -> ConversionUtils.jsonstring2Map( (String) el ) )
             .collect( Collectors.toList() );
     }
-
-    protected String getHashFromClass( Class<T> clazz ) {
-        return clazz.getName().replace('.', '_');
-    }
-
 
 
 }

@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import com.arch.mfc.infra.inputport.QueryMessageBrokerInputPort;
+import com.arch.mfc.infra.inputport.QueryCQRSBrokerInputPort;
 
 @RestController
 @RequestMapping(value = "customer")
@@ -19,7 +19,7 @@ public class CustomerAPI {
     @Autowired
     CustomerCommandCommandService customerCommandService;
     @Autowired
-    QueryMessageBrokerInputPort messageBrokerInputPort;
+    QueryCQRSBrokerInputPort messageBrokerInputPort;
 
     @PostMapping(value = "create", produces=MediaType.APPLICATION_JSON_VALUE)
     public Customer create(@RequestParam String name, @RequestParam String country ) {

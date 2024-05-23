@@ -1,23 +1,28 @@
 package com.arch.mfc.infra.inputadapter;
 
-import com.arch.mfc.infra.inputport.EventMessageBrokerInputPort;
-import com.arch.mfc.infra.outputport.QueryRepositoryInterface;
+import com.arch.mfc.infra.inputport.EventSourcingBrokerInputPort;
+import com.arch.mfc.infra.outputport.EventRepositoryInterface;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
-public class EventAbstractService implements EventMessageBrokerInputPort {
+@Service
+public class EventAbstractService implements EventSourcingBrokerInputPort {
 
     @Autowired
-    QueryRepositoryInterface queryRepository;
+    EventRepositoryInterface<T> eventRepositoryInterface;
+
+
     @Override
-    public void insertEvent(String almacen, Map<String, Object> reg) {
+    public void insertEvent(Map<String, Object> reg, Class<T> clazz) {
 
     }
 
     @Override
-    public List<Map<String, Object>> getAll(String almacen) {
+    public List<Map<String, Object>> getAll(Class<T> clazz) {
         return null;
     }
 }

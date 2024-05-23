@@ -1,7 +1,8 @@
 package com.arch.mfc.infra.eventconsumers;
 
-import com.arch.mfc.infra.inputport.EventMessageBrokerInputPort;
+import com.arch.mfc.infra.inputport.EventSourcingBrokerInputPort;
 import com.arch.mfc.infra.utils.ConversionUtils;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -13,7 +14,7 @@ import java.util.Map;
 public class EventConsumerService {
 
     @Autowired
-    EventMessageBrokerInputPort eventMessageBrokerInputPort;
+    EventSourcingBrokerInputPort eventSourcingBrokerInputPort;
 
     protected static final String TOPIC_PATTERN = "topicCQRS*";
 
@@ -27,9 +28,14 @@ public class EventConsumerService {
         Map<String, Object> event = ConversionUtils.jsonstring2Map( eventMsg );
 
         Map<String, Object> payload = (Map<String, Object>) event.get("payload");
-        String table = (String) payload.get("table");
+        String almacen = (String) payload.get("table");
 
-        eventMessageBrokerInputPort.insertEvent(table, (Map<String, Object>) payload.get("after"));
+        try {
+            eventSourcingBrokerInputPort.insertEvent((Map<String, Object>) payload.get("after"),
+                    (Class<T>) Class.forName(almacen));
+        } catch (ClassNotFoundException exc) {
+            throw new RuntimeException("fatal error ", exc);
+        }
     }
     
 }

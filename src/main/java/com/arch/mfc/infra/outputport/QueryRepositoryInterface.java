@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 @Document
-public interface QueryRepositoryInterface<T> {
+public interface QueryRepositoryInterface {
 
-    void save( Map<String,Object> reg, Class<T> clazz );
+    void save( Map<String,Object> reg, String almacen );
 
-    void delete( String id, Class<T> clazz );
+    void delete( String id, String almacen );
 
-    Map<String,Object> getById( String id, Class<T> clazz );
+    Map<String,Object> getById( String id, String almacen );
 
-    List<Map<String,Object>> getAll( Class<T> clazz );
+    List<Map<String,Object>> getAll( String almacen );
 }

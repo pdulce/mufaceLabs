@@ -1,7 +1,7 @@
 package com.arch.mfc.application.service.query;
 
 import com.arch.mfc.application.domain.document.CustomerOrderDocument;
-import com.arch.mfc.infra.outputadapter.nonrelational.RepositoryRedisImpl;
+import com.arch.mfc.infra.inputadapter.QueryCQRSService;
 import com.arch.mfc.infra.utils.ConversionUtils;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +11,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class CustomerOrderService extends RepositoryRedisImpl<CustomerOrderDocument> {
+public class CustomerOrderCQRSService extends QueryCQRSService {
 
-    @Override
+    /*@Override
     public void save(Map<String, Object> reg, Class<CustomerOrderDocument> clazz) {
         super.save(reg, clazz);
         addOrderToCustomer(reg, true );
@@ -60,8 +60,7 @@ public class CustomerOrderService extends RepositoryRedisImpl<CustomerOrderDocum
                 ConversionUtils.map2Jsonstring( customer )
         );
     }
-
-
+    */
 
 
 }
