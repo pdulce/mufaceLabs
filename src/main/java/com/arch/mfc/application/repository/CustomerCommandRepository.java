@@ -1,6 +1,6 @@
 package com.arch.mfc.application.repository;
 
-import com.arch.mfc.application.domain.entities.Customer;
+import com.arch.mfc.application.domain.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

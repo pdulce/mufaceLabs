@@ -2,8 +2,8 @@ package com.arch.mfc.application.api;
 
 import java.math.BigDecimal;
 
-import com.arch.mfc.application.domain.entities.Customer;
-import com.arch.mfc.application.domain.entities.CustomerOrder;
+import com.arch.mfc.application.domain.Customer;
+import com.arch.mfc.application.domain.CustomerOrder;
 import com.arch.mfc.application.service.command.CustomerOrderCommandCommandService;
 import com.arch.mfc.application.service.command.CustomerCommandCommandService;
 import org.springframework.beans.factory.annotation.Autowired;

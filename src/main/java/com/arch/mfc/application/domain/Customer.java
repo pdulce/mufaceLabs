@@ -1,4 +1,4 @@
-package com.arch.mfc.application.domain.entities;
+package com.arch.mfc.application.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -20,6 +20,6 @@ public class Customer {
     private String name;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private List<CustomerOrder> customerOrders;
+    private List<CustomerOrder> customerOrderEntities;
 
 }

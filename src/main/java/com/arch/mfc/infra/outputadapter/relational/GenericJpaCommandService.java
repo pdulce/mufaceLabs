@@ -34,10 +34,14 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
             Map<String, Object> intercambio = new HashMap<>();
             intercambio.put("payload", new HashMap<String, Object>());
             ((Map<String, Object>) intercambio.get("payload")).put("op", "c");
-            ((Map<String, Object>) intercambio.get("payload")).put("almacen", entity.getClass().getSimpleName().
-                    toLowerCase().concat("s"));
-            ((Map<String, Object>) intercambio.get("payload")).put("document", entity.getClass().getSimpleName().
-                    concat("Document"));
+
+            String pathClass = entity.getClass().getName().substring(0,
+                    entity.getClass().getName().lastIndexOf("."));
+            String entityname = entity.getClass().getSimpleName();
+
+            ((Map<String, Object>) intercambio.get("payload")).put("almacen", (entityname + "s").toLowerCase());
+            ((Map<String, Object>) intercambio.get("payload")).put("document", pathClass + ".document." +
+                    entityname + "Document");
             ((Map<String, Object>) intercambio.get("payload")).put("classname", entity.getClass().getName());
             ((Map<String, Object>) intercambio.get("payload")).put("after", ConversionUtils.convertToMap(saved));
 
