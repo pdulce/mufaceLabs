@@ -16,7 +16,7 @@ spring:
   # query domain
   redis:
     host: 192.168.1.137
-    #password: samplepwd
+    password: SUPER_SECRET_PASSWORD
     port: 6379
 
   # event domaindoc
@@ -39,17 +39,5 @@ spring:
 
 # Event bus configuration
   kafka:
-    topic: topicCQRS
     consumer:
       bootstrap-servers: 192.168.1.137:29092
-      group-id: cqrs
-      auto-offset-reset: earliest
-      properties:
-        spring:
-          json:
-            trusted:
-              packages: '*'
-      producer:
-        key-serializer: org.apache.kafka.common.serialization.StringSerializer
-        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-
