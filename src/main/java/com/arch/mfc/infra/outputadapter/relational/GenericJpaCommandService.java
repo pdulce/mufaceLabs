@@ -20,13 +20,6 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
     @Autowired
     protected JpaRepository<T, Long> repository;
 
-    private Class<T> entityClass;
-
-    public GenericJpaCommandService() {}
-    public GenericJpaCommandService(Class<T> entityClass) {
-        this.entityClass = entityClass;
-    }
-
     @Override
     public T save(T entity) {
         T saved = repository.save(entity);

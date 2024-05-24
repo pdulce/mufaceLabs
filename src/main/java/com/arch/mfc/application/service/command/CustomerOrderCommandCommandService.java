@@ -7,11 +7,4 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomerOrderCommandCommandService extends GenericJpaCommandService<CustomerOrder> {
 
-    public CustomerOrderCommandCommandService() {
-
-    }
-    public CustomerOrderCommandCommandService(Class<CustomerOrder> entityClass) {
-        super(entityClass);
-    }
-
 }
