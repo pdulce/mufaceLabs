@@ -2,8 +2,8 @@ package com.arch.mfc.infra.outputadapter.nonrelational;
 
 import com.arch.mfc.infra.outputport.EventRepositoryInterface;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Service;
 import com.arch.mfc.infra.utils.ConversionUtils;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
@@ -11,38 +11,31 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class MongoImpl<T> implements EventRepositoryInterface<T> {
+public abstract class MongoImpl<T> implements EventRepositoryInterface<T> {
 
-    protected MongoRepository<T, String> repository;
-
-    public MongoImpl() {}
-
-    public MongoImpl(MongoRepository<T, String> repository) {
-
-        this.repository = repository;
-    }
+    protected abstract MongoRepository<T, String> getRepository();
 
     @Override
     public void save(Map<String, Object> reg, Class<T> clazz) {
         String json = ConversionUtils.map2Jsonstring(reg);
         T order = ConversionUtils.jsonStringToObject(json, clazz);
-        repository.save(order);
+        getRepository().save(order);
     }
 
     @Override
     public void delete(String id) {
-        repository.deleteById(id);
+        getRepository().deleteById(id);
     }
 
     @Override
     public Map<String, Object> getById(String id, Class<T> clazz) {
-        Optional<T> order = repository.findById(id);
+        Optional<T> order = getRepository().findById(id);
         return order.map(ConversionUtils::objectToMap).orElse(null);
     }
 
     @Override
     public List<Map<String, Object>> getAll(Class<T> clazz) {
-        List<T> orders = repository.findAll();
+        List<T> orders = getRepository().findAll();
         return orders.stream().map(ConversionUtils::objectToMap).collect(Collectors.toList());
     }
 

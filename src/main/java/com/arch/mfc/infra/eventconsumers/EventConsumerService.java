@@ -1,6 +1,7 @@
 package com.arch.mfc.infra.eventconsumers;
 
 import com.arch.mfc.infra.inputport.EventSourcingBrokerInputPort;
+import com.arch.mfc.infra.outputadapter.nonrelational.MongoImpl;
 import com.arch.mfc.infra.utils.ConversionUtils;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,8 @@ import java.util.Map;
 @Service
 public class EventConsumerService {
 
-    @Autowired
-    EventSourcingBrokerInputPort eventSourcingBrokerInputPort;
+    //@Autowired
+    EventSourcingBrokerInputPort<T> eventSourcingBrokerInputPort;
 
     protected static final String TOPIC_PATTERN = "topicCQRS*";
 

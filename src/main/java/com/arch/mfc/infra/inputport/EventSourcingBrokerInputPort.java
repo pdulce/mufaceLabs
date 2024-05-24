@@ -5,7 +5,7 @@ import org.apache.poi.ss.formula.functions.T;
 import java.util.List;
 import java.util.Map;
 
-public interface EventSourcingBrokerInputPort {
+public interface EventSourcingBrokerInputPort<T> {
 
     void insertEvent(Map<String, Object> reg, Class<T> clazz);
 

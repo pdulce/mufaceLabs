@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class EventAbstractService implements EventSourcingBrokerInputPort {
+public class EventAbstractService<T> implements EventSourcingBrokerInputPort<T> {
 
     @Autowired
     EventRepositoryInterface<T> eventRepositoryInterface;

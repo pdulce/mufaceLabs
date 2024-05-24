@@ -13,6 +13,7 @@ public class CustomerOrderDocument {
 
     @Id
     private String id;
+    private String  customer_id;
     private BigDecimal total;
 
 }
