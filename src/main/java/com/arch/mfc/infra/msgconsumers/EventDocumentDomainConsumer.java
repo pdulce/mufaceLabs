@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
-@Service
+//@Service
 public class EventDocumentDomainConsumer {
 
     /** Usaremos un adaptador para un port de BBDD no relacional de tipo Key-Value como Redis **/
 
-    @Autowired
+    //@Autowired
     EventSourcingDocumentInputPort<T> eventSourcingDocumentInputPort;
 
     protected static final String TOPIC_PATTERN = "no-recuperar-topicCQRS*";

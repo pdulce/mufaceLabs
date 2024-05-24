@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 
-@Service
+//@Service
 public class EventDocumentInputAdapter implements EventSourcingDocumentInputPort<T> {
 
-    @Autowired
+    //@Autowired
     MongoRepository<T, String> eventRepositoryInterface;
 
 
