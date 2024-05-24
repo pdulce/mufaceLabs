@@ -1,15 +1,13 @@
 package com.arch.mfc.infra.inputadapter;
 
-import com.arch.mfc.infra.inputport.QueryCQRSBrokerInputPort;
+import com.arch.mfc.infra.inputport.QueryCQRSKeyValueInputPort;
 import com.arch.mfc.infra.outputadapter.nonrelational.RepositoryRedisImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
-@Service
-public class QueryCQRSService implements QueryCQRSBrokerInputPort {
+public class QueryKeyValueInputAdapter implements QueryCQRSKeyValueInputPort {
 
     @Autowired
     RepositoryRedisImpl queryRepository;
@@ -35,5 +33,4 @@ public class QueryCQRSService implements QueryCQRSBrokerInputPort {
 
         return queryRepository.getAll( almacen );
     }
-
 }

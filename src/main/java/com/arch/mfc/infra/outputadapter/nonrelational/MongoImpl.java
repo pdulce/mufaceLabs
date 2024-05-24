@@ -1,6 +1,6 @@
 package com.arch.mfc.infra.outputadapter.nonrelational;
 
-import com.arch.mfc.infra.outputport.EventRepositoryInterface;
+import com.arch.mfc.infra.outputport.DocumentRepositoryInterface;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import com.arch.mfc.infra.utils.ConversionUtils;
 import org.springframework.stereotype.Service;
@@ -11,9 +11,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public abstract class MongoImpl<T> implements EventRepositoryInterface<T> {
+public class MongoImpl<T> implements DocumentRepositoryInterface<T> {
 
-    protected abstract MongoRepository<T, String> getRepository();
+    protected MongoRepository<T, String> getRepository() {
+        return null;
+    }
 
     @Override
     public void save(Map<String, Object> reg, Class<T> clazz) {

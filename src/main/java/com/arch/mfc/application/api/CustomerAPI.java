@@ -7,7 +7,7 @@ import java.util.Map;
 import com.arch.mfc.application.domain.Customer;
 import com.arch.mfc.application.domain.document.CustomerDocument;
 import com.arch.mfc.application.service.command.CustomerCommandCommandService;
-import com.arch.mfc.application.service.query.CustomerQueryService;
+import com.arch.mfc.application.service.query.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +19,7 @@ public class CustomerAPI {
     @Autowired
     CustomerCommandCommandService customerCommandService;
     @Autowired
-    CustomerQueryService customerQueryService;
+    CustomerService customerQueryService;
 
     @PostMapping(value = "create", produces=MediaType.APPLICATION_JSON_VALUE)
     public Customer create(@RequestParam String name, @RequestParam String country ) {

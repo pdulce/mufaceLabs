@@ -1,4 +1,4 @@
-package com.arch.mfc.infra.eventproducer;
+package com.arch.mfc.infra.msgproducer;
 
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;

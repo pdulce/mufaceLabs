@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 @Document
-public interface QueryRepositoryInterface {
+public interface PairKeyValueRepositoryInterface {
 
     void save( Map<String,Object> reg, String almacen );
 

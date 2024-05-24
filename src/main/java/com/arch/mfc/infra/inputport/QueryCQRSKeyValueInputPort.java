@@ -3,7 +3,7 @@ package com.arch.mfc.infra.inputport;
 import java.util.List;
 import java.util.Map;
 
-public interface QueryCQRSBrokerInputPort {
+public interface QueryCQRSKeyValueInputPort {
     
     void deleteReg( String almacen, Map<String, Object> reg );
     void updateReg( String almacen, Map<String, Object> reg );

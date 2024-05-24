@@ -1,14 +1,5 @@
 package com.arch.mfc.application.service.query;
 
-import com.arch.mfc.infra.inputadapter.QueryCQRSService;
-import com.arch.mfc.infra.utils.ConversionUtils;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 //@Service
 public class CustomerOrderCQRSService  { //extends QueryCQRSService {
 

@@ -1,7 +1,7 @@
 package com.arch.mfc.infra.outputadapter.relational;
 
 import com.arch.mfc.infra.outputport.GenericCommandPort;
-import com.arch.mfc.infra.eventproducer.CommandProducerService;
+import com.arch.mfc.infra.msgproducer.CommandProducerService;
 import com.arch.mfc.infra.utils.ConversionUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
