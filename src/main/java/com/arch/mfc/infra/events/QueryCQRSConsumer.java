@@ -22,7 +22,7 @@ public class QueryCQRSConsumer {
 
     @KafkaListener(topics = EventArch.EVENT_TOPIC, groupId = GROUP_ID)
     public void listen(EventArch<?> event) {
-        Map<String, Object> eventData = ConversionUtils.convertToMap(event.getData());
+        Map<String, Object> eventData = ConversionUtils.convertLinkedHashMapToMap(event.getData());
         try {
             if (event.getTypeEvent().contentEquals(EventArch.EVENT_TYPE_CREATE)) {
                 queryCQRSDocumentInputPort.insertReg(eventData,

@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -56,6 +58,16 @@ public class ConversionUtils {
         return new HashMap<String, Object>();
     }
 
+    public static <T> Map<String, Object> convertLinkedHashMapToMap(T obj) {
+        Map<String, Object> resultMap = new HashMap<>();
+        Iterator<Map.Entry> iteratorMap = ((LinkedHashMap) obj).entrySet().iterator();
+        while (iteratorMap.hasNext()) {
+            Map.Entry entry = iteratorMap.next();
+            resultMap.put((String) entry.getKey(), entry.getValue());
+        }
+        return resultMap;
+    }
+
     public static <T> Map<String, Object> convertToMap(T obj) {
         Map<String, Object> resultMap = new HashMap<>();
         Class<?> clazz = obj.getClass();
@@ -71,6 +83,7 @@ public class ConversionUtils {
         }
         return resultMap;
     }
+
 
     public static LocalDate addDaysToADate(final String fechaInicialString) {
         // Fecha inicial

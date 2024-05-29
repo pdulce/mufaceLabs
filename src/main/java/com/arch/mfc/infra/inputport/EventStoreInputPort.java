@@ -7,8 +7,8 @@ import java.util.List;
 public interface EventStoreInputPort {
 
     public void saveEvent(EventArch<?> eventArch) ;
-    public EventArch<?> getById(String id);
+    public EventArch<?> getById(String almacen, String id);
 
-    public List<EventArch<?>> getAll() ;
+    public List<EventArch<?>> getAll(String almacen);
 
 }

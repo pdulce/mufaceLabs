@@ -11,11 +11,14 @@ public class EventArch<T> {
     public static final String EVENT_TYPE_DELETE = "delete";
     public static final String EVENT_TYPE_CREATE = "create";
     public static final String EVENT_TYPE_UPDATE = "update";
-    private final String id;
-    private final String typeEvent;
-    private final Instant occurredOn;
-    private final T data;
+    private String id;
+    private String almacen;
+    private String typeEvent;
+    private Instant occurredOn;
+    private T data;
 
+    public EventArch() {
+    }
     public EventArch(String id, String typeEvent, T data) {
         this.id = id;
         this.typeEvent = typeEvent;
