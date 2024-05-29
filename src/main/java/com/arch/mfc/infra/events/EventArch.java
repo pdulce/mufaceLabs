@@ -7,7 +7,8 @@ import java.time.Instant;
 @Data
 public class EventArch<T> {
 
-    public static final String EVENT_TOPIC = "events";
+    public static final String EVENT_TOPIC = "event";
+    public static final String EVENT_TOPIC_PATTERN = "event*";
     public static final String EVENT_TYPE_DELETE = "delete";
     public static final String EVENT_TYPE_CREATE = "create";
     public static final String EVENT_TYPE_UPDATE = "update";
@@ -19,7 +20,8 @@ public class EventArch<T> {
 
     public EventArch() {
     }
-    public EventArch(String id, String typeEvent, T data) {
+    public EventArch(String almacen, String id, String typeEvent, T data) {
+        this.almacen = almacen;
         this.id = id;
         this.typeEvent = typeEvent;
         this.occurredOn = Instant.now();
