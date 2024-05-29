@@ -1,20 +1,21 @@
 package com.arch.mfc.infra.events;
 
 import com.arch.mfc.infra.inputport.EventStoreInputPort;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
-public class EventStore implements EventStoreInputPort {
+@RedisHash
+@Service
+public class RedisEventStore implements EventStoreInputPort {
 
-    private final RedisTemplate<String, Event<?>> redisTemplate;
-
-    public EventStore(RedisTemplate<String, Event<?>> redisTemplate) {
-        this.redisTemplate = redisTemplate;
-    }
+    @Autowired
+    RedisTemplate<String, Event<?>> redisTemplate;
 
     public void saveEvent(Event<?> event) {
         redisTemplate.opsForList().leftPush(Event.EVENT_TOPIC, event);
