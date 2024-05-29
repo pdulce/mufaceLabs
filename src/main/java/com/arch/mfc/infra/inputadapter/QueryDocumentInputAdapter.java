@@ -1,39 +1,77 @@
 package com.arch.mfc.infra.inputadapter;
 
+import com.arch.mfc.infra.events.EventArch;
 import com.arch.mfc.infra.inputport.QueryCQRSDocumentInputPort;
-import com.arch.mfc.infra.outputadapter.nonrelational.MongoImpl;
+import com.arch.mfc.infra.utils.ConversionUtils;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.kafka.annotation.KafkaListener;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-@Service
-public class QueryDocumentInputAdapter implements QueryCQRSDocumentInputPort<T> {
+public class QueryDocumentInputAdapter<T> implements QueryCQRSDocumentInputPort<T> {
+
+    private final MongoRepository<T, String> repository;
 
     @Autowired
-    MongoImpl<T> mongoImplementation;
-
-
-    @Override
-    public void deleteReg(Map<String, Object> reg, Class<T> clazz) {
-        mongoImplementation.delete((String) reg.get("id"));
+    public QueryDocumentInputAdapter(MongoRepository<T, String> concreteRepository) {
+        this.repository = concreteRepository;
     }
 
-    @Override
-    public void updateReg(Map<String, Object> reg, Class<T> clazz) {
-        mongoImplementation.save(reg, clazz);
+    protected static final String GROUP_ID = "cqrs-2";
+
+    @KafkaListener(topicPattern = EventArch.EVENT_TOPIC_PATTERN, groupId = GROUP_ID)
+    public void listen(EventArch<?> event) {
+        Map<String, Object> eventData = ConversionUtils.convertLinkedHashMapToMap(event.getData());
+        try {
+            if (event.getTypeEvent().contentEquals(EventArch.EVENT_TYPE_CREATE)) {
+                this.insertReg(eventData,
+                        (Class<T>) Class.forName(event.getData().getClass().getName()));
+            } else if (event.getTypeEvent().contentEquals(EventArch.EVENT_TYPE_UPDATE)) {
+                this.updateReg(eventData,
+                        (Class<T>) Class.forName(event.getData().getClass().getName()));
+            } else if (event.getTypeEvent().contentEquals(EventArch.EVENT_TYPE_DELETE)) {
+                this.deleteReg(event.getId());
+            }
+
+        } catch (ClassNotFoundException exc) {
+            throw new RuntimeException("fatal error ", exc);
+        }
     }
 
     @Override
     public void insertReg(Map<String, Object> reg, Class<T> clazz) {
-        mongoImplementation.save(reg, clazz);
+        String json = ConversionUtils.map2Jsonstring(reg);
+        T order = ConversionUtils.jsonStringToObject(json, clazz);
+        this.repository.save(order);
     }
 
     @Override
-    public List<Map<String, Object>> getAll(Class<T> clazz) {
-        return mongoImplementation.getAll(clazz);
+    public void updateReg(Map<String, Object> reg, Class<T> clazz) {
+        String json = ConversionUtils.map2Jsonstring(reg);
+        T order = ConversionUtils.jsonStringToObject(json, clazz);
+        this.repository.save(order);
+    }
+
+    @Override
+    public void deleteReg(String id) {
+        this.repository.deleteById(id);
+    }
+
+    @Override
+    public Map<String, Object> getById(String id) {
+        Optional<T> order = this.repository.findById(id);
+        return order.map(ConversionUtils::objectToMap).orElse(null);
+    }
+
+    @Override
+    public List<Map<String, Object>> getAll() {
+        List<T> orders = this.repository.findAll();
+        return orders.stream().map(ConversionUtils::objectToMap).collect(Collectors.toList());
     }
 
 }
