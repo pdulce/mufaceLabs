@@ -14,7 +14,7 @@ public class CommandPublisher implements EventPublisher {
 
     @Override
     public void publish(String topic, EventArch<?> eventArch) {
-        kafkaTemplate.send(topic, eventArch.getId(), eventArch);
+        kafkaTemplate.send(topic.concat("-").concat(eventArch.getAlmacen()), eventArch.getId(), eventArch);
     }
 
 }
