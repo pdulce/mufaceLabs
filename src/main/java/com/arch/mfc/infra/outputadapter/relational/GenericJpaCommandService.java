@@ -8,9 +8,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.lang.reflect.Field;
 import java.util.List;
-import java.util.UUID;
 
 @Transactional
 public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
@@ -28,9 +26,10 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
              *  - el responsable del dominio de eventos que persiste en MongoDB (patrón Event-Sourcing)
              *  - el responsable del dominio de consultas que persiste en Redis (patrón CQRS)
              */
-            EventArch eventArch = new EventArch(ConversionUtils.convertToMap(saved).get("id").toString(),
+            EventArch eventArch = new EventArch(entity.getClass().getSimpleName(),
+                    ConversionUtils.convertToMap(saved).get("id").toString(),
                     EventArch.EVENT_TYPE_CREATE, entity);
-            commandPublisher.publish(EventArch.EVENT_TOPIC, /*ConversionUtils.map2Jsonstring(intercambio)*/eventArch);
+            commandPublisher.publish(EventArch.EVENT_TOPIC, eventArch);
         }
         return saved;
     }
@@ -45,7 +44,8 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
             ((Map<String, Object>) intercambio.get("payload")).put("op", "u");
             ((Map<String, Object>) intercambio.get("payload")).put("almacen", entity.getClass().getSimpleName());
             ((Map<String, Object>) intercambio.get("payload")).put("after", ConversionUtils.convertToMap(updated));*/
-            EventArch eventArch = new EventArch(ConversionUtils.convertToMap(entity).get("id").toString(),
+            EventArch eventArch = new EventArch(entity.getClass().getSimpleName(),
+                    ConversionUtils.convertToMap(entity).get("id").toString(),
                     EventArch.EVENT_TYPE_UPDATE, updated);
             commandPublisher.publish(EventArch.EVENT_TOPIC, eventArch);
         }
@@ -55,13 +55,8 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
     @Override
     public void delete(T entity) {
         repository.delete(entity);
-        // cqrs artesanal
-        /*Map<String, Object> intercambio = new HashMap<>();
-        intercambio.put("payload", new HashMap<String, Object>());
-        ((Map<String, Object>) intercambio.get("payload")).put("op", "d");
-        ((Map<String, Object>) intercambio.get("payload")).put("almacen", entity.getClass().getSimpleName());
-        ((Map<String, Object>) intercambio.get("payload")).put("before", ConversionUtils.convertToMap(entity));*/
-        EventArch eventArch = new EventArch(ConversionUtils.convertToMap(entity).get("id").toString(),
+        EventArch eventArch = new EventArch(entity.getClass().getSimpleName(),
+                ConversionUtils.convertToMap(entity).get("id").toString(),
                 EventArch.EVENT_TYPE_DELETE, entity);
         commandPublisher.publish(EventArch.EVENT_TOPIC, eventArch);
     }
@@ -74,16 +69,6 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
     @Override
     public List<T> findAll() {
         return repository.findAll().stream().toList();
-    }
-
-    public Object getId(T entity) {
-        try {
-            Field idField = entity.getClass().getDeclaredField("id");
-            idField.setAccessible(true);
-            return idField.get(entity);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException("Failed to get id field value", e);
-        }
     }
 
 }
