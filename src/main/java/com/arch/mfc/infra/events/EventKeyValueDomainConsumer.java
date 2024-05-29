@@ -7,37 +7,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EventKeyValueDomainConsumer {
-
-    /** Usaremos un adaptador para un port de BBDD no relacional de tipo Key-Value como Redis **/
-    //@Autowired
-    //EventSourcingKeyValueInputPort eventSourcingKeyValueInputPort;
-
     protected static final String GROUP_ID = "cqrs-1";
 
     @Autowired
     EventStoreInputPort eventStore;
 
-    @KafkaListener(topics = EventArch.EVENT_TOPIC, groupId = GROUP_ID)
+    @KafkaListener(topicPattern = EventArch.EVENT_TOPIC_PATTERN, groupId = GROUP_ID)
     public void listen(EventArch<Object> eventArch) {
         eventStore.saveEvent(eventArch);
     }
-
-    /*@KafkaListener(topics = Event.EVENT_TOPIC, groupId = GROUP_ID)
-    public void consumeEvent( @Payload( required = false ) String eventMsg ) {
-        if ( eventMsg == null ) {
-            return;
-        }
-
-        Map<String, Object> event = ConversionUtils.jsonstring2Map( eventMsg );
-        Map<String, Object> payload = (Map<String, Object>) event.get("payload");
-        String operation = (String) payload.get("op");
-        String table = (String) payload.get("almacen");
-
-        if ( operation.equals("u") || operation.equals("c")) {
-            eventSourcingKeyValueInputPort.insertEvent(table, (Map<String, Object>) payload.get("after"));
-        } else if ( operation.equals("d") ) {
-            eventSourcingKeyValueInputPort.insertEvent(table, (Map<String, Object>) payload.get("before"));
-        }
-    }*/
 
 }
