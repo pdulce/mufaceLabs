@@ -7,10 +7,12 @@ import java.util.Map;
 
 public interface QueryCQRSDocumentInputPort<T> {
     
-    void deleteReg( Map<String, Object> reg, Class<T> clazz );
+    void deleteReg( String id );
     void updateReg( Map<String, Object> reg, Class<T> clazz );
     void insertReg( Map<String, Object> reg, Class<T> clazz );
-    List<Map<String, Object>> getAll( Class<T> clazz );
+
+    Map<String, Object> getById(String id);
+    List<Map<String, Object>> getAll();
 
 
 
