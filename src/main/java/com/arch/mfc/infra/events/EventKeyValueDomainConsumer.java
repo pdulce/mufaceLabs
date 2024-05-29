@@ -1,4 +1,4 @@
-package com.arch.mfc.infra.events.adapter;
+package com.arch.mfc.infra.events;
 
 import com.arch.mfc.infra.inputport.EventStoreInputPort;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +17,9 @@ public class EventKeyValueDomainConsumer {
     @Autowired
     EventStoreInputPort eventStore;
 
-    @KafkaListener(topics = Event.EVENT_TOPIC, groupId = GROUP_ID)
-    public void listen(Event<Object> event) {
-        eventStore.saveEvent(event);
+    @KafkaListener(topics = EventArch.EVENT_TOPIC, groupId = GROUP_ID)
+    public void listen(EventArch<Object> eventArch) {
+        eventStore.saveEvent(eventArch);
     }
 
     /*@KafkaListener(topics = Event.EVENT_TOPIC, groupId = GROUP_ID)

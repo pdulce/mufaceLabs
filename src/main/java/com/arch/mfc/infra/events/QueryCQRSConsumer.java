@@ -1,4 +1,4 @@
-package com.arch.mfc.infra.events.adapter;
+package com.arch.mfc.infra.events;
 
 
 import com.arch.mfc.infra.inputport.QueryCQRSDocumentInputPort;
@@ -20,12 +20,24 @@ public class QueryCQRSConsumer {
 
     protected static final String GROUP_ID = "cqrs-2";
 
-    //@KafkaListener(topics = Event.EVENT_TOPIC, groupId = GROUP_ID)
-    //public void listen(Event<Object> event) {
+    @KafkaListener(topics = EventArch.EVENT_TOPIC, groupId = GROUP_ID)
+    public void listen(EventArch<?> event) {
+        Map<String, Object> eventData = ConversionUtils.convertToMap(event.getData());
+        try {
+            if (event.getTypeEvent().contentEquals(EventArch.EVENT_TYPE_CREATE)) {
+                queryCQRSDocumentInputPort.insertReg(eventData,
+                        (Class<T>) Class.forName(event.getData().getClass().getName()));
+            } else if (event.getTypeEvent().contentEquals(EventArch.EVENT_TYPE_UPDATE)) {
+                queryCQRSDocumentInputPort.updateReg(eventData,
+                        (Class<T>) Class.forName(event.getData().getClass().getName()));
+            }
 
-    //}
+        } catch (ClassNotFoundException exc) {
+            throw new RuntimeException("fatal error ", exc);
+        }
+    }
 
-    @KafkaListener(topics = "events", groupId = GROUP_ID)
+    /*@KafkaListener(topics = "events", groupId = GROUP_ID)
     public void consumeEvent( @Payload( required = false ) String eventMsg ) {
         if ( eventMsg == null ) {
             return;
@@ -48,6 +60,6 @@ public class QueryCQRSConsumer {
         } catch (ClassNotFoundException exc) {
             throw new RuntimeException("fatal error ", exc);
         }
-    }
+    }*/
     
 }

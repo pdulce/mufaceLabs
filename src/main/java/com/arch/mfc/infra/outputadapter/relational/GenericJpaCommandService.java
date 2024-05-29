@@ -1,8 +1,8 @@
 package com.arch.mfc.infra.outputadapter.relational;
 
-import com.arch.mfc.infra.events.adapter.Event;
+import com.arch.mfc.infra.events.EventArch;
 import com.arch.mfc.infra.outputport.GenericCommandPort;
-import com.arch.mfc.infra.events.adapter.CommandPublisher;
+import com.arch.mfc.infra.events.CommandPublisher;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -41,8 +41,8 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
              *  - el responsable del dominio de eventos que persiste en MongoDB (patrón Event-Sourcing)
              *  - el responsable del dominio de consultas que persiste en Redis (patrón CQRS)
              */
-            Event event = new Event(UUID.randomUUID().toString(), Event.EVENT_TYPE_CREATE, entity);
-            commandPublisher.publish(Event.EVENT_TOPIC, /*ConversionUtils.map2Jsonstring(intercambio)*/event);
+            EventArch eventArch = new EventArch(UUID.randomUUID().toString(), EventArch.EVENT_TYPE_CREATE, entity);
+            commandPublisher.publish(EventArch.EVENT_TOPIC, /*ConversionUtils.map2Jsonstring(intercambio)*/eventArch);
         }
         return saved;
     }
@@ -57,8 +57,8 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
             ((Map<String, Object>) intercambio.get("payload")).put("op", "u");
             ((Map<String, Object>) intercambio.get("payload")).put("almacen", entity.getClass().getSimpleName());
             ((Map<String, Object>) intercambio.get("payload")).put("after", ConversionUtils.convertToMap(updated));*/
-            Event event = new Event(UUID.randomUUID().toString(), Event.EVENT_TYPE_UPDATE, updated);
-            commandPublisher.publish(Event.EVENT_TOPIC, /*ConversionUtils.map2Jsonstring(intercambio)*/event);
+            EventArch eventArch = new EventArch(UUID.randomUUID().toString(), EventArch.EVENT_TYPE_UPDATE, updated);
+            commandPublisher.publish(EventArch.EVENT_TOPIC, /*ConversionUtils.map2Jsonstring(intercambio)*/eventArch);
         }
         return updated;
     }
@@ -72,8 +72,8 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
         ((Map<String, Object>) intercambio.get("payload")).put("op", "d");
         ((Map<String, Object>) intercambio.get("payload")).put("almacen", entity.getClass().getSimpleName());
         ((Map<String, Object>) intercambio.get("payload")).put("before", ConversionUtils.convertToMap(entity));*/
-        Event event = new Event(UUID.randomUUID().toString(), Event.EVENT_TYPE_DELETE, entity);
-        commandPublisher.publish(Event.EVENT_TOPIC, /*ConversionUtils.map2Jsonstring(intercambio)*/event);
+        EventArch eventArch = new EventArch(UUID.randomUUID().toString(), EventArch.EVENT_TYPE_DELETE, entity);
+        commandPublisher.publish(EventArch.EVENT_TOPIC, /*ConversionUtils.map2Jsonstring(intercambio)*/eventArch);
     }
 
     @Override

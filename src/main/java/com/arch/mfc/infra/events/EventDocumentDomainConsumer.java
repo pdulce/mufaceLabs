@@ -1,4 +1,4 @@
-package com.arch.mfc.infra.events.adapter;
+package com.arch.mfc.infra.events;
 
 import com.arch.mfc.infra.inputport.EventSourcingDocumentInputPort;
 import com.arch.mfc.infra.utils.ConversionUtils;
