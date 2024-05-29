@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.arch.mfc.infra.outputport.PairKeyValueRepositoryInterface;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -15,9 +14,9 @@ import org.springframework.stereotype.Service;
 
 @RedisHash
 @Service
-public class RepositoryRedisImpl implements PairKeyValueRepositoryInterface {
+public class RepositoryRedisImplToDelete implements PairKeyValueRepositoryInterface {
 
-    @Autowired
+    //@Autowired
     protected RedisTemplate<String, String> redisTemplate;
 
 

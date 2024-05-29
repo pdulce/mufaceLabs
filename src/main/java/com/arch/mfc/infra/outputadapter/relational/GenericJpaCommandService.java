@@ -1,8 +1,8 @@
 package com.arch.mfc.infra.outputadapter.relational;
 
-import com.arch.mfc.infra.events.Event;
+import com.arch.mfc.infra.events.adapter.Event;
 import com.arch.mfc.infra.outputport.GenericCommandPort;
-import com.arch.mfc.infra.events.CommandPublisher;
+import com.arch.mfc.infra.events.adapter.CommandPublisher;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;

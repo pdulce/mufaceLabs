@@ -1,4 +1,4 @@
-package com.arch.mfc.infra.events;
+package com.arch.mfc.infra.events.adapter;
 
 import java.time.Instant;
 

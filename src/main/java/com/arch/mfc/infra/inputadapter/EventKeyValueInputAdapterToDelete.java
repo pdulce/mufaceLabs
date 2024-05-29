@@ -1,19 +1,17 @@
 package com.arch.mfc.infra.inputadapter;
 
 import com.arch.mfc.infra.inputport.EventSourcingKeyValueInputPort;
-import com.arch.mfc.infra.outputadapter.nonrelational.RepositoryRedisImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.arch.mfc.infra.outputadapter.nonrelational.RepositoryRedisImplToDelete;
 
 import java.util.List;
 import java.util.Map;
 
 
-@Service
-public class EventKeyValueInputAdapter implements EventSourcingKeyValueInputPort {
+//@Service
+public class EventKeyValueInputAdapterToDelete implements EventSourcingKeyValueInputPort {
 
-    @Autowired
-    RepositoryRedisImpl queryRepository;
+    //@Autowired
+    RepositoryRedisImplToDelete queryRepository;
 
 
     @Override

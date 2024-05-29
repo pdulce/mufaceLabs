@@ -1,10 +1,10 @@
-package com.arch.mfc.infra.events;
+package com.arch.mfc.infra.events.adapter;
 
+import com.arch.mfc.infra.events.adapter.Event;
 import com.arch.mfc.infra.inputport.EventStoreInputPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,12 +1,13 @@
-package com.arch.mfc.infra.events;
+package com.arch.mfc.infra.events.adapter;
+
 
 import com.arch.mfc.infra.inputport.QueryCQRSDocumentInputPort;
 import com.arch.mfc.infra.utils.ConversionUtils;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
+import org.apache.poi.ss.formula.functions.T;
 
 import java.util.Map;
 
@@ -19,7 +20,12 @@ public class QueryCQRSConsumer {
 
     protected static final String GROUP_ID = "cqrs-2";
 
-    @KafkaListener(topics = Event.EVENT_TOPIC, groupId = GROUP_ID)
+    //@KafkaListener(topics = Event.EVENT_TOPIC, groupId = GROUP_ID)
+    //public void listen(Event<Object> event) {
+
+    //}
+
+    @KafkaListener(topics = "events", groupId = GROUP_ID)
     public void consumeEvent( @Payload( required = false ) String eventMsg ) {
         if ( eventMsg == null ) {
             return;

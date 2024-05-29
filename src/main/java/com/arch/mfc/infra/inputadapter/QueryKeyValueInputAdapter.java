@@ -1,7 +1,7 @@
 package com.arch.mfc.infra.inputadapter;
 
 import com.arch.mfc.infra.inputport.QueryCQRSKeyValueInputPort;
-import com.arch.mfc.infra.outputadapter.nonrelational.RepositoryRedisImpl;
+import com.arch.mfc.infra.outputadapter.nonrelational.RepositoryRedisImplToDelete;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.Map;
 public class QueryKeyValueInputAdapter implements QueryCQRSKeyValueInputPort {
 
     @Autowired
-    RepositoryRedisImpl queryRepository;
+    RepositoryRedisImplToDelete queryRepository;
 
     @Override
     public void deleteReg(String almacen, Map<String, Object> reg) {

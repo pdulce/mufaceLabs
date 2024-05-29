@@ -1,9 +1,8 @@
 package com.arch.mfc.infra.inputport;
 
-import com.arch.mfc.infra.events.Event;
+import com.arch.mfc.infra.events.adapter.Event;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public interface EventStoreInputPort {
 

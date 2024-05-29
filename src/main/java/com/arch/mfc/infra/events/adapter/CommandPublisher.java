@@ -1,5 +1,6 @@
-package com.arch.mfc.infra.events;
+package com.arch.mfc.infra.events.adapter;
 
+import com.arch.mfc.infra.events.port.EventPublisher;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 

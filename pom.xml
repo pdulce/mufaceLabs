@@ -144,6 +144,11 @@
       <artifactId>jakarta.validation-api</artifactId>
       <version>3.0.2</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-pool2</artifactId>
+    </dependency>
     <!--<dependency>
       <groupId>javax.xml.ws</groupId>
       <artifactId>jaxws-api</artifactId>
