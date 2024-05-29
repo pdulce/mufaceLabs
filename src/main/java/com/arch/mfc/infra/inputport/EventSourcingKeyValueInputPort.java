@@ -5,7 +5,7 @@ import java.util.Map;
 
 public interface EventSourcingKeyValueInputPort {
 
-    void insertEvent( String almacen, Map<String, Object> reg );
+    void saveEvent( String almacen, Map<String, Object> reg );
     List<Map<String, Object>> getAll( String almacen );
 
 }

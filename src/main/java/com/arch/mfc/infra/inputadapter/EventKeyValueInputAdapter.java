@@ -17,7 +17,7 @@ public class EventKeyValueInputAdapter implements EventSourcingKeyValueInputPort
 
 
     @Override
-    public void insertEvent(String almacen, Map<String, Object> reg) {
+    public void saveEvent(String almacen, Map<String, Object> reg) {
         queryRepository.save( reg, almacen );
     }
 

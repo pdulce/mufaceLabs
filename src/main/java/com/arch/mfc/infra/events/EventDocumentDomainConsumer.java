@@ -1,4 +1,4 @@
-package com.arch.mfc.infra.msgconsumers;
+package com.arch.mfc.infra.events;
 
 import com.arch.mfc.infra.inputport.EventSourcingDocumentInputPort;
 import com.arch.mfc.infra.utils.ConversionUtils;
@@ -18,11 +18,9 @@ public class EventDocumentDomainConsumer {
     //@Autowired
     EventSourcingDocumentInputPort<T> eventSourcingDocumentInputPort;
 
-    protected static final String TOPIC_PATTERN = "no-recuperar-topicCQRS*";
-
     protected static final String GROUP_ID = "cqrs-1";
 
-    @KafkaListener(topicPattern = TOPIC_PATTERN, groupId = GROUP_ID)
+    @KafkaListener(topics = "no-recuperar-topic", groupId = GROUP_ID)
     public void consumeEvent( @Payload( required = false ) String eventMsg ) {
         if ( eventMsg == null ) {
             return;
