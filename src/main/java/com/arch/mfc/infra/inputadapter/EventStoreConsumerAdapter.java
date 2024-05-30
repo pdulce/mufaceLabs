@@ -3,7 +3,6 @@ package com.arch.mfc.infra.inputadapter;
 import com.arch.mfc.infra.event.Event;
 import com.arch.mfc.infra.inputport.EventConsumer;
 import com.arch.mfc.infra.inputport.EventStoreInputPort;
-import com.arch.mfc.infra.utils.ConversionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -11,7 +10,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,13 +27,13 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort, EventCons
 
     public void saveEvent(Event<?> eventArch) {
         HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
-        if (hashOps.entries(eventArch.getAlmacen()).get(eventArch.getId()) == null) {
+        if (hashOps.entries(eventArch.getContextInfo().getAlmacen()).get(eventArch.getId()) == null) {
             List<Object> agregados = new ArrayList<>();
-            hashOps.put(eventArch.getAlmacen(), eventArch.getId(), agregados);
+            hashOps.put(eventArch.getContextInfo().getAlmacen(), eventArch.getId(), agregados);
         }
-        List<Object> agregados = hashOps.entries(eventArch.getAlmacen()).get(eventArch.getId());
+        List<Object> agregados = hashOps.entries(eventArch.getContextInfo().getAlmacen()).get(eventArch.getId());
         agregados.add(eventArch.getInnerEvent());
-        hashOps.put(eventArch.getAlmacen(), eventArch.getId(), agregados);
+        hashOps.put(eventArch.getContextInfo().getAlmacen(), eventArch.getId(), agregados);
     }
 
     public List<Object> findById(String almacen, String id) {

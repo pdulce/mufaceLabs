@@ -15,10 +15,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class QueryInputConsumerAdapter<T> implements QueryInputPort<T>, EventConsumer {
-
     @Autowired
     MongoRepository<T, String> repository;
-
     protected static final String GROUP_ID = "cqrs-query-adapter";
 
     @KafkaListener(topics = Event.EVENT_TOPIC, groupId = GROUP_ID)
@@ -27,7 +25,7 @@ public class QueryInputConsumerAdapter<T> implements QueryInputPort<T>, EventCon
         Class<T> entityClass = (Class<T>) ((ParameterizedType) getClass()
                 .getGenericSuperclass())
                 .getActualTypeArguments()[0];
-        if (!entityClass.getName().equals(event.getAlmacen())) {
+        if (!entityClass.getSimpleName().equals(event.getContextInfo().getAlmacen())) {
             return; //dejo pasar este mensaje porque no es para este consumidor
         }
 
