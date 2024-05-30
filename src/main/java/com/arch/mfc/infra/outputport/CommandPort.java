@@ -1,5 +1,7 @@
 package com.arch.mfc.infra.outputport;
 
+import com.arch.mfc.infra.exceptions.NotExistException;
+
 import java.util.List;
 
 
@@ -7,13 +9,13 @@ public interface CommandPort<T> {
 
     T insert(T entity) throws NoSuchFieldException;
 
-    T update(T entity);
+    T update(T entity) throws NotExistException;
 
-    void delete(T entity);
+    void delete(T entity) throws NotExistException;
 
     void deleteAll();
 
-    T findById(Long id);
+    T findById(Long id) throws NotExistException;
 
     List<T> findAll();
 

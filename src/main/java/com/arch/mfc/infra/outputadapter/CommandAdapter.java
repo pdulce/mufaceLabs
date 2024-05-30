@@ -1,6 +1,7 @@
 package com.arch.mfc.infra.outputadapter;
 
 import com.arch.mfc.infra.event.Event;
+import com.arch.mfc.infra.exceptions.NotExistException;
 import com.arch.mfc.infra.outputport.CommandEventPublisher;
 import com.arch.mfc.infra.outputport.CommandPort;
 import com.arch.mfc.infra.utils.ConversionUtils;
@@ -38,7 +39,7 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
     }
 
     @Override
-    public T update(T entity) {
+    public T update(T entity) throws NotExistException {
         T updated =  this.repository.save(entity);
         if (updated != null) {
             Event eventArch = new Event(getDocumentEntityClassname(),
@@ -50,12 +51,17 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
     }
 
     @Override
-    public void delete(T entity) {
-        this.repository.delete(entity);
-        Event eventArch = new Event(getDocumentEntityClassname(),
-                ConversionUtils.convertToMap(entity).get("id").toString(),
-                Event.EVENT_TYPE_DELETE, entity);
-        commandEventPublisher.publish(Event.EVENT_TOPIC, eventArch);
+    public void delete(T entity) throws NotExistException {
+        if (this.repository.findById(Long.valueOf(ConversionUtils.convertToMap(entity).get("id").toString()))
+                .isPresent()) {
+            this.repository.delete(entity);
+            Event eventArch = new Event(getDocumentEntityClassname(),
+                    ConversionUtils.convertToMap(entity).get("id").toString(),
+                    Event.EVENT_TYPE_DELETE, entity);
+            commandEventPublisher.publish(Event.EVENT_TOPIC, eventArch);
+        } else {
+            throw new NotExistException();
+        }
     }
 
     @Override
@@ -70,8 +76,11 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
     }
 
     @Override
-    public T findById(Long id) {
-        return this.repository.findById(id).get();
+    public T findById(Long id) throws NotExistException {
+        if (this.repository.findById(id).isPresent()) {
+           return this.repository.findById(id).get();
+        }
+        throw new NotExistException();
     }
 
     @Override

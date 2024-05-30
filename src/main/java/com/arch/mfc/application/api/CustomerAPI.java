@@ -34,16 +34,24 @@ public class CustomerAPI {
 
     @PutMapping(value = "update", produces=MediaType.APPLICATION_JSON_VALUE)
     public Customer update(@RequestParam Long id, @RequestParam String country ) {
-        Customer customer = customerCommandService.findById(id);
-        customer.setCountry(country);
-        return customerCommandService.update(customer);
+        try{
+            Customer customer = customerCommandService.findById(id);
+            customer.setCountry(country);
+            return customerCommandService.update(customer);
+        } catch (Throwable exc) {
+            return null;
+        }
     }
 
     @DeleteMapping(value = "delete", produces=MediaType.APPLICATION_JSON_VALUE)
     public void deleteByname(@RequestParam String name) {
         List<Customer> customers = this.customerCommandService.findAllByFieldvalue("name", name);
         customers.forEach((customer) -> {
-            customerCommandService.delete(customer);
+            try {
+                customerCommandService.delete(customer);
+            } catch (Throwable exc) {
+                return;
+            }
         });
     }
 
@@ -69,7 +77,11 @@ public class CustomerAPI {
 
     @GetMapping(value = "get", produces=MediaType.APPLICATION_JSON_VALUE)
     public Customer get(@RequestParam Long customerId) {
-        return customerCommandService.findById(customerId);
+        try{
+            return customerCommandService.findById(customerId);
+        } catch (Throwable exc) {
+            return null;
+        }
     }
 
 
