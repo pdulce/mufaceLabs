@@ -14,25 +14,16 @@ import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 @Transactional
-public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
+public abstract class GenericJpaCommandService<T> implements GenericCommandPort<T> {
 
     @Autowired
     CommandPublisher commandPublisher;
     @Autowired
-    protected JpaRepository<T, Long> repository;
-
-    private final Class<T> entityClass;
-
-    @SuppressWarnings("unchecked")
-    public GenericJpaCommandService() {
-        this.entityClass = (Class<T>) ((ParameterizedType) getClass()
-                .getGenericSuperclass())
-                .getActualTypeArguments()[0];
-    }
+    JpaRepository<T, Long> repository;
 
     @Override
     public final T save(T entity) {
-        T saved = repository.save(entity);
+        T saved = this.repository.save(entity);
         if (saved != null) {
             /*** Mando el evento al bus para que los recojan los dos consumers:
              *  - consumer responsable del dominio de eventos que persiste en MongoDB (patrón Event-Sourcing)
@@ -48,7 +39,7 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
 
     @Override
     public final T update(T entity) {
-        T updated =  repository.save(entity);
+        T updated =  this.repository.save(entity);
         if (updated != null) {
             EventArch eventArch = new EventArch(entity.getClass().getSimpleName(),
                     ConversionUtils.convertToMap(entity).get("id").toString(),
@@ -60,7 +51,7 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
 
     @Override
     public final void delete(T entity) {
-        repository.delete(entity);
+        this.repository.delete(entity);
         EventArch eventArch = new EventArch(entity.getClass().getSimpleName(),
                 ConversionUtils.convertToMap(entity).get("id").toString(),
                 EventArch.EVENT_TYPE_DELETE, entity);
@@ -69,12 +60,12 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
 
     @Override
     public final T findById(Long id) {
-        return repository.findById(id).get();
+        return this.repository.findById(id).get();
     }
 
     @Override
     public final List<T> findAll() {
-        return repository.findAll().stream().toList();
+        return this.repository.findAll().stream().toList();
     }
 
     /** método generíco para buscar dentro de cualquier campo de un entidad T **/
@@ -82,12 +73,15 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
     public final List<T> findByFieldvalue(String fieldName, Object fieldValue) {
 
         try {
+            Class<T> entityClass = (Class<T>) ((ParameterizedType) getClass()
+                    .getGenericSuperclass())
+                    .getActualTypeArguments()[0];
             T instance = entityClass.getDeclaredConstructor().newInstance();
             // llenamos esta instancia con el field y value recibidos
             Field field = entityClass.getDeclaredField(fieldName);
             field.setAccessible(true);
             field.set(instance, fieldValue);
-            return repository.findAll(Example.of(instance));
+            return this.repository.findAll(Example.of(instance));
         } catch (Throwable exc) {
             return null;
         }

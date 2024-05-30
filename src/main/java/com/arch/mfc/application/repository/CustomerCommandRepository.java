@@ -3,6 +3,7 @@ package com.arch.mfc.application.repository;
 import com.arch.mfc.application.domain.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * consultas filtrando por uno o varios campos específicos de la entidad que maneja este Repository
  */
 
+@Repository
 public interface CustomerCommandRepository extends JpaRepository<Customer, Long> {
 
 
