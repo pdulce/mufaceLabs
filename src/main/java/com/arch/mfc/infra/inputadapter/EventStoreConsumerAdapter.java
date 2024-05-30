@@ -31,9 +31,8 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort, EventCons
         Map<String, Object> mapa = new HashMap<>();
         mapa.put("operation", eventArch.getTypeEvent());
         mapa.put("timestamp", eventArch.getOccurredOn());
-        mapa.put("data", mapaData.get("data"));
+        mapa.put("data", mapaData);
         String jsonConverted = ConversionUtils.map2Jsonstring(mapa);
-        //redisTemplate.opsForList().leftPush(EventArch.EVENT_TOPIC, jsonConverted);
         redisTemplate.opsForHash().put(eventArch.getAlmacen(), eventArch.getId(), jsonConverted);
     }
 
