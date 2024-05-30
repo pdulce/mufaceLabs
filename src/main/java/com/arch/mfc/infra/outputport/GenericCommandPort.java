@@ -1,15 +1,20 @@
 package com.arch.mfc.infra.outputport;
 
+import com.arch.mfc.infra.events.EventArch;
+import com.arch.mfc.infra.utils.ConversionUtils;
+
 import java.util.List;
 
 
 public interface GenericCommandPort<T> {
 
-    public T save(T entity) throws NoSuchFieldException;
+    T insert(T entity) throws NoSuchFieldException;
 
-    public T update(T entity);
+    T update(T entity);
 
-    public void delete(T entity);
+    void delete(T entity);
+
+    void deleteAll();
 
     public T findById(Long id);
 

@@ -29,7 +29,7 @@ public class OrderAPI {
         CustomerOrder customerOrder = new CustomerOrder();
         customerOrder.setCustomer(customer);
         customerOrder.setTotal(total);
-        return customerOrderCommandService.save(customerOrder);
+        return customerOrderCommandService.insert(customerOrder);
    }
     
 }

@@ -25,14 +25,27 @@ public class CustomerAPI {
         Customer customer = new Customer();
         customer.setName(name);
         customer.setCountry(country);
-        return customerCommandService.save(customer);
+        return customerCommandService.insert(customer);
     }
 
     @PutMapping(value = "update", produces=MediaType.APPLICATION_JSON_VALUE)
     public Customer update(@RequestParam Long id, @RequestParam String country ) {
         Customer customer = customerCommandService.findById(id);
         customer.setCountry(country);
-        return customerCommandService.save(customer);
+        return customerCommandService.update(customer);
+    }
+
+    @DeleteMapping(value = "delete", produces=MediaType.APPLICATION_JSON_VALUE)
+    public void deleteByname(@RequestParam String name) {
+        List<Customer> customers = this.customerCommandService.findAllByFieldvalue("name", name);
+        customers.forEach((customer) -> {
+            customerCommandService.delete(customer);
+        });
+    }
+
+    @DeleteMapping(value = "deleteAll", produces=MediaType.APPLICATION_JSON_VALUE)
+    public void deleteAll() {
+        this.customerCommandService.deleteAll();
     }
 
     @GetMapping(value = "getAllFromCommandDB", produces=MediaType.APPLICATION_JSON_VALUE)

@@ -22,7 +22,7 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
     JpaRepository<T, Long> repository;
 
     @Override
-    public T save(T entity) {
+    public T insert(T entity) {
         T saved = this.repository.save(entity);
         if (saved != null) {
             /*** Mando el evento al bus para que los recojan los dos consumers:
@@ -56,6 +56,17 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
                 ConversionUtils.convertToMap(entity).get("id").toString(),
                 EventArch.EVENT_TYPE_DELETE, entity);
         commandPublisher.publish(EventArch.EVENT_TOPIC, eventArch);
+    }
+
+    @Override
+    public void deleteAll() {
+        findAll().forEach((record) -> {
+            EventArch eventArch = new EventArch(record.getClass().getSimpleName(),
+                    ConversionUtils.convertToMap(record).get("id").toString(),
+                    EventArch.EVENT_TYPE_DELETE, record);
+            commandPublisher.publish(EventArch.EVENT_TOPIC, eventArch);
+        });
+        this.repository.deleteAll();
     }
 
     @Override
