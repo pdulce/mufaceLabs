@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.kafka.annotation.KafkaListener;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -22,35 +23,25 @@ public class QueryInputConsumerAdapter<T> implements QueryInputPort<T>, EventCon
 
     @KafkaListener(topics = Event.EVENT_TOPIC, groupId = GROUP_ID)
     public void listen(Event<?> event) {
-        Map<String, Object> eventData = ConversionUtils.convertLinkedHashMapToMap(event.getData());
-        try {
-            if (event.getTypeEvent().contentEquals(Event.EVENT_TYPE_CREATE)) {
-                this.insertReg(eventData,
-                        (Class<T>) Class.forName(event.getData().getClass().getName()));
-            } else if (event.getTypeEvent().contentEquals(Event.EVENT_TYPE_UPDATE)) {
-                this.updateReg(eventData,
-                        (Class<T>) Class.forName(event.getData().getClass().getName()));
-            } else if (event.getTypeEvent().contentEquals(Event.EVENT_TYPE_DELETE)) {
-                this.deleteReg(event.getId());
-            }
 
-        } catch (ClassNotFoundException exc) {
-            throw new RuntimeException("fatal error ", exc);
+        Class<T> entityClass = (Class<T>) ((ParameterizedType) getClass()
+                .getGenericSuperclass())
+                .getActualTypeArguments()[0];
+        if (!entityClass.getName().equals(event.getAlmacen().concat("Document"))) {
+            return; //dejo pasar este mensaje porque no es para este consumidor
+        }
+
+        if (event.getTypeEvent().contentEquals(Event.EVENT_TYPE_CREATE)
+                || event.getTypeEvent().contentEquals(Event.EVENT_TYPE_UPDATE)) {
+            saveReg((T) event.getData());
+        } else if (event.getTypeEvent().contentEquals(Event.EVENT_TYPE_DELETE)) {
+            this.deleteReg(event.getId());
         }
     }
 
     @Override
-    public void insertReg(Map<String, Object> reg, Class<T> clazz) {
-        String json = ConversionUtils.map2Jsonstring(reg);
-        T order = ConversionUtils.jsonStringToObject(json, clazz);
-        this.repository.save(order);
-    }
-
-    @Override
-    public void updateReg(Map<String, Object> reg, Class<T> clazz) {
-        String json = ConversionUtils.map2Jsonstring(reg);
-        T order = ConversionUtils.jsonStringToObject(json, clazz);
-        this.repository.save(order);
+    public void saveReg(T document) {
+        this.repository.save(document);
     }
 
     @Override
