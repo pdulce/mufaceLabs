@@ -84,10 +84,23 @@ public class CustomerAPI {
         }
     }
 
+    /*** CONSULTAS CONTRA EL DOMINIO DE EVENTOS ***/
 
     @GetMapping(value = "getAllFromEventStoreRedis", produces=MediaType.APPLICATION_JSON_VALUE)
     public Map<String, List<Object>> getAllFromEventStoreRedis() {
         return eventStoreConsumerAdapter.findAll(customerCommandService.getDocumentEntityClassname());
+    }
+
+    @GetMapping(value = "getAllEventsFromCustomerIdFromRedis", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<Object> getAllEventsFromIdFromRedis(@RequestParam String customerId) {
+        return eventStoreConsumerAdapter.findById(customerCommandService.getDocumentEntityClassname(), customerId);
+    }
+
+    /*** CONSULTAS CONTRA EL DOMINIO DE QUERIES ***/
+
+    @GetMapping(value = "getFromQueryStoreMongoById", produces=MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, Object> getFromQueryStoreMongoById(@RequestParam String customerId) {
+        return customerQueryService.findById(customerId);
     }
 
     @GetMapping(value = "getAllFromQueryStoreMongo", produces=MediaType.APPLICATION_JSON_VALUE)
@@ -95,10 +108,7 @@ public class CustomerAPI {
         return customerQueryService.findAll();
     }
 
-    @GetMapping(value = "getAllEventsFromCustomerIdFromRedis", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Object> getAllEventsFromIdFromRedis(@RequestParam String customerId) {
-        return eventStoreConsumerAdapter.findById(customerCommandService.getDocumentEntityClassname(), customerId);
-    }
+
 
 
 }
