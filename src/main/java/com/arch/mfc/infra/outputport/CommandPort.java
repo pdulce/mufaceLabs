@@ -17,4 +17,6 @@ public interface CommandPort<T> {
 
     List<T> findAll();
 
+    String getDocumentEntityClassname();
+
 }

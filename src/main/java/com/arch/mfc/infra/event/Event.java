@@ -2,7 +2,9 @@ package com.arch.mfc.infra.event;
 
 import lombok.Data;
 
+import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Calendar;
 
 @Data
 public class Event<T> {
@@ -14,7 +16,7 @@ public class Event<T> {
     private String id;
     private String almacen;
     private String typeEvent;
-    private Instant occurredOn;
+    private Timestamp occurredOn;
     private T data;
 
     public Event() {
@@ -23,7 +25,7 @@ public class Event<T> {
         this.almacen = almacen;
         this.id = id;
         this.typeEvent = typeEvent;
-        this.occurredOn = Instant.now();
+        this.occurredOn = new Timestamp(Calendar.getInstance().getTimeInMillis());
         this.data = data;
     }
 

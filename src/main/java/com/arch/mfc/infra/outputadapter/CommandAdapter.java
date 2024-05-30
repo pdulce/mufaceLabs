@@ -14,7 +14,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 @Transactional
-public class CommandAdapter<T> implements CommandPort<T> {
+public abstract class CommandAdapter<T> implements CommandPort<T> {
 
     @Autowired
     CommandEventPublisher commandEventPublisher;
@@ -29,7 +29,7 @@ public class CommandAdapter<T> implements CommandPort<T> {
              *  - consumer responsable del dominio de eventos que persiste en MongoDB (patrón Event-Sourcing)
              *  - consumer responsable del dominio de consultas que persiste en Redis (patrón CQRS)
              */
-            Event eventArch = new Event(entity.getClass().getSimpleName(),
+            Event eventArch = new Event(getDocumentEntityClassname(),
                     ConversionUtils.convertToMap(saved).get("id").toString(),
                     Event.EVENT_TYPE_CREATE, entity);
             commandEventPublisher.publish(Event.EVENT_TOPIC, eventArch);
@@ -41,7 +41,7 @@ public class CommandAdapter<T> implements CommandPort<T> {
     public T update(T entity) {
         T updated =  this.repository.save(entity);
         if (updated != null) {
-            Event eventArch = new Event(entity.getClass().getSimpleName(),
+            Event eventArch = new Event(getDocumentEntityClassname(),
                     ConversionUtils.convertToMap(entity).get("id").toString(),
                     Event.EVENT_TYPE_UPDATE, updated);
             commandEventPublisher.publish(Event.EVENT_TOPIC, eventArch);
@@ -52,7 +52,7 @@ public class CommandAdapter<T> implements CommandPort<T> {
     @Override
     public void delete(T entity) {
         this.repository.delete(entity);
-        Event eventArch = new Event(entity.getClass().getSimpleName(),
+        Event eventArch = new Event(getDocumentEntityClassname(),
                 ConversionUtils.convertToMap(entity).get("id").toString(),
                 Event.EVENT_TYPE_DELETE, entity);
         commandEventPublisher.publish(Event.EVENT_TOPIC, eventArch);
@@ -61,7 +61,7 @@ public class CommandAdapter<T> implements CommandPort<T> {
     @Override
     public void deleteAll() {
         findAll().forEach((record) -> {
-            Event eventArch = new Event(record.getClass().getSimpleName(),
+            Event eventArch = new Event(getDocumentEntityClassname(),
                     ConversionUtils.convertToMap(record).get("id").toString(),
                     Event.EVENT_TYPE_DELETE, record);
             commandEventPublisher.publish(Event.EVENT_TOPIC, eventArch);

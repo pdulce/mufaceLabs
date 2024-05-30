@@ -27,7 +27,7 @@ public class QueryInputConsumerAdapter<T> implements QueryInputPort<T>, EventCon
         Class<T> entityClass = (Class<T>) ((ParameterizedType) getClass()
                 .getGenericSuperclass())
                 .getActualTypeArguments()[0];
-        if (!entityClass.getName().equals(event.getAlmacen().concat("Document"))) {
+        if (!entityClass.getName().equals(event.getAlmacen())) {
             return; //dejo pasar este mensaje porque no es para este consumidor
         }
 
