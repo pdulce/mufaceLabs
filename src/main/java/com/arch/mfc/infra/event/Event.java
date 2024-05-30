@@ -7,7 +7,7 @@ import java.time.Instant;
 @Data
 public class Event<T> {
 
-    public static final String EVENT_TOPIC = "event";
+    public static final String EVENT_TOPIC = "topic-command-event";
     public static final String EVENT_TYPE_DELETE = "delete";
     public static final String EVENT_TYPE_CREATE = "create";
     public static final String EVENT_TYPE_UPDATE = "update";
