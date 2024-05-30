@@ -22,10 +22,10 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort, EventCons
 
     @KafkaListener(topics = Event.EVENT_TOPIC, groupId = GROUP_ID)
     public void listen(Event<?> eventArch) {
-        saveEvent(eventArch);
+        procesarEvento(eventArch);
     }
 
-    public void saveEvent(Event<?> eventArch) {
+    public void procesarEvento(Event<?> eventArch) {
         HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
         if (hashOps.entries(eventArch.getContextInfo().getAlmacen()).get(eventArch.getId()) == null) {
             List<Object> agregados = new ArrayList<>();

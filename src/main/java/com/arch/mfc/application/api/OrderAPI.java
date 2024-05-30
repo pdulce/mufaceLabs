@@ -6,6 +6,7 @@ import com.arch.mfc.application.domain.Customer;
 import com.arch.mfc.application.domain.CustomerOrder;
 import com.arch.mfc.application.service.command.CustomerOrderCommandAdapter;
 import com.arch.mfc.application.service.command.CustomerCommandAdapter;
+import com.arch.mfc.application.service.query.CustomerOrderQueryServiceConsumerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,9 @@ public class OrderAPI {
 
     @Autowired
     CustomerOrderCommandAdapter customerOrderCommandService;
+
+    @Autowired
+    CustomerOrderQueryServiceConsumerAdapter customerOrderQueryServiceConsumerAdapter;
 
     @PostMapping(value = "create", produces=MediaType.APPLICATION_JSON_VALUE)
     public CustomerOrder create(@RequestParam Long customerId, @RequestParam BigDecimal total) {
