@@ -12,11 +12,6 @@ public class CustomerCommandCommandService extends GenericJpaCommandService<Cust
 
     /** personalized operations not in infra : acceder al repositorio de la infra y consultar **/
 
-    public List<Customer> getByName(String name) {
-        Customer plantilla = new Customer();
-        plantilla.setName(name);
-        Example<Customer> filter = Example.of(plantilla);
-        return repository.findAll(filter);
-    }
+
 
 }

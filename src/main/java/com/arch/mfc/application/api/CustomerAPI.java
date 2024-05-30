@@ -35,6 +35,11 @@ public class CustomerAPI {
         return customerCommandService.findAll();
     }
 
+    @GetMapping(value = "getByNameFromCommandDB", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<Customer> getAllWithName(@RequestParam String name) {
+        return customerCommandService.getByFieldvalue("name", name);
+    }
+
     @GetMapping(value = "get", produces=MediaType.APPLICATION_JSON_VALUE)
     public Customer get(@RequestParam Long customerId ) {
         return customerCommandService.findById(customerId);
