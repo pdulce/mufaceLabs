@@ -25,11 +25,15 @@ public class OrderAPI {
 
     @PostMapping(value = "create", produces=MediaType.APPLICATION_JSON_VALUE)
     public CustomerOrder create(@RequestParam Long customerId, @RequestParam BigDecimal total) {
-        Customer customer = customerCommandService.findById(customerId);
-        CustomerOrder customerOrder = new CustomerOrder();
-        customerOrder.setCustomer(customer);
-        customerOrder.setTotal(total);
-        return customerOrderCommandService.insert(customerOrder);
-   }
+        try{
+            Customer customer = customerCommandService.findById(customerId);
+            CustomerOrder customerOrder = new CustomerOrder();
+            customerOrder.setCustomer(customer);
+            customerOrder.setTotal(total);
+            return customerOrderCommandService.insert(customerOrder);
+        } catch (Throwable exc) {
+            return null;
+        }
+    }
     
 }
