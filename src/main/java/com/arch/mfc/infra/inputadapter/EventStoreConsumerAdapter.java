@@ -5,14 +5,13 @@ import com.arch.mfc.infra.inputport.EventConsumer;
 import com.arch.mfc.infra.inputport.EventStoreInputPort;
 import com.arch.mfc.infra.utils.ConversionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class EventStoreConsumerAdapter implements EventStoreInputPort, EventConsumer {
@@ -37,27 +36,14 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort, EventCons
     }
 
     public Event<?> findById(String almacen, String id) {
-        String recovered = (String) redisTemplate.opsForHash().get(almacen, id);
-        //Map<String, Object> mapa = ConversionUtils.jsonstring2Map(recovered);
-        //Map<String, Object> mapaData = (Map<String, Object>) mapa.get("data");
-        //ConversionUtils.jsonStringToObject(recovered, ?);
-        return null;
+        HashOperations<String, String, Event<?>> hashOps = redisTemplate.opsForHash();
+        return hashOps.entries(almacen).get(almacen);
     }
 
-    public List<Event<?>> findAll(String almacen) {
-        return redisTemplate.opsForList().range(almacen, 0, -1)
-                .stream()
-                .map(event -> (Event<?>) event)
-                .collect(Collectors.toList());
-        /*
-         return redisTemplate.opsForHash()
-                .values( "eventsById" )
-                .stream()
-                .map( el -> ConversionUtils.jsonstring2Map( (String) el ) )
-                .collect( Collectors.toList() );
-         */
+    public Map<String, Event<?>> findAll(String almacen) {
+        HashOperations<String, String, Event<?>> hashOps = redisTemplate.opsForHash();
+        return hashOps.entries(almacen);
     }
-
 
 
 }

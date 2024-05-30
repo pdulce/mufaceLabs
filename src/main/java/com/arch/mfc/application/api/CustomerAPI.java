@@ -7,6 +7,8 @@ import java.util.Map;
 import com.arch.mfc.application.domain.Customer;
 import com.arch.mfc.application.service.command.CustomerCommandAdapter;
 import com.arch.mfc.application.service.query.CustomerQueryServiceConsumerAdapter;
+import com.arch.mfc.infra.event.Event;
+import com.arch.mfc.infra.inputadapter.EventStoreConsumerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,9 @@ public class CustomerAPI {
     CustomerCommandAdapter customerCommandService;
     @Autowired
     CustomerQueryServiceConsumerAdapter customerQueryService;
+
+    @Autowired
+    EventStoreConsumerAdapter eventStoreConsumerAdapter;
 
     @PostMapping(value = "create", produces=MediaType.APPLICATION_JSON_VALUE)
     public Customer create(@RequestParam String name, @RequestParam String country ) {
@@ -64,14 +69,24 @@ public class CustomerAPI {
     }
 
     @GetMapping(value = "get", produces=MediaType.APPLICATION_JSON_VALUE)
-    public Customer get(@RequestParam Long customerId ) {
+    public Customer get(@RequestParam Long customerId) {
         return customerCommandService.findById(customerId);
     }
 
 
-    @GetMapping(value = "getAllFromQueryMongoDB", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Map<String,Object>> getAllFromQueryMongoDB() {
-        return customerQueryService.findAll();
+    @GetMapping(value = "getAllFromEventStoreRedis", produces=MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, Event<?>> getAllFromEventStoreRedis() {
+        return eventStoreConsumerAdapter.findAll(customerCommandService.getDocumentEntityClassname());
+    }
+
+    /*@GetMapping(value = "getAllFromEventStoreRedis", produces=MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, Event<?>> getAllFromEventStoreRedis() {
+        return eventStoreConsumerAdapter.findAll(customerCommandService.getDocumentEntityClassname());
+    }*/
+
+    @GetMapping(value = "getAllEventsFromCustomerIdFromRedis", produces=MediaType.APPLICATION_JSON_VALUE)
+    public Object getAllEventsFromIdFromRedis(@RequestParam String customerId) {
+        return eventStoreConsumerAdapter.findById(customerCommandService.getDocumentEntityClassname(), customerId);
     }
 
 
