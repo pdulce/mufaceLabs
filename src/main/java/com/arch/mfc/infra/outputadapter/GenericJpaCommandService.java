@@ -19,7 +19,7 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
     @Autowired
     CommandPublisher commandPublisher;
     @Autowired
-    JpaRepository<T, Long> repository;
+    protected JpaRepository<T, Long> repository;
 
     @Override
     public T insert(T entity) {

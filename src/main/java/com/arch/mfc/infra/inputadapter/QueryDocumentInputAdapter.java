@@ -20,7 +20,7 @@ public class QueryDocumentInputAdapter<T> implements QueryCQRSDocumentInputPort<
 
     protected static final String GROUP_ID = "cqrs-query-adapter";
 
-    @KafkaListener(topicPattern = EventArch.EVENT_TOPIC_PATTERN, groupId = GROUP_ID)
+    @KafkaListener(topics = EventArch.EVENT_TOPIC, groupId = GROUP_ID)
     public void listen(EventArch<?> event) {
         Map<String, Object> eventData = ConversionUtils.convertLinkedHashMapToMap(event.getData());
         try {

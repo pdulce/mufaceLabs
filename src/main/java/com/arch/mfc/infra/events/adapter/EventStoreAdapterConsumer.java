@@ -1,11 +1,10 @@
 package com.arch.mfc.infra.events.adapter;
 
 import com.arch.mfc.infra.events.EventArch;
-import com.arch.mfc.infra.events.port.EventStoreInputPort;
 import com.arch.mfc.infra.utils.ConversionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -13,14 +12,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@RedisHash
 @Service
-public class RedisEventStore implements EventStoreInputPort {
+public class EventStoreAdapterConsumer {
+    protected static final String GROUP_ID = "event-adapter";
 
     @Autowired
     RedisTemplate<String, EventArch<?>> redisTemplate;
 
-    public void saveEvent(EventArch<?> eventArch) {
+    @KafkaListener(topics = EventArch.EVENT_TOPIC, groupId = GROUP_ID)
+    public void listen(EventArch<?> eventArch) {
+        saveEvent(eventArch);
+    }
+
+    private void saveEvent(EventArch<?> eventArch) {
         Map<String, Object> mapaData = ConversionUtils.convertLinkedHashMapToMap(eventArch.getData());
         Map<String, Object> mapa = new HashMap<>();
         mapa.put("operation", eventArch.getTypeEvent());
@@ -52,5 +56,7 @@ public class RedisEventStore implements EventStoreInputPort {
                 .collect( Collectors.toList() );
          */
     }
+
+
 
 }
