@@ -7,7 +7,6 @@ import java.util.Map;
 import com.arch.mfc.application.domain.Customer;
 import com.arch.mfc.application.service.command.CustomerCommandAdapter;
 import com.arch.mfc.application.service.query.CustomerQueryServiceConsumerAdapter;
-import com.arch.mfc.infra.event.Event;
 import com.arch.mfc.infra.inputadapter.EventStoreConsumerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -75,7 +74,7 @@ public class CustomerAPI {
 
 
     @GetMapping(value = "getAllFromEventStoreRedis", produces=MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, Event<?>> getAllFromEventStoreRedis() {
+    public Map<String, List<Object>> getAllFromEventStoreRedis() {
         return eventStoreConsumerAdapter.findAll(customerCommandService.getDocumentEntityClassname());
     }
 
@@ -85,7 +84,7 @@ public class CustomerAPI {
     }*/
 
     @GetMapping(value = "getAllEventsFromCustomerIdFromRedis", produces=MediaType.APPLICATION_JSON_VALUE)
-    public Object getAllEventsFromIdFromRedis(@RequestParam String customerId) {
+    public List<Object> getAllEventsFromIdFromRedis(@RequestParam String customerId) {
         return eventStoreConsumerAdapter.findById(customerCommandService.getDocumentEntityClassname(), customerId);
     }
 
