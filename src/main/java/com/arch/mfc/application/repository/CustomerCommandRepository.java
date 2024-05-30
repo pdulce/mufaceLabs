@@ -11,9 +11,8 @@ import java.util.List;
  * no disponibles desde la arquitectura, por ejemplo, consultas HQL persionalizas con JOINS etc,
  * consultas filtrando por uno o varios campos específicos de la entidad que maneja este Repository
  */
-@RedisHash
+
 public interface CustomerCommandRepository extends JpaRepository<Customer, Long> {
 
-    List<Customer> findByName(String name);
 
 }

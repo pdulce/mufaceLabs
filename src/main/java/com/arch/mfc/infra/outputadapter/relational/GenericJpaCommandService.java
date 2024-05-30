@@ -35,8 +35,8 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
         T saved = repository.save(entity);
         if (saved != null) {
             /*** Mando el evento al bus para que los recojan los dos consumers:
-             *  - el responsable del dominio de eventos que persiste en MongoDB (patrón Event-Sourcing)
-             *  - el responsable del dominio de consultas que persiste en Redis (patrón CQRS)
+             *  - consumer responsable del dominio de eventos que persiste en MongoDB (patrón Event-Sourcing)
+             *  - consumer responsable del dominio de consultas que persiste en Redis (patrón CQRS)
              */
             EventArch eventArch = new EventArch(entity.getClass().getSimpleName(),
                     ConversionUtils.convertToMap(saved).get("id").toString(),
@@ -50,12 +50,6 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
     public final T update(T entity) {
         T updated =  repository.save(entity);
         if (updated != null) {
-            // cqrs artesanal
-            /*Map<String, Object> intercambio = new HashMap<>();
-            intercambio.put("payload", new HashMap<String, Object>());
-            ((Map<String, Object>) intercambio.get("payload")).put("op", "u");
-            ((Map<String, Object>) intercambio.get("payload")).put("almacen", entity.getClass().getSimpleName());
-            ((Map<String, Object>) intercambio.get("payload")).put("after", ConversionUtils.convertToMap(updated));*/
             EventArch eventArch = new EventArch(entity.getClass().getSimpleName(),
                     ConversionUtils.convertToMap(entity).get("id").toString(),
                     EventArch.EVENT_TYPE_UPDATE, updated);

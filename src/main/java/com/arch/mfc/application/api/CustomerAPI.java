@@ -40,6 +40,13 @@ public class CustomerAPI {
         return customerCommandService.getByFieldvalue("name", name);
     }
 
+    @GetMapping(value = "getByCountryFromCommandDB", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<Customer> getAllOfThisCountry(@RequestParam String country) {
+        return customerCommandService.getByFieldvalue("country", country);
+    }
+
+
+
     @GetMapping(value = "get", produces=MediaType.APPLICATION_JSON_VALUE)
     public Customer get(@RequestParam Long customerId ) {
         return customerCommandService.findById(customerId);
