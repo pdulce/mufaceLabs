@@ -1,6 +1,5 @@
 package com.arch.mfc.infra.outputadapter.relational;
 
-import com.arch.mfc.application.domain.Customer;
 import com.arch.mfc.infra.events.EventArch;
 import com.arch.mfc.infra.outputport.GenericCommandPort;
 import com.arch.mfc.infra.events.adapter.CommandPublisher;
@@ -12,9 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Transactional
 public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
