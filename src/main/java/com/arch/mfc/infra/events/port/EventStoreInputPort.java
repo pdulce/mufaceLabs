@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface EventStoreInputPort {
 
-    public void saveEvent(EventArch<?> eventArch) ;
-    public EventArch<?> findById(String almacen, String id);
+    void saveEvent(EventArch<?> eventArch) ;
+    EventArch<?> findById(String almacen, String id);
 
-    public List<EventArch<?>> findAll(String almacen);
+    List<EventArch<?>> findAll(String almacen);
 
 }

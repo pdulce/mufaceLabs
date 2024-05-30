@@ -16,8 +16,8 @@ public interface GenericCommandPort<T> {
 
     void deleteAll();
 
-    public T findById(Long id);
+    T findById(Long id);
 
-    public List<T> findAll();
+    List<T> findAll();
 
 }
