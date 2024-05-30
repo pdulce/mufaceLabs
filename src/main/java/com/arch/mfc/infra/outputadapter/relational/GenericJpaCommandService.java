@@ -79,7 +79,7 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
 
     /** método generíco para buscar dentro de cualquier campo de un entidad T **/
 
-    public final List<T> getByFieldvalue(String fieldName, Object fieldValue) {
+    public final List<T> findByFieldvalue(String fieldName, Object fieldValue) {
 
         try {
             T instance = entityClass.getDeclaredConstructor().newInstance();
