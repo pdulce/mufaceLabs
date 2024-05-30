@@ -15,12 +15,8 @@ import java.util.stream.Collectors;
 
 public class QueryDocumentInputAdapter<T> implements QueryCQRSDocumentInputPort<T> {
 
-    private final MongoRepository<T, String> repository;
-
     @Autowired
-    public QueryDocumentInputAdapter(MongoRepository<T, String> concreteRepository) {
-        this.repository = concreteRepository;
-    }
+    MongoRepository<T, String> repository;
 
     protected static final String GROUP_ID = "cqrs-query-adapter";
 

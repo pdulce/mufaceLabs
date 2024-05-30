@@ -1,4 +1,4 @@
-package com.arch.mfc.infra.inputport;
+package com.arch.mfc.infra.events.port;
 
 import com.arch.mfc.infra.events.EventArch;
 

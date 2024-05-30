@@ -9,11 +9,4 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomerQueryService extends QueryDocumentInputAdapter<CustomerDocument> {
 
-    @Autowired
-    CustomerDocumentRepository repository;
-
-    public CustomerQueryService(CustomerDocumentRepository concreteRepository) {
-        super(concreteRepository);
-    }
-
 }

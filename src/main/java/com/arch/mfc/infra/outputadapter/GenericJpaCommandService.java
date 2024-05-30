@@ -1,4 +1,4 @@
-package com.arch.mfc.infra.outputadapter.relational;
+package com.arch.mfc.infra.outputadapter;
 
 import com.arch.mfc.infra.events.EventArch;
 import com.arch.mfc.infra.outputport.GenericCommandPort;
