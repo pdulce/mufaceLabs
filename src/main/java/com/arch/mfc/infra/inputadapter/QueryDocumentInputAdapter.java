@@ -22,7 +22,7 @@ public class QueryDocumentInputAdapter<T> implements QueryCQRSDocumentInputPort<
         this.repository = concreteRepository;
     }
 
-    protected static final String GROUP_ID = "cqrs-2";
+    protected static final String GROUP_ID = "cqrs-query-adapter";
 
     @KafkaListener(topicPattern = EventArch.EVENT_TOPIC_PATTERN, groupId = GROUP_ID)
     public void listen(EventArch<?> event) {
