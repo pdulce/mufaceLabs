@@ -2,12 +2,12 @@ package com.arch.mfc.infra.event;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.Calendar;
 
 @Data
-public class Event<T> {
+public class Event<T> implements Serializable {
 
     public static final String EVENT_TOPIC = "topic-command-event";
     public static final String EVENT_TYPE_DELETE = "delete";
@@ -15,18 +15,14 @@ public class Event<T> {
     public static final String EVENT_TYPE_UPDATE = "update";
     private String id;
     private String almacen;
-    private String typeEvent;
-    private Timestamp occurredOn;
-    private T data;
+    private InnerEvent<T> innerEvent;
 
     public Event() {
     }
     public Event(String almacen, String id, String typeEvent, T data) {
         this.almacen = almacen;
         this.id = id;
-        this.typeEvent = typeEvent;
-        this.occurredOn = new Timestamp(Calendar.getInstance().getTimeInMillis());
-        this.data = data;
+        this.innerEvent = new InnerEvent<T>(typeEvent, data);
     }
 
 }

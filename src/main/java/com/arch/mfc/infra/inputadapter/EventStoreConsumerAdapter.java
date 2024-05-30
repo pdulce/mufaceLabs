@@ -25,8 +25,6 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort, EventCons
     @KafkaListener(topics = Event.EVENT_TOPIC, groupId = GROUP_ID)
     public void listen(Event<?> eventArch) {
         saveEvent(eventArch);
-        //HashOperations<String, String, String> hashOps = redisTemplate.opsForHash();
-        //hashOps.delete(eventArch.getAlmacen());
     }
 
     public void saveEvent(Event<?> eventArch) {
@@ -36,7 +34,7 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort, EventCons
             hashOps.put(eventArch.getAlmacen(), eventArch.getId(), agregados);
         }
         List<Object> agregados = hashOps.entries(eventArch.getAlmacen()).get(eventArch.getId());
-        agregados.add(eventArch);
+        agregados.add(eventArch.getInnerEvent());
         hashOps.put(eventArch.getAlmacen(), eventArch.getId(), agregados);
     }
 

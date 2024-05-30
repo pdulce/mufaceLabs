@@ -39,7 +39,6 @@ public class RedisConfig {
         SimpleModule module = new SimpleModule();
         module.addDeserializer(Timestamp.class, new DateDeserializers.TimestampDeserializer());
         objectMapper.registerModule(new JavaTimeModule());
-        //jackson2JsonRedisSerializer.setObjectMapper(objectMapper);
 
         template.setValueSerializer(jackson2JsonRedisSerializer);
         template.setHashKeySerializer(new StringRedisSerializer());

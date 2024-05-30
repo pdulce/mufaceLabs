@@ -31,10 +31,10 @@ public class QueryInputConsumerAdapter<T> implements QueryInputPort<T>, EventCon
             return; //dejo pasar este mensaje porque no es para este consumidor
         }
 
-        if (event.getTypeEvent().contentEquals(Event.EVENT_TYPE_CREATE)
-                || event.getTypeEvent().contentEquals(Event.EVENT_TYPE_UPDATE)) {
-            saveReg((T) event.getData());
-        } else if (event.getTypeEvent().contentEquals(Event.EVENT_TYPE_DELETE)) {
+        if (event.getInnerEvent().getTypeEvent().contentEquals(Event.EVENT_TYPE_CREATE)
+                || event.getInnerEvent().getTypeEvent().contentEquals(Event.EVENT_TYPE_UPDATE)) {
+            saveReg((T) event.getInnerEvent().getData());
+        } else if (event.getInnerEvent().getTypeEvent().contentEquals(Event.EVENT_TYPE_DELETE)) {
             this.deleteReg(event.getId());
         }
     }
