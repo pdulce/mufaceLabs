@@ -90,10 +90,10 @@ public class CustomerAPI {
         return eventStoreConsumerAdapter.findAll(customerCommandService.getDocumentEntityClassname());
     }
 
-    /*@GetMapping(value = "getAllFromEventStoreRedis", produces=MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, Event<?>> getAllFromEventStoreRedis() {
-        return eventStoreConsumerAdapter.findAll(customerCommandService.getDocumentEntityClassname());
-    }*/
+    @GetMapping(value = "getAllFromQueryStoreMongo", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<Map<String, Object>> getAllFromQueryStoreMongo() {
+        return customerQueryService.findAll();
+    }
 
     @GetMapping(value = "getAllEventsFromCustomerIdFromRedis", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Object> getAllEventsFromIdFromRedis(@RequestParam String customerId) {
