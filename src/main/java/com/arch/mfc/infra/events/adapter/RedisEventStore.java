@@ -31,7 +31,7 @@ public class RedisEventStore implements EventStoreInputPort {
         redisTemplate.opsForHash().put(eventArch.getAlmacen(), eventArch.getId(), jsonConverted);
     }
 
-    public EventArch<?> getById(String almacen, String id) {
+    public EventArch<?> findById(String almacen, String id) {
         String recovered = (String) redisTemplate.opsForHash().get(almacen, id);
         //Map<String, Object> mapa = ConversionUtils.jsonstring2Map(recovered);
         //Map<String, Object> mapaData = (Map<String, Object>) mapa.get("data");
@@ -39,7 +39,7 @@ public class RedisEventStore implements EventStoreInputPort {
         return null;
     }
 
-    public List<EventArch<?>> getAll(String almacen) {
+    public List<EventArch<?>> findAll(String almacen) {
         return redisTemplate.opsForList().range(almacen, 0, -1)
                 .stream()
                 .map(event -> (EventArch<?>) event)

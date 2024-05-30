@@ -22,7 +22,7 @@ public class EventDocumentInputAdapter implements EventSourcingDocumentInputPort
     }
 
     @Override
-    public List<T> getAll() {
+    public List<T> findAll() {
         return eventRepositoryInterface.findAll();
     }
 }

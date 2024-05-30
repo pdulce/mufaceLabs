@@ -63,13 +63,13 @@ public class QueryDocumentInputAdapter<T> implements QueryCQRSDocumentInputPort<
     }
 
     @Override
-    public Map<String, Object> getById(String id) {
+    public Map<String, Object> findById(String id) {
         Optional<T> order = this.repository.findById(id);
         return order.map(ConversionUtils::objectToMap).orElse(null);
     }
 
     @Override
-    public List<Map<String, Object>> getAll() {
+    public List<Map<String, Object>> findAll() {
         List<T> orders = this.repository.findAll();
         return orders.stream().map(ConversionUtils::objectToMap).collect(Collectors.toList());
     }

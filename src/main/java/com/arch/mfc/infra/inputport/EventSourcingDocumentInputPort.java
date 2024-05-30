@@ -7,6 +7,6 @@ public interface EventSourcingDocumentInputPort<T> {
 
     void insertEvent(T object);
 
-    List<T> getAll();
+    List<T> findAll();
 
 }

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.arch.mfc.application.domain.Customer;
-import com.arch.mfc.application.domain.document.CustomerDocument;
 import com.arch.mfc.application.service.command.CustomerCommandCommandService;
 import com.arch.mfc.application.service.query.CustomerQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +58,7 @@ public class CustomerAPI {
 
     @GetMapping(value = "getAllFromQueryMongoDB", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Map<String,Object>> getAllFromQueryMongoDB() {
-        return customerQueryService.getAll();
+        return customerQueryService.findAll();
     }
 
 
