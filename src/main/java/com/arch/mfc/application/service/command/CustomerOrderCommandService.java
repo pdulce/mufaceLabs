@@ -5,6 +5,6 @@ import com.arch.mfc.infra.outputadapter.relational.GenericJpaCommandService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CustomerOrderCommandCommandService extends GenericJpaCommandService<CustomerOrder> {
+public class CustomerOrderCommandService extends GenericJpaCommandService<CustomerOrder> {
 
 }

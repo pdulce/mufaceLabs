@@ -1,6 +1,5 @@
-package com.arch.mfc.application.domain.document;
+package com.arch.mfc.application.domain.querydomain;
 
-import com.arch.mfc.application.domain.CustomerOrder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
         import org.springframework.data.mongodb.core.mapping.Document;

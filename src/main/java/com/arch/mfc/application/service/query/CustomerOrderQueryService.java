@@ -1,7 +1,7 @@
 package com.arch.mfc.application.service.query;
 
-import com.arch.mfc.application.domain.document.CustomerOrderDocument;
-import com.arch.mfc.application.repository.document.CustomerOrderDocumentRepository;
+import com.arch.mfc.application.domain.querydomain.CustomerOrderDocument;
+import com.arch.mfc.application.repository.queryrepository.CustomerOrderDocumentRepository;
 import com.arch.mfc.infra.inputadapter.QueryDocumentInputAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

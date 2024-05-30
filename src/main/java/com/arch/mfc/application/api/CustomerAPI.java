@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.arch.mfc.application.domain.Customer;
-import com.arch.mfc.application.service.command.CustomerCommandCommandService;
+import com.arch.mfc.application.service.command.CustomerCommandService;
 import com.arch.mfc.application.service.query.CustomerQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerAPI {
 
     @Autowired
-    CustomerCommandCommandService customerCommandService;
+    CustomerCommandService customerCommandService;
     @Autowired
     CustomerQueryService customerQueryService;
 
