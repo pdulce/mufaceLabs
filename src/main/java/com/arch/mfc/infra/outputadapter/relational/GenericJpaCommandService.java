@@ -14,7 +14,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 @Transactional
-public abstract class GenericJpaCommandService<T> implements GenericCommandPort<T> {
+public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
 
     @Autowired
     CommandPublisher commandPublisher;
@@ -22,7 +22,7 @@ public abstract class GenericJpaCommandService<T> implements GenericCommandPort<
     JpaRepository<T, Long> repository;
 
     @Override
-    public final T save(T entity) {
+    public T save(T entity) {
         T saved = this.repository.save(entity);
         if (saved != null) {
             /*** Mando el evento al bus para que los recojan los dos consumers:
@@ -38,7 +38,7 @@ public abstract class GenericJpaCommandService<T> implements GenericCommandPort<
     }
 
     @Override
-    public final T update(T entity) {
+    public T update(T entity) {
         T updated =  this.repository.save(entity);
         if (updated != null) {
             EventArch eventArch = new EventArch(entity.getClass().getSimpleName(),
@@ -50,7 +50,7 @@ public abstract class GenericJpaCommandService<T> implements GenericCommandPort<
     }
 
     @Override
-    public final void delete(T entity) {
+    public void delete(T entity) {
         this.repository.delete(entity);
         EventArch eventArch = new EventArch(entity.getClass().getSimpleName(),
                 ConversionUtils.convertToMap(entity).get("id").toString(),
@@ -59,18 +59,18 @@ public abstract class GenericJpaCommandService<T> implements GenericCommandPort<
     }
 
     @Override
-    public final T findById(Long id) {
+    public T findById(Long id) {
         return this.repository.findById(id).get();
     }
 
     @Override
-    public final List<T> findAll() {
+    public List<T> findAll() {
         return this.repository.findAll().stream().toList();
     }
 
     /** método generíco para buscar dentro de cualquier campo de un entidad T **/
 
-    public final List<T> findByFieldvalue(String fieldName, Object fieldValue) {
+    public List<T> findByFieldvalue(String fieldName, Object fieldValue) {
 
         try {
             Class<T> entityClass = (Class<T>) ((ParameterizedType) getClass()
