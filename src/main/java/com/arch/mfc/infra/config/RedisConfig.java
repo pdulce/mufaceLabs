@@ -1,6 +1,6 @@
 package com.arch.mfc.infra.config;
 
-import com.arch.mfc.infra.events.EventArch;
+import com.arch.mfc.infra.event.Event;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -18,8 +18,8 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, EventArch<?>> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<String, EventArch<?>> template = new RedisTemplate<>();
+    public RedisTemplate<String, Event<?>> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<String, Event<?>> template = new RedisTemplate<>();
         template.setConnectionFactory(redisConnectionFactory);
         return template;
     }

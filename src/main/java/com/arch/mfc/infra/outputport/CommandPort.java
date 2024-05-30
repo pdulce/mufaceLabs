@@ -1,12 +1,9 @@
 package com.arch.mfc.infra.outputport;
 
-import com.arch.mfc.infra.events.EventArch;
-import com.arch.mfc.infra.utils.ConversionUtils;
-
 import java.util.List;
 
 
-public interface GenericCommandPort<T> {
+public interface CommandPort<T> {
 
     T insert(T entity) throws NoSuchFieldException;
 

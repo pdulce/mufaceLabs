@@ -1,9 +1,9 @@
 package com.arch.mfc.infra.inputadapter;
 
-import com.arch.mfc.infra.events.EventArch;
-import com.arch.mfc.infra.inputport.QueryCQRSDocumentInputPort;
+import com.arch.mfc.infra.event.Event;
+import com.arch.mfc.infra.inputport.EventConsumer;
+import com.arch.mfc.infra.inputport.QueryInputPort;
 import com.arch.mfc.infra.utils.ConversionUtils;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -13,24 +13,24 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class QueryDocumentInputAdapter<T> implements QueryCQRSDocumentInputPort<T> {
+public class QueryInputConsumerAdapter<T> implements QueryInputPort<T>, EventConsumer {
 
     @Autowired
     MongoRepository<T, String> repository;
 
     protected static final String GROUP_ID = "cqrs-query-adapter";
 
-    @KafkaListener(topics = EventArch.EVENT_TOPIC, groupId = GROUP_ID)
-    public void listen(EventArch<?> event) {
+    @KafkaListener(topics = Event.EVENT_TOPIC, groupId = GROUP_ID)
+    public void listen(Event<?> event) {
         Map<String, Object> eventData = ConversionUtils.convertLinkedHashMapToMap(event.getData());
         try {
-            if (event.getTypeEvent().contentEquals(EventArch.EVENT_TYPE_CREATE)) {
+            if (event.getTypeEvent().contentEquals(Event.EVENT_TYPE_CREATE)) {
                 this.insertReg(eventData,
                         (Class<T>) Class.forName(event.getData().getClass().getName()));
-            } else if (event.getTypeEvent().contentEquals(EventArch.EVENT_TYPE_UPDATE)) {
+            } else if (event.getTypeEvent().contentEquals(Event.EVENT_TYPE_UPDATE)) {
                 this.updateReg(eventData,
                         (Class<T>) Class.forName(event.getData().getClass().getName()));
-            } else if (event.getTypeEvent().contentEquals(EventArch.EVENT_TYPE_DELETE)) {
+            } else if (event.getTypeEvent().contentEquals(Event.EVENT_TYPE_DELETE)) {
                 this.deleteReg(event.getId());
             }
 

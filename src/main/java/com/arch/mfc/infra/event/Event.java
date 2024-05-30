@@ -1,11 +1,11 @@
-package com.arch.mfc.infra.events;
+package com.arch.mfc.infra.event;
 
 import lombok.Data;
 
 import java.time.Instant;
 
 @Data
-public class EventArch<T> {
+public class Event<T> {
 
     public static final String EVENT_TOPIC = "event";
     public static final String EVENT_TYPE_DELETE = "delete";
@@ -17,9 +17,9 @@ public class EventArch<T> {
     private Instant occurredOn;
     private T data;
 
-    public EventArch() {
+    public Event() {
     }
-    public EventArch(String almacen, String id, String typeEvent, T data) {
+    public Event(String almacen, String id, String typeEvent, T data) {
         this.almacen = almacen;
         this.id = id;
         this.typeEvent = typeEvent;

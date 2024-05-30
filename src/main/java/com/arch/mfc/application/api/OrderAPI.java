@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 
 import com.arch.mfc.application.domain.Customer;
 import com.arch.mfc.application.domain.CustomerOrder;
-import com.arch.mfc.application.service.command.CustomerOrderCommandService;
-import com.arch.mfc.application.service.command.CustomerCommandService;
+import com.arch.mfc.application.service.command.CustomerOrderCommandAdapter;
+import com.arch.mfc.application.service.command.CustomerCommandAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderAPI {
 
     @Autowired
-    CustomerCommandService customerCommandService;
+    CustomerCommandAdapter customerCommandService;
 
     @Autowired
-    CustomerOrderCommandService customerOrderCommandService;
+    CustomerOrderCommandAdapter customerOrderCommandService;
 
     @PostMapping(value = "create", produces=MediaType.APPLICATION_JSON_VALUE)
     public CustomerOrder create(@RequestParam Long customerId, @RequestParam BigDecimal total) {

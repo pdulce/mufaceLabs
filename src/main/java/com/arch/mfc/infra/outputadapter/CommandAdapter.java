@@ -1,8 +1,8 @@
 package com.arch.mfc.infra.outputadapter;
 
-import com.arch.mfc.infra.events.EventArch;
-import com.arch.mfc.infra.outputport.GenericCommandPort;
-import com.arch.mfc.infra.events.adapter.CommandPublisher;
+import com.arch.mfc.infra.event.Event;
+import com.arch.mfc.infra.outputport.CommandEventPublisher;
+import com.arch.mfc.infra.outputport.CommandPort;
 import com.arch.mfc.infra.utils.ConversionUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +14,10 @@ import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 @Transactional
-public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
+public class CommandAdapter<T> implements CommandPort<T> {
 
     @Autowired
-    CommandPublisher commandPublisher;
+    CommandEventPublisher commandEventPublisher;
     @Autowired
     protected JpaRepository<T, Long> repository;
 
@@ -29,10 +29,10 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
              *  - consumer responsable del dominio de eventos que persiste en MongoDB (patrón Event-Sourcing)
              *  - consumer responsable del dominio de consultas que persiste en Redis (patrón CQRS)
              */
-            EventArch eventArch = new EventArch(entity.getClass().getSimpleName(),
+            Event eventArch = new Event(entity.getClass().getSimpleName(),
                     ConversionUtils.convertToMap(saved).get("id").toString(),
-                    EventArch.EVENT_TYPE_CREATE, entity);
-            commandPublisher.publish(EventArch.EVENT_TOPIC, eventArch);
+                    Event.EVENT_TYPE_CREATE, entity);
+            commandEventPublisher.publish(Event.EVENT_TOPIC, eventArch);
         }
         return saved;
     }
@@ -41,10 +41,10 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
     public T update(T entity) {
         T updated =  this.repository.save(entity);
         if (updated != null) {
-            EventArch eventArch = new EventArch(entity.getClass().getSimpleName(),
+            Event eventArch = new Event(entity.getClass().getSimpleName(),
                     ConversionUtils.convertToMap(entity).get("id").toString(),
-                    EventArch.EVENT_TYPE_UPDATE, updated);
-            commandPublisher.publish(EventArch.EVENT_TOPIC, eventArch);
+                    Event.EVENT_TYPE_UPDATE, updated);
+            commandEventPublisher.publish(Event.EVENT_TOPIC, eventArch);
         }
         return updated;
     }
@@ -52,19 +52,19 @@ public class GenericJpaCommandService<T> implements GenericCommandPort<T> {
     @Override
     public void delete(T entity) {
         this.repository.delete(entity);
-        EventArch eventArch = new EventArch(entity.getClass().getSimpleName(),
+        Event eventArch = new Event(entity.getClass().getSimpleName(),
                 ConversionUtils.convertToMap(entity).get("id").toString(),
-                EventArch.EVENT_TYPE_DELETE, entity);
-        commandPublisher.publish(EventArch.EVENT_TOPIC, eventArch);
+                Event.EVENT_TYPE_DELETE, entity);
+        commandEventPublisher.publish(Event.EVENT_TOPIC, eventArch);
     }
 
     @Override
     public void deleteAll() {
         findAll().forEach((record) -> {
-            EventArch eventArch = new EventArch(record.getClass().getSimpleName(),
+            Event eventArch = new Event(record.getClass().getSimpleName(),
                     ConversionUtils.convertToMap(record).get("id").toString(),
-                    EventArch.EVENT_TYPE_DELETE, record);
-            commandPublisher.publish(EventArch.EVENT_TOPIC, eventArch);
+                    Event.EVENT_TYPE_DELETE, record);
+            commandEventPublisher.publish(Event.EVENT_TOPIC, eventArch);
         });
         this.repository.deleteAll();
     }
