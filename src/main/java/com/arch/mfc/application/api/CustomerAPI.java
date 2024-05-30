@@ -42,12 +42,12 @@ public class CustomerAPI {
 
     @GetMapping(value = "getByNameFromCommandDB", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Customer> getAllWithName(@RequestParam String name) {
-        return customerCommandService.findByFieldvalue("name", name);
+        return customerCommandService.findAllByFieldvalue("name", name);
     }
 
     @GetMapping(value = "getByCountryFromCommandDB", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Customer> getAllOfThisCountry(@RequestParam String country) {
-        return customerCommandService.findByFieldvalue("country", country);
+        return customerCommandService.findAllByFieldvalue("country", country);
     }
 
     @GetMapping(value = "get", produces=MediaType.APPLICATION_JSON_VALUE)
