@@ -25,7 +25,8 @@ public abstract class QueryInputConsumerAdapter<T> implements QueryInputPort<T>,
         Class<T> entityClass = (Class<T>) ((ParameterizedType) getClass()
                 .getGenericSuperclass())
                 .getActualTypeArguments()[0];
-        if (!entityClass.getSimpleName().equals(event.getContextInfo().getAlmacen())) {
+        if (event.getContextInfo() == null || event.getContextInfo().getAlmacen() == null
+                || !entityClass.getSimpleName().equals(event.getContextInfo().getAlmacen())) {
             //dejo pasar este mensaje porque no es para este consumidor
             return;
         }
