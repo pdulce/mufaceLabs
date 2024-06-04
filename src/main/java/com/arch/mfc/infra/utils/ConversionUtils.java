@@ -1,12 +1,11 @@
 package com.arch.mfc.infra.utils;
 
 import java.lang.reflect.Field;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +16,19 @@ public class ConversionUtils {
 
     private ConversionUtils() {}
 
+    public static String formatTimestampToSpanish(Timestamp timestamp) {
+        // Convertir Timestamp a LocalDateTime
+        LocalDateTime localDateTime = timestamp.toLocalDateTime();
+
+        // Definir el formato deseado
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, d 'de' MMMM 'de' yyyy HH:mm:ss",
+                new Locale("es", "ES"));
+
+        // Formatear la fecha
+        String formattedDate = localDateTime.format(formatter);
+
+        return formattedDate;
+    }
     public static String map2Jsonstring( Map<String, Object> map ) {
         if ( map == null ) return "{}";
 

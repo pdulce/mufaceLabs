@@ -1,16 +1,18 @@
 version version: '3.5'
 
 services:
+
   zookeeper:
     container_name: zookeeper
-    image: docker.io/bitnami/zookeeper:3.7my
+    image: docker.io/bitnami/zookeeper
     ports:
       - "2181:2181"
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
+
   kafka:
     container_name: kafka
-    image: docker.io/bitnami/kafka:2
+    image: docker.io/bitnami/kafka
     ports:
       - "9092:9092"
       - "29092:29092"
@@ -21,41 +23,99 @@ services:
       - KAFKA_INTER_BROKER_LISTENER_NAME=EXTERNALPLAINTEXT
       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes
-    depends_on
-      - zookeeper
-  postgres:
-    container_name: postgres
-    image: postgres:11
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgresdb
-      PGDATA: /data/postgres
-    ports:
-      - "5432:5432"
-    command: [ "postgres", "-c", "wal_level=logical", "-c", "max_wal_senders=1" , "-c", "max_replication_slots=1" ]
-    restart: unless-stopped
-
-  debezium:
-    container_name: debezium
-    image: debezium/connect
-    environment:
-      GROUP_ID: 1
-      CONFIG_STORAGE_TOPIC: my-connect-configs
-      OFFSET_STORAGE_TOPIC: my-connect-offsets
-      BOOTSTRAP_SERVERS: kafka:9092
-      ADVERTISED_HOST_NAME: debezium
-    ports:
-      - "8083:8083"
     depends_on:
-      - kafka
+      - zookeeper
+
+  fluentd:
+    image: bitnami/fluentd:latest
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+    volumes:
+      - /home/pedro/data/fluentd/conf:/opt/bitnami/fluentd/conf
+    environment:
+      - FLUENTD_CONF=fluent.conf
+      - FLUENTD_DAEMON=off
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
 
   redis:
     container_name: redis
-     image: redis:7.0.5-alpine
+    image: redis:latest
     ports:
       - "6379:6379"
-    command: [ "redis-server", "--requirepass", "SUPER_SECRET_PASSWORD" ]
-    
+    command: [ "redis-server", "--requirepass", "mypass" ]
+
+  mongo:
+    container_name: mongo
+    image: mongo:4.4.29-focal
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: rootdb
+      MONGO_INITDB_ROOT_PASSWORD: passwd
+    volumes:
+      - /home/pedro/data/mongo:/data/db
+
+  mysql:
+    container_name: mysql
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: mydb
+    volumes:
+      - /home/pedro/data/mysql:/var/lib/mysql
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.5
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m - Xmx512m
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.5
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_URL=http://192.168.1.137:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+
+  wso2-apigateway:
+    image: wso2/wso2am:4.0.0
+    container_name: wso2-apigateway
+    ports:
+      - "9443:9443"
+      - "8242:8242"
+      - "8280:8280"
+    environment:
+      - USER=wso2user
+      - USER_ID=1000
+      - GROUP=wso2
+      - GROUP_ID=1000
+    volumes:
+      - wso2am_repository_deployment_server:/home/wso2carbon/wso2am-4.0.0/repository/deployment/server
+
+volumes:
+  mysql_data:
+  mongo_data:
+  es_data:
+  wso2am_repository_deployment_server:
+
+
+
+
+
       
 

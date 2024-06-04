@@ -1,6 +1,7 @@
 package com.arch.mfc.application.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.List;
@@ -11,6 +12,7 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
+    @NotNull(message = "La clave no puede ser nula")
     private Long id;
 
     @Column

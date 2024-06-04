@@ -13,4 +13,5 @@ public class CustomerCommandAdapter extends CommandAdapter<Customer> {
         return "CustomerDocument";
     }
 
+
 }
