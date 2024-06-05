@@ -107,7 +107,29 @@ services:
     volumes:
       - wso2am_repository_deployment_server:/home/wso2carbon/wso2am-4.0.0/repository/deployment/server
 
+  postgresql:
+    image: docker.io/bitnami/postgresql:latest
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - POSTGRESQL_USERNAME=bn_keycloak
+      - POSTGRESQL_DATABASE=bitnami_keycloak
+    volumes:
+      - 'postgresql_data:/bitnami/postgresql'
+  keycloak:
+    image: docker.io/bitnami/keycloak:latest
+    ports:
+      - "80:8080"
+    environment:
+      - KEYCLOAK_CREATE_ADMIN_USER=true
+    # user:bitnami
+    depends_on:
+      - postgresql
+    volumes:
+        - './mynewtheme:/opt/bitnami/keycloak/themes/mynewtheme'
+
 volumes:
+  postgresql_data:
+  driver: local
   mysql_data:
   mongo_data:
   es_data:

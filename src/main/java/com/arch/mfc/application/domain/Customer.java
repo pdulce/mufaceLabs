@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 public class Customer {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
     @NotNull(message = "La clave no puede ser nula")
     private Long id;

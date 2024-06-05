@@ -1,4 +1,4 @@
-package com.arch.mfc.application.service.command;
+package com.arch.mfc.application.dataaccess.command;
 
 import com.arch.mfc.application.domain.Customer;
 import com.arch.mfc.infra.outputadapter.CommandAdapter;

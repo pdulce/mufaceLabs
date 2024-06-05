@@ -1,4 +1,7 @@
 package com.arch.mfc.infra.saga;
 
-public class SagaCoordinatorPort {
+public interface SagaCoordinatorPort {
+
+
+
 }

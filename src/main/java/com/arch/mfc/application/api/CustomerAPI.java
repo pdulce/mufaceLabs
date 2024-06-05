@@ -2,13 +2,16 @@ package com.arch.mfc.application.api;
 
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import com.arch.mfc.application.domain.Customer;
-import com.arch.mfc.application.service.command.CustomerCommandAdapter;
-import com.arch.mfc.application.service.query.CustomerQueryServiceConsumerAdapter;
+import com.arch.mfc.application.dataaccess.command.CustomerCommandAdapter;
+import com.arch.mfc.application.dataaccess.query.CustomerQueryServiceConsumerAdapter;
 import com.arch.mfc.infra.inputadapter.EventStoreConsumerAdapter;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,40 +27,39 @@ public class CustomerAPI {
     @Autowired
     EventStoreConsumerAdapter eventStoreConsumerAdapter;
 
-    @PostMapping(value = "create", produces=MediaType.APPLICATION_JSON_VALUE)
-    public Customer create(@RequestParam String name, @RequestParam String country ) {
-        Customer customer = new Customer();
-        customer.setName(name);
-        customer.setCountry(country);
+    @Autowired
+    private MessageSource messageSource;
+
+    @PostMapping(produces=MediaType.APPLICATION_JSON_VALUE)
+    public Customer create(@RequestBody @NotNull Customer customer) {
+        Locale locale = "es" != null ? new Locale("es") : Locale.getDefault();
+        String message = messageSource.getMessage("greeting", null, locale);
         return customerCommandService.insert(customer);
     }
 
-    @PutMapping(value = "update", produces=MediaType.APPLICATION_JSON_VALUE)
-    public Customer update(@RequestParam Long id, @RequestParam String country ) {
+    @PutMapping(produces=MediaType.APPLICATION_JSON_VALUE)
+    public Customer update(@RequestBody @NotNull Customer customer) {
         try{
-            Customer customer = customerCommandService.findById(id);
-            customer.setCountry(country);
             return customerCommandService.update(customer);
         } catch (Throwable exc) {
             return null;
         }
     }
 
-    @DeleteMapping(value = "delete", produces=MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(produces=MediaType.APPLICATION_JSON_VALUE)
     public void deleteByname(@RequestParam String name) {
-        List<Customer> customers = this.customerCommandService.findAllByFieldvalue("name", name);
-        customers.forEach((customer) -> {
-            try {
-                customerCommandService.delete(customer);
-            } catch (Throwable exc) {
-                return;
-            }
-        });
-    }
-
-    @DeleteMapping(value = "deleteAll", produces=MediaType.APPLICATION_JSON_VALUE)
-    public void deleteAll() {
-        this.customerCommandService.deleteAll();
+        if (name != null) {
+            List<Customer> customers = this.customerCommandService.findAllByFieldvalue("name", name);
+            customers.forEach((customer) -> {
+                try {
+                    customerCommandService.delete(customer);
+                } catch (Throwable exc) {
+                    return;
+                }
+            });
+        } else {
+            this.customerCommandService.deleteAll();
+        }
     }
 
     @GetMapping(value = "getAllFromCommandDB", produces=MediaType.APPLICATION_JSON_VALUE)
