@@ -4,6 +4,7 @@ package com.arch.mfc.application.api;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 import com.arch.mfc.application.domain.Customer;
 import com.arch.mfc.application.dataaccess.command.CustomerCommandAdapter;
@@ -34,6 +35,7 @@ public class CustomerAPI {
     public Customer create(@RequestBody @NotNull Customer customer) {
         Locale locale = "es" != null ? new Locale("es") : Locale.getDefault();
         String message = messageSource.getMessage("greeting", null, locale);
+        customer.setId(UUID.randomUUID().getMostSignificantBits());
         return customerCommandService.insert(customer);
     }
 

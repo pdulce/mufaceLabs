@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping(value = "order")
 public class OrderAPI {
@@ -25,6 +27,7 @@ public class OrderAPI {
     @PostMapping(value = "create", produces=MediaType.APPLICATION_JSON_VALUE)
     public CustomerOrder create(@PathVariable @NotNull CustomerOrder customerOrder) {
         try{
+            customerOrder.setId(UUID.randomUUID().getMostSignificantBits());
             return customerOrderCommandService.insert(customerOrder);
         } catch (Throwable exc) {
             return null;
