@@ -9,7 +9,7 @@ spring:
   # command domain: 192.168.1.163
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://miubuntu.home:3306/sampleCommandDB
+    url: jdbc:mysql://192.168.1.137:3306/sampleCommandDB
     username: test
     password: test
 
@@ -22,9 +22,9 @@ spring:
   # event domain
   data:
     mongodb:
-      host: miubuntu.home
+      host: 192.168.1.137
       port: 27017
-      uri: mongodb://pedro:passwd@miubuntu.home:27017/eventDbStore
+      uri: mongodb://pedro:passwd@192.168.1.137:27017/eventDbStore
       authentication-database: eventDbStore
     sql:
       init:
@@ -58,7 +58,7 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
   zipkin:
-    base-url: http://miubuntu.home:9411
+    base-url: http://192.168.1.137:9411
     sleuth:
       sampler:
         probability: 1.0
