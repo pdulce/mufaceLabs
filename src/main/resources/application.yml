@@ -15,7 +15,7 @@ spring:
 
   # query domain
   redis:
-    host: localhost
+    host: miubuntu.home
     password: mypass
     port: 6379
 
