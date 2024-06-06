@@ -1,10 +1,10 @@
-package com.arch.mfc.backend.micro.customers.api;
+package com.mfc.backend.microcustomers.api;
 
-import com.arch.mfc.backend.micro.customers.domain.service.command.CustomerOrderCommandAdapter;
-import com.arch.mfc.backend.micro.customers.domain.model.command.CustomerOrder;
-import com.arch.mfc.backend.micro.customers.domain.service.command.CustomerCommandAdapter;
-import com.arch.mfc.backend.micro.customers.domain.service.query.CustomerOrderQueryServiceConsumerAdapter;
-import com.arch.mfc.infra.controller.BaseRestController;
+import com.mfc.backend.microcustomers.domain.model.command.CustomerOrder;
+import com.mfc.backend.microcustomers.domain.service.command.CustomerCommandAdapter;
+import com.mfc.backend.microcustomers.domain.service.command.CustomerOrderCommandAdapter;
+import com.mfc.backend.microcustomers.domain.service.query.CustomerOrderQueryServiceConsumerAdapter;
+import com.mfc.infra.controller.BaseRestController;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

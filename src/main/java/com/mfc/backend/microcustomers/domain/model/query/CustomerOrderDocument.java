@@ -1,4 +1,4 @@
-package com.arch.mfc.backend.micro.customers.domain.model.query;
+package com.mfc.backend.microcustomers.domain.model.query;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
