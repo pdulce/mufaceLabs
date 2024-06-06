@@ -1,12 +1,7 @@
 package com.arch.mfc.infra.controller;
 
 
-import com.arch.mfc.backendA.domain.Customer;
-import com.arch.mfc.backendA.service.command.CustomerCommandAdapter;
-import com.arch.mfc.backendA.service.query.CustomerQueryServiceConsumerAdapter;
-import com.arch.mfc.infra.inputadapter.EventStoreConsumerAdapter;
 import com.arch.mfc.infra.utils.ErrorConstantes;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;

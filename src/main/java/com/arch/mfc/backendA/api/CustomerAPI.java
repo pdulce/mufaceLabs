@@ -6,9 +6,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
-import com.arch.mfc.backendA.domain.Customer;
-import com.arch.mfc.backendA.service.command.CustomerCommandAdapter;
-import com.arch.mfc.backendA.service.query.CustomerQueryServiceConsumerAdapter;
+import com.arch.mfc.backendA.domain.model.Customer;
+import com.arch.mfc.backendA.domain.service.command.CustomerCommandAdapter;
+import com.arch.mfc.backendA.domain.service.query.CustomerQueryServiceConsumerAdapter;
 import com.arch.mfc.infra.controller.BaseRestController;
 import com.arch.mfc.infra.inputadapter.EventStoreConsumerAdapter;
 import jakarta.validation.constraints.NotNull;

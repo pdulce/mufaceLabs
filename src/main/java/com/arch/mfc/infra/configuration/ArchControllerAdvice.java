@@ -1,4 +1,4 @@
-package com.arch.mfc.infra.config;
+package com.arch.mfc.infra.configuration;
 
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.slf4j.Logger;

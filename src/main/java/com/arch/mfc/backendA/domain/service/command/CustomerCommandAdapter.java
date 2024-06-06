@@ -1,6 +1,6 @@
-package com.arch.mfc.backendA.service.command;
+package com.arch.mfc.backendA.domain.service.command;
 
-import com.arch.mfc.backendA.domain.Customer;
+import com.arch.mfc.backendA.domain.model.Customer;
 import com.arch.mfc.infra.outputadapter.CommandAdapter;
 import org.springframework.stereotype.Service;
 

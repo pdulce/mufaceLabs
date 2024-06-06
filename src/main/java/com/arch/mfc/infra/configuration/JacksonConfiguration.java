@@ -1,4 +1,4 @@
-package com.arch.mfc.infra.config;
+package com.arch.mfc.infra.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.DateDeserializers;

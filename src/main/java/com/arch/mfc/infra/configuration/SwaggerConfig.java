@@ -1,4 +1,4 @@
-package com.arch.mfc.infra.config;
+package com.arch.mfc.infra.configuration;
 
 import org.springframework.context.annotation.Configuration;
 
