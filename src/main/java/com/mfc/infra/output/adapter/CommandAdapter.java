@@ -1,9 +1,9 @@
-package com.mfc.infra.outputadapter;
+package com.mfc.infra.output.adapter;
 
 import com.mfc.infra.event.Event;
 import com.mfc.infra.exceptions.NotExistException;
-import com.mfc.infra.outputport.CommandEventPublisher;
-import com.mfc.infra.outputport.CommandPort;
+import com.mfc.infra.output.port.CommandEventPublisher;
+import com.mfc.infra.output.port.CommandPort;
 import com.mfc.infra.utils.ConversionUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

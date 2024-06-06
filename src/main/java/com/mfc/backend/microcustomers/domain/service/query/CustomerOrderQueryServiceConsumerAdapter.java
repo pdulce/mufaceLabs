@@ -2,7 +2,7 @@ package com.mfc.backend.microcustomers.domain.service.query;
 
 import com.mfc.backend.microcustomers.domain.model.query.CustomerOrderDocument;
 import com.mfc.infra.event.Event;
-import com.mfc.infra.inputadapter.QueryInputConsumerAdapter;
+import com.mfc.infra.input.adapter.QueryInputConsumerAdapter;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.mfc.infra.inputport;
+package com.mfc.infra.input.port;
 
 import java.util.LinkedHashMap;
 import java.util.List;

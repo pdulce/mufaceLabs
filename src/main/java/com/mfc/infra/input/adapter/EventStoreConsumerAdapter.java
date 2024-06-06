@@ -1,8 +1,8 @@
-package com.mfc.infra.inputadapter;
+package com.mfc.infra.input.adapter;
 
 import com.mfc.infra.event.Event;
-import com.mfc.infra.inputport.EventConsumer;
-import com.mfc.infra.inputport.EventStoreInputPort;
+import com.mfc.infra.input.port.EventConsumer;
+import com.mfc.infra.input.port.EventStoreInputPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;

@@ -1,8 +1,8 @@
-package com.mfc.infra.inputadapter;
+package com.mfc.infra.input.adapter;
 
 import com.mfc.infra.event.Event;
-import com.mfc.infra.inputport.EventConsumer;
-import com.mfc.infra.inputport.QueryInputPort;
+import com.mfc.infra.input.port.EventConsumer;
+import com.mfc.infra.input.port.QueryInputPort;
 import com.mfc.infra.utils.ConversionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.repository.MongoRepository;
