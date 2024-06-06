@@ -1,4 +1,4 @@
-package com.arch.mfc.application.domain;
+package com.arch.mfc.backendA.domain;
 
 import java.math.BigDecimal;
 

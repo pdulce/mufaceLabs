@@ -1,4 +1,4 @@
-package com.arch.mfc.application.api;
+package com.arch.mfc.backendA.api;
 
 
 import java.util.List;
@@ -6,19 +6,19 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
-import com.arch.mfc.application.domain.Customer;
-import com.arch.mfc.application.dataaccess.command.CustomerCommandAdapter;
-import com.arch.mfc.application.dataaccess.query.CustomerQueryServiceConsumerAdapter;
+import com.arch.mfc.backendA.domain.Customer;
+import com.arch.mfc.backendA.service.command.CustomerCommandAdapter;
+import com.arch.mfc.backendA.service.query.CustomerQueryServiceConsumerAdapter;
+import com.arch.mfc.infra.controller.BaseRestController;
 import com.arch.mfc.infra.inputadapter.EventStoreConsumerAdapter;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "customer")
-public class CustomerAPI {
+public class CustomerAPI extends BaseRestController {
 
     @Autowired
     CustomerCommandAdapter customerCommandService;
@@ -28,13 +28,10 @@ public class CustomerAPI {
     @Autowired
     EventStoreConsumerAdapter eventStoreConsumerAdapter;
 
-    @Autowired
-    private MessageSource messageSource;
-
     @PostMapping(produces=MediaType.APPLICATION_JSON_VALUE)
     public Customer create(@RequestBody @NotNull Customer customer) {
         Locale locale = "es" != null ? new Locale("es") : Locale.getDefault();
-        String message = messageSource.getMessage("greeting", null, locale);
+        String message = this.messageSource.getMessage("greeting", null, locale);
         customer.setId(UUID.randomUUID().getMostSignificantBits());
         return customerCommandService.insert(customer);
     }
@@ -54,7 +51,7 @@ public class CustomerAPI {
             List<Customer> customers = this.customerCommandService.findAllByFieldvalue("name", name);
             customers.forEach((customer) -> {
                 try {
-                    customerCommandService.delete(customer);
+                    this.customerCommandService.delete(customer);
                 } catch (Throwable exc) {
                     return;
                 }
@@ -66,23 +63,23 @@ public class CustomerAPI {
 
     @GetMapping(value = "getAllFromCommandDB", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Customer> getAllFromCommandDB() {
-        return customerCommandService.findAll();
+        return this.customerCommandService.findAll();
     }
 
     @GetMapping(value = "getByNameFromCommandDB", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Customer> getAllWithName(@RequestParam String name) {
-        return customerCommandService.findAllByFieldvalue("name", name);
+        return this.customerCommandService.findAllByFieldvalue("name", name);
     }
 
     @GetMapping(value = "getByCountryFromCommandDB", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Customer> getAllOfThisCountry(@RequestParam String country) {
-        return customerCommandService.findAllByFieldvalue("country", country);
+        return this.customerCommandService.findAllByFieldvalue("country", country);
     }
 
     @GetMapping(value = "get", produces=MediaType.APPLICATION_JSON_VALUE)
     public Customer get(@RequestParam Long customerId) {
         try{
-            return customerCommandService.findById(customerId);
+            return this.customerCommandService.findById(customerId);
         } catch (Throwable exc) {
             return null;
         }
@@ -92,24 +89,24 @@ public class CustomerAPI {
 
     @GetMapping(value = "getAllFromEventStoreRedis", produces=MediaType.APPLICATION_JSON_VALUE)
     public Map<String, List<Object>> getAllFromEventStoreRedis() {
-        return eventStoreConsumerAdapter.findAll(customerCommandService.getDocumentEntityClassname());
+        return this.eventStoreConsumerAdapter.findAll(customerCommandService.getDocumentEntityClassname());
     }
 
     @GetMapping(value = "getAllEventsFromCustomerIdFromRedis", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Object> getAllEventsFromIdFromRedis(@RequestParam String customerId) {
-        return eventStoreConsumerAdapter.findById(customerCommandService.getDocumentEntityClassname(), customerId);
+        return this.eventStoreConsumerAdapter.findById(customerCommandService.getDocumentEntityClassname(), customerId);
     }
 
     /*** CONSULTAS CONTRA EL DOMINIO DE QUERIES ***/
 
     @GetMapping(value = "getFromQueryStoreMongoById", produces=MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Object> getFromQueryStoreMongoById(@RequestParam String customerId) {
-        return customerQueryService.findById(customerId);
+        return this.customerQueryService.findById(customerId);
     }
 
     @GetMapping(value = "getAllFromQueryStoreMongo", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Map<String, Object>> getAllFromQueryStoreMongo() {
-        return customerQueryService.findAll();
+        return this.customerQueryService.findAll();
     }
 
 

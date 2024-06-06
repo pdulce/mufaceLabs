@@ -1,4 +1,4 @@
-package com.arch.mfc.application.domain;
+package com.arch.mfc.backendA.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

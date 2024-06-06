@@ -1,11 +1,8 @@
-package com.arch.mfc.application.repository;
+package com.arch.mfc.backendA.repository;
 
-import com.arch.mfc.application.domain.Customer;
+import com.arch.mfc.backendA.domain.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.redis.core.RedisHash;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * Esta clase la crearemos solo cuando necesite la capa de negocio de la aplicación nuevas operaciones

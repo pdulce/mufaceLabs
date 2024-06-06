@@ -129,7 +129,7 @@ services:
 
 volumes:
   postgresql_data:
-  driver: local
+  #driver: local
   mysql_data:
   mongo_data:
   es_data:

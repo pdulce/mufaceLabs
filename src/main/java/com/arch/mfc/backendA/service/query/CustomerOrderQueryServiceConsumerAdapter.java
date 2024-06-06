@@ -1,6 +1,6 @@
-package com.arch.mfc.application.dataaccess.query;
+package com.arch.mfc.backendA.service.query;
 
-import com.arch.mfc.application.domain.querydomain.CustomerOrderDocument;
+import com.arch.mfc.backendA.domain.querydomain.CustomerOrderDocument;
 import com.arch.mfc.infra.event.Event;
 import com.arch.mfc.infra.inputadapter.QueryInputConsumerAdapter;
 import org.springframework.kafka.annotation.KafkaListener;

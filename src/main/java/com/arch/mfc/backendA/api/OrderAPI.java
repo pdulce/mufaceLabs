@@ -1,9 +1,10 @@
-package com.arch.mfc.application.api;
+package com.arch.mfc.backendA.api;
 
-import com.arch.mfc.application.domain.CustomerOrder;
-import com.arch.mfc.application.dataaccess.command.CustomerOrderCommandAdapter;
-import com.arch.mfc.application.dataaccess.command.CustomerCommandAdapter;
-import com.arch.mfc.application.dataaccess.query.CustomerOrderQueryServiceConsumerAdapter;
+import com.arch.mfc.backendA.domain.CustomerOrder;
+import com.arch.mfc.backendA.service.command.CustomerOrderCommandAdapter;
+import com.arch.mfc.backendA.service.command.CustomerCommandAdapter;
+import com.arch.mfc.backendA.service.query.CustomerOrderQueryServiceConsumerAdapter;
+import com.arch.mfc.infra.controller.BaseRestController;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -13,7 +14,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "order")
-public class OrderAPI {
+public class OrderAPI extends BaseRestController {
 
     @Autowired
     CustomerCommandAdapter customerCommandService;

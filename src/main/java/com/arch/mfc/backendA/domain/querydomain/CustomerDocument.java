@@ -1,4 +1,4 @@
-package com.arch.mfc.application.domain.querydomain;
+package com.arch.mfc.backendA.domain.querydomain;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;

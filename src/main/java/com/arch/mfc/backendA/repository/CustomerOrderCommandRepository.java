@@ -1,7 +1,7 @@
-package com.arch.mfc.application.repository;
+package com.arch.mfc.backendA.repository;
 
 
-import com.arch.mfc.application.domain.CustomerOrder;
+import com.arch.mfc.backendA.domain.CustomerOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
