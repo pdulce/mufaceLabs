@@ -5,16 +5,14 @@ import com.arch.mfc.backendA.domain.Customer;
 import com.arch.mfc.backendA.service.command.CustomerCommandAdapter;
 import com.arch.mfc.backendA.service.query.CustomerQueryServiceConsumerAdapter;
 import com.arch.mfc.infra.inputadapter.EventStoreConsumerAdapter;
+import com.arch.mfc.infra.utils.ErrorConstantes;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 //@RequestMapping(value = "customer")
@@ -30,6 +28,32 @@ public abstract class BaseRestController {
 
     @Autowired
     protected MessageSource messageSource;
+
+    public static final String EUSKERA = "euskera";
+    public static final String GALLEGO = "gallego";
+    public static final String CATALAN = "catalan";
+    public static final String CASTELLANO = "castellano";
+    public static final String ENGLISH = "english";
+    public final Map<String, Locale> mapLocales = new HashMap<>();
+
+    protected Locale getLocale(String idioma) {
+        if (mapLocales.isEmpty()) {
+            mapLocales.put(EUSKERA, new Locale("eu", "ES"));
+            mapLocales.put(GALLEGO, new Locale("gl", "ES"));
+            mapLocales.put(CATALAN, new Locale("ca", "ES"));
+            mapLocales.put(CASTELLANO, new Locale("es"));
+            mapLocales.put(ENGLISH, new Locale("en"));
+        }
+        Locale locale = mapLocales.get(idioma);
+        return locale == null ? Locale.getDefault() : locale;
+    }
+
+    @GetMapping(value = "hola", produces=MediaType.APPLICATION_JSON_VALUE)
+    public String saludar() {
+        String message = messageSource.getMessage(ErrorConstantes.GREETING, null, getLocale(CASTELLANO));
+        return message == null ? messageSource.getMessage(ErrorConstantes.ERROR_NOT_FOUND, null,
+                getLocale(CASTELLANO)) : message;
+    }
 
     /*@PostMapping(produces=MediaType.APPLICATION_JSON_VALUE)
     public Customer create(@RequestBody @NotNull Customer customer) {
