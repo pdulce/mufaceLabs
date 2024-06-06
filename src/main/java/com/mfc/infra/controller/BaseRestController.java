@@ -1,7 +1,7 @@
 package com.mfc.infra.controller;
 
 
-import com.mfc.infra.utils.ErrorConstantes;
+import com.mfc.infra.utils.ConstantMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
@@ -44,8 +44,8 @@ public abstract class BaseRestController {
 
     @GetMapping(value = "hola", produces=MediaType.APPLICATION_JSON_VALUE)
     public String saludar() {
-        String message = messageSource.getMessage(ErrorConstantes.GREETING, null, getLocale(CASTELLANO));
-        return message == null ? messageSource.getMessage(ErrorConstantes.ERROR_NOT_FOUND, null,
+        String message = messageSource.getMessage(ConstantMessages.GREETING, null, getLocale(CASTELLANO));
+        return message == null ? messageSource.getMessage(ConstantMessages.ERROR_NOT_FOUND, null,
                 getLocale(CASTELLANO)) : message;
     }
 

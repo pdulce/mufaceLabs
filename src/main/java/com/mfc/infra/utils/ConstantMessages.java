@@ -1,6 +1,6 @@
 package com.mfc.infra.utils;
 
-public final class ErrorConstantes {
+public final class ConstantMessages {
 
     // Greeting
     public static final String GREETING = "greeting";
@@ -77,7 +77,7 @@ public final class ErrorConstantes {
     public static final String ERROR_NOT_EXTENDED = "error.not_extended";
     public static final String ERROR_NETWORK_AUTHENTICATION_REQUIRED = "error.network_authentication_required";
 
-    private ErrorConstantes() {
+    private ConstantMessages() {
         // Evitar instanciación
     }
 }

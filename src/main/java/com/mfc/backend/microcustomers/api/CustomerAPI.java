@@ -11,6 +11,7 @@ import com.mfc.backend.microcustomers.domain.service.command.CustomerCommandAdap
 import com.mfc.backend.microcustomers.domain.service.query.CustomerQueryServiceConsumerAdapter;
 import com.mfc.infra.controller.BaseRestController;
 import com.mfc.infra.input.adapter.EventStoreConsumerAdapter;
+import com.mfc.infra.utils.ConstantMessages;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -31,7 +32,7 @@ public class CustomerAPI extends BaseRestController {
     @PostMapping(produces=MediaType.APPLICATION_JSON_VALUE)
     public Customer create(@RequestBody @NotNull Customer customer) {
         Locale locale = "es" != null ? new Locale("es") : Locale.getDefault();
-        String message = this.messageSource.getMessage("greeting", null, locale);
+        String message = this.messageSource.getMessage(ConstantMessages.SUCCESS_CREATED, null, locale);
         customer.setId(UUID.randomUUID().getMostSignificantBits());
         return customerCommandService.insert(customer);
     }
