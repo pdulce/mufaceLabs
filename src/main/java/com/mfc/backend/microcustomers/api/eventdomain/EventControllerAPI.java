@@ -1,4 +1,4 @@
-package com.mfc.backend.microcustomers.api.querydomain;
+package com.mfc.backend.microcustomers.api.eventdomain;
 
 
 import com.mfc.backend.microcustomers.domain.service.command.CustomerCommandAdapter;
