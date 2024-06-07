@@ -24,9 +24,6 @@ public class CustomerAPI extends BaseRestController {
     @Autowired
     CustomerQueryServiceConsumerAdapter customerQueryService;
 
-    @Autowired
-    EventStoreConsumerAdapter eventStoreConsumerAdapter;
-
     @Override
     @GetMapping("saludar")
     public String saludar(){
@@ -80,18 +77,6 @@ public class CustomerAPI extends BaseRestController {
         } catch (Throwable exc) {
             return null;
         }
-    }
-
-    /*** CONSULTAS CONTRA EL DOMINIO DE EVENTOS ***/
-
-    @GetMapping(value = "getAllFromEventStoreRedis", produces=MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, List<Object>> getAllFromEventStoreRedis() {
-        return this.eventStoreConsumerAdapter.findAll(customerCommandService.getDocumentEntityClassname());
-    }
-
-    @GetMapping(value = "getAllEventsFromCustomerIdFromRedis", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Object> getAllEventsFromIdFromRedis(@RequestParam String customerId) {
-        return this.eventStoreConsumerAdapter.findById(customerCommandService.getDocumentEntityClassname(), customerId);
     }
 
     /*** CONSULTAS CONTRA EL DOMINIO DE QUERIES ***/

@@ -35,7 +35,7 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
              */
             Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
                     ConversionUtils.convertToMap(saved).get("id").toString(),
-                    Event.EVENT_TYPE_CREATE, entity);
+                    Event.EVENT_TYPE_CREATE, saved);
             commandEventPublisherPort.publish(Event.EVENT_TOPIC, eventArch);
         }
         return saved;

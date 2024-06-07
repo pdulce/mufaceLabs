@@ -12,4 +12,6 @@ public interface EventStoreInputPort {
 
     Map<String, List<Object>> findAll(String almacen);
 
+    void deleteAll(String almacen);
+
 }

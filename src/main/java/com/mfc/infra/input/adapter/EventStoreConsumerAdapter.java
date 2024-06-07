@@ -55,5 +55,12 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort, EventCons
         return hashOps.entries(almacen);
     }
 
+    public void deleteAll(String almacen) {
+        HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
+        hashOps.entries(almacen).keySet().forEach((entry) -> {
+            hashOps.delete(entry);
+        });
+    }
+
 
 }
