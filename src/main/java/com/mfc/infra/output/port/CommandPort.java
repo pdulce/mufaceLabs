@@ -13,6 +13,7 @@ public interface CommandPort<T> {
 
     void delete(T entity) throws NotExistException;
 
+    void deleteAllList(List<T> entities) throws NotExistException;
     void deleteAll();
 
     T findById(Long id) throws NotExistException;

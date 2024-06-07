@@ -1,5 +1,6 @@
 package com.mfc.backend.microdiplomas.domain.service.command;
 
+import com.mfc.backend.microcustomers.domain.model.command.Customer;
 import com.mfc.backend.microdiplomas.domain.model.command.Diploma;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.exceptions.NotExistException;
@@ -10,6 +11,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -46,11 +48,24 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
     @Override
     public void doSagaOperation(Event<?> event) {
         try {
-            Diploma diploma = ConversionUtils.
-                    convertMapToObject((LinkedHashMap<String, Object>) event.getInnerEvent().getData(), Diploma.class);
-            if (diploma.getId() == null) {
-                diploma.setId(UUID.randomUUID().getMostSignificantBits());
+            Customer customer = ConversionUtils.
+                    convertMapToObject((LinkedHashMap<String, Object>) event.getInnerEvent().getData(), Customer.class);
+            Diploma diploma = new Diploma();
+            diploma.setId(UUID.randomUUID().getMostSignificantBits());
+            diploma.setName(customer.getName());
+            diploma.setIdcustomer(customer.getId());
+            if (customer.getCountry() != null) {
+                if (customer.getCountry() == null || "".contentEquals(customer.getCountry())) {
+                    throw new Throwable ("forzando exception en SAGA step 2 para probar la arquitectura");
+                }
+                if (customer.getCountry().contentEquals("Afganistán")) {
+                    throw new Throwable ("Error de negocio: " +
+                            "exception por país FORBIDDEN en SAGA step 2 para probar la arquitectura");
+                }
+                diploma.setRegion(customer.getCountry());
             }
+            diploma.setTitulo("Bienvenida diploma, señor(a) " + customer.getName());
+
             this.insert(diploma);
         } catch (Throwable exc) {
             event.getInnerEvent().setTypeEvent(Event.EVENT_FAILED_OPERATION);
@@ -61,12 +76,17 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
     @Override
     public void doSagaCompensation(Event<?> event) {
         try {
-            Diploma diploma = ConversionUtils.
-                    convertMapToObject((LinkedHashMap<String, Object>) event.getInnerEvent().getData(), Diploma.class);
-            this.delete(diploma);
-        } catch (NotExistException notExistException) {
-            logger.error("doSagaCompensation failed: Cause ", notExistException);
+            Customer customer = ConversionUtils.
+                    convertMapToObject((LinkedHashMap<String, Object>) event.getInnerEvent().getData(), Customer.class);
+            List<Diploma> diplomas = this.findAllByFieldvalue("idcustomer", customer.getId());
+            if (diplomas == null || diplomas.isEmpty()) {
+                throw new Throwable ("Error de negocio: " +
+                        "Exception por intenatr eliminar diplomas de un customer que no tiene");
+            }
+            this.deleteAllList(diplomas);
+        } catch (Throwable notExistException) {
             event.getInnerEvent().setTypeEvent(Event.EVENT_FAILED_OPERATION);
+            logger.error("doSagaCompensation failed: Cause ", notExistException);
         }
     }
 

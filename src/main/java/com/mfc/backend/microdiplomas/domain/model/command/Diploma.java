@@ -15,6 +15,9 @@ public class Diploma {
     private Long id;
 
     @Column
+    private Long idcustomer;
+
+    @Column
     private String name;
 
     @Column

@@ -68,6 +68,17 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
     }
 
     @Override
+    public void deleteAllList(List<T> entities) throws NotExistException {
+        entities.forEach((record) -> {
+            this.repository.delete(record);
+            Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
+                    ConversionUtils.convertToMap(record).get("id").toString(),
+                    Event.EVENT_TYPE_DELETE, record);
+            commandEventPublisherPort.publish(Event.EVENT_TOPIC, eventArch);
+        });
+    }
+
+    @Override
     public void deleteAll() {
         findAll().forEach((record) -> {
             Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
