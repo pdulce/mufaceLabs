@@ -2,13 +2,10 @@ package com.mfc.backend.microcustomers.api.bussinessdomain;
 
 
 import java.util.List;
-import java.util.Map;
 
 import com.mfc.backend.microcustomers.domain.model.command.Customer;
 import com.mfc.backend.microcustomers.domain.service.command.CustomerCommandAdapter;
-import com.mfc.backend.microcustomers.domain.service.query.CustomerQueryServiceConsumerAdapter;
 import com.mfc.infra.controller.BaseRestController;
-import com.mfc.infra.input.adapter.EventStoreConsumerAdapter;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -21,8 +18,6 @@ public class CustomerAPI extends BaseRestController {
     @Autowired
     CustomerCommandAdapter customerCommandService;
 
-    @Autowired
-    CustomerQueryServiceConsumerAdapter customerQueryService;
 
     @Override
     @GetMapping("saludar")
@@ -83,20 +78,6 @@ public class CustomerAPI extends BaseRestController {
             return null;
         }
     }
-
-    /*** CONSULTAS CONTRA EL DOMINIO DE QUERIES ***/
-
-    @GetMapping(value = "getFromQueryStoreMongoById", produces=MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, Object> getFromQueryStoreMongoById(@RequestParam String customerId) {
-        return this.customerQueryService.findById(customerId);
-    }
-
-    @GetMapping(value = "getAllFromQueryStoreMongo", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Map<String, Object>> getAllFromQueryStoreMongo() {
-        return this.customerQueryService.findAll();
-    }
-
-
 
 
 }
