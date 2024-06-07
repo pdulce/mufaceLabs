@@ -72,6 +72,7 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
             diploma.setTitulo("Bienvenida diploma, señor(a) " + customer.getName());
 
             this.insert(diploma);
+            event.getInnerEvent().setNewData(diploma);
         } catch (Throwable exc) {
             event.getInnerEvent().setTypeEvent(Event.EVENT_FAILED_OPERATION);
             logger.error("doSagaOperation failed: Cause ", exc);
@@ -81,15 +82,10 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
     @Override
     public void doSagaCompensation(Event<?> event) {
         try {
-            CustomerWrapper customer = ConversionUtils.
+            Diploma diploma = ConversionUtils.
                     convertMapToObject((LinkedHashMap<String, Object>) event.getInnerEvent().getData(),
-                            CustomerWrapper.class);
-            List<Diploma> diplomas = this.findAllByFieldvalue("idcustomer", customer.getId());
-            if (diplomas == null || diplomas.isEmpty()) {
-                throw new Throwable ("Error de negocio: " +
-                        "Exception por intenatr eliminar diplomas de un customer que no tiene");
-            }
-            this.deleteAllList(diplomas);
+                            Diploma.class);
+            this.delete(diploma);
         } catch (Throwable notExistException) {
             event.getInnerEvent().setTypeEvent(Event.EVENT_FAILED_OPERATION);
             logger.error("doSagaCompensation failed: Cause ", notExistException);
