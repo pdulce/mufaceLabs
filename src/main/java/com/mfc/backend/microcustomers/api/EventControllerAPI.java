@@ -24,12 +24,12 @@ public class EventControllerAPI extends BaseRestController {
 
     /*** CONSULTAS CONTRA EL DOMINIO DE EVENTOS ***/
 
-    @GetMapping(value = "getAllFromEventStoreRedis", produces=MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, List<Object>> getAllFromEventStoreRedis() {
+    @GetMapping(value = "getAllFromEventStoreCustomers", produces=MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, List<Object>> getAllFromEventStoreCustomers() {
         return this.eventStoreConsumerAdapter.findAll(customerCommandService.getDocumentEntityClassname());
     }
 
-    @GetMapping(value = "getAllEventsFromCustomerIdFromRedis", produces=MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "getAllEventsFromCustomerId", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Object> getAllEventsFromIdFromRedis(@RequestParam String customerId) {
         return this.eventStoreConsumerAdapter.findById(customerCommandService.getDocumentEntityClassname(), customerId);
     }
