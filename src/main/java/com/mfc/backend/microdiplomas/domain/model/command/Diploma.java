@@ -10,8 +10,6 @@ public class Diploma {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    @NotNull(message = "La clave no puede ser nula")
     private Long id;
 
     @Column

@@ -1,6 +1,7 @@
 package com.mfc.backend.microcustomers.domain.model.command;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -12,13 +13,14 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    @NotNull(message = "La clave no puede ser nula")
     private Long id;
 
     @Column
+    @NotEmpty(message = "El country no puede ser vacío")
     private String country;
 
     @Column
+    @NotEmpty(message = "El country no puede ser vacío")
     private String name;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)

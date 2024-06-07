@@ -1,5 +1,7 @@
 package com.mfc.infra.configuration;
 
+import com.mfc.infra.utils.ConstantMessages;
+import jakarta.validation.ConstraintViolationException;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +31,16 @@ public class ArchControllerAdvice {
     @Autowired
     private MessageSource messageSource;
 
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<String> handleResourceNotFoundException(ConstraintViolationException ex,
+                                                                  WebRequest request, Locale locale) {
+        return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex,
                                                                   WebRequest request, Locale locale) {
-        String errorMessage = messageSource.getMessage("error.notfound", null, locale);
+        String errorMessage = messageSource.getMessage(ConstantMessages.ERROR_NOT_FOUND, null, locale);
         return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
     }
 

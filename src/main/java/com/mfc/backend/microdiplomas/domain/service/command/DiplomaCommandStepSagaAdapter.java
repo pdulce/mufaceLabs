@@ -6,6 +6,7 @@ import com.mfc.infra.event.Event;
 import com.mfc.infra.output.adapter.CommandStepSagaAdapter;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.utils.ConversionUtils;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -56,7 +57,6 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
                     convertMapToObject((LinkedHashMap<String, Object>) event.getInnerEvent().getData(),
                             CustomerWrapper.class);
             Diploma diploma = new Diploma();
-            diploma.setId(Math.abs(UUID.randomUUID().getMostSignificantBits()));
             diploma.setName(customer.getName());
             diploma.setIdcustomer(customer.getId());
             if (customer.getCountry() != null) {
@@ -73,6 +73,9 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
 
             this.insert(diploma);
             event.getInnerEvent().setNewData(diploma);
+        } catch (ConstraintViolationException exc) {
+            event.getSagaStepInfo().setLastStepNumberProccessed(Event.SAGA_OPE_FAILED);
+            logger.error("doSagaOperation failed: Cause ", exc.getLocalizedMessage());
         } catch (Throwable exc) {
             event.getSagaStepInfo().setLastStepNumberProccessed(Event.SAGA_OPE_FAILED);
             logger.error("doSagaOperation failed: Cause ", exc);
