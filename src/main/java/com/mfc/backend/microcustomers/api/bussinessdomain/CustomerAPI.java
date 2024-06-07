@@ -1,4 +1,4 @@
-package com.mfc.backend.microcustomers.api;
+package com.mfc.backend.microcustomers.api.bussinessdomain;
 
 
 import java.util.List;

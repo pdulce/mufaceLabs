@@ -1,4 +1,4 @@
-package com.mfc.backend.microcustomers.api;
+package com.mfc.backend.microcustomers.api.querydomain;
 
 
 import com.mfc.backend.microcustomers.domain.service.query.CustomerQueryServiceConsumerAdapter;

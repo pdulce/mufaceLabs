@@ -1,4 +1,4 @@
-package com.mfc.backend.microcustomers.api;
+package com.mfc.backend.microcustomers.api.bussinessdomain;
 
 import com.mfc.backend.microcustomers.domain.model.command.CustomerOrder;
 import com.mfc.backend.microcustomers.domain.service.command.CustomerCommandAdapter;
