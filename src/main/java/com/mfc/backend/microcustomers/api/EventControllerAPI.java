@@ -34,8 +34,8 @@ public class EventControllerAPI extends BaseRestController {
         return this.eventStoreConsumerAdapter.findById(customerCommandService.getDocumentEntityClassname(), customerId);
     }
 
-    @DeleteMapping(value = "deleteAll", produces=MediaType.APPLICATION_JSON_VALUE)
-    public void deleteAll() {
+    @DeleteMapping(value = "deleteAlmacenCustomers", produces=MediaType.APPLICATION_JSON_VALUE)
+    public void deleteAlmacenCustomers() {
         this.eventStoreConsumerAdapter.deleteAll(customerCommandService.getDocumentEntityClassname());
     }
 

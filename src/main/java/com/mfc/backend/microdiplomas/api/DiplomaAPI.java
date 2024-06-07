@@ -32,5 +32,9 @@ public class DiplomaAPI extends BaseRestController {
         return this.diplomaCommandStepSagaAdapter.findAllByFieldvalue("idcustomer", idcustomer);
     }
 
+    @DeleteMapping(value = "deleteAll", produces=MediaType.APPLICATION_JSON_VALUE)
+    public void deleteAll() {
+        this.diplomaCommandStepSagaAdapter.deleteAll();
+    }
 
 }
