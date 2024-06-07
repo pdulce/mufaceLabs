@@ -27,5 +27,10 @@ public class DiplomaAPI extends BaseRestController {
         return this.diplomaCommandStepSagaAdapter.findAllByFieldvalue("name", name);
     }
 
+    @GetMapping(value = "getAllByDiplomasByIdcustomerFromDB", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<Diploma> getAllByDiplomasFromDB(@RequestParam Long idcustomer) {
+        return this.diplomaCommandStepSagaAdapter.findAllByFieldvalue("idcustomer", idcustomer);
+    }
+
 
 }

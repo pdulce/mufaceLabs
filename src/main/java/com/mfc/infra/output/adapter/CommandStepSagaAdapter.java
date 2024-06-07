@@ -16,7 +16,8 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
 
     protected Logger logger = LoggerFactory.getLogger(CommandStepSagaAdapter.class);
     @Autowired
-    CommandEventPublisherPort commandEventPublisherPort;
+    protected CommandEventPublisherPort commandEventPublisherPort;
+
     @Autowired
     protected JpaRepository<T, Long> repository;
 
@@ -43,24 +44,27 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
         }
 
         if (event.getSagaStepInfo().isDoCompensateOp()) {
-            doSagaCompensation(event);
-            this.commandEventPublisherPort.publish(event.getSagaStepInfo().getSagaName() + "-" +
-                    SagaOrchestratorPort.SAGA_FROM_STEP_TOPIC + event.getSagaStepInfo().getStepNumber()
-                    + "-topic", event);
+            orderSagaCompensation(event);
+            this.commandEventPublisherPort.publish(SagaOrchestratorPort.SAGA_FROM_STEP_TOPIC, event);
             logger.info("Se ha informado al orchestrator que la operación de compensación en el step "
                     + event.getSagaStepInfo().getStepNumber()
                     + " para la transacción núm: " + event.getSagaStepInfo().getTransactionIdentifier()
                     + " se ha realizado de forma satisfactoria");
         } else {
-            doSagaOperation(event);
-            this.commandEventPublisherPort.publish(event.getSagaStepInfo().getSagaName() + "-" +
-                    SagaOrchestratorPort.SAGA_FROM_STEP_TOPIC + event.getSagaStepInfo().getStepNumber()
-                    + "-topic", event);
+            orderSagaOperation(event);
+            this.commandEventPublisherPort.publish(SagaOrchestratorPort.SAGA_FROM_STEP_TOPIC, event);
             logger.info("Se ha informado al orchestrator que la operación de consolidación en el step "
                     + event.getSagaStepInfo().getStepNumber()
                     + " para la transacción núm: " + event.getSagaStepInfo().getTransactionIdentifier()
                     + " se ha realizado de forma satisfactoria");
         }
+    }
+    private void orderSagaOperation(Event<?> event) {
+        this.doSagaOperation(event);
+    }
+
+    private void orderSagaCompensation(Event<?> event) {
+        this.doSagaCompensation(event);
     }
 
     @Override
@@ -77,5 +81,8 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
 
     @Override
     public abstract void doSagaCompensation(Event<?> event);
+
+
+
 
 }
