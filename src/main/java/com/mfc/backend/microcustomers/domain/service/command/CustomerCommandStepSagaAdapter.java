@@ -58,7 +58,7 @@ public class CustomerCommandStepSagaAdapter extends CommandStepSagaAdapter<Custo
             }
             this.insert(customer);
         } catch (Throwable exc) {
-            event.getSagaStepInfo().setLastStepNumberProccessed(-1);
+            event.getSagaStepInfo().setLastStepNumberProccessed(Event.SAGA_OPE_FAILED);
             logger.error("doSagaOperation failed: Cause ", exc);
         }
     }
@@ -70,7 +70,7 @@ public class CustomerCommandStepSagaAdapter extends CommandStepSagaAdapter<Custo
                     convertMapToObject((LinkedHashMap<String, Object>) event.getInnerEvent().getData(), Customer.class);
             this.delete(customer);
         } catch (NotExistException notExistException) {
-            event.getSagaStepInfo().setLastStepNumberProccessed(-1);
+            event.getSagaStepInfo().setLastStepNumberProccessed(Event.SAGA_OPE_FAILED);
             logger.error("doSagaCompensation failed: Cause ", notExistException);
         }
     }

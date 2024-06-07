@@ -41,9 +41,12 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
         if (event.getSagaStepInfo().getSagaName().contentEquals(getSagaName())
              && event.getSagaStepInfo().getNextStepNumberToProccess() == getOrderStepInSaga()
                 && event.getSagaStepInfo().getLastStepNumberProccessed() != getOrderStepInSaga()) {
-            event.getSagaStepInfo().setLastStepNumberProccessed(event.getSagaStepInfo().getNextStepNumberToProccess());
             if (event.getSagaStepInfo().isDoCompensateOp()) {
                 orderSagaCompensation(event);
+                if (event.getSagaStepInfo().getLastStepNumberProccessed() != -1) {
+                    event.getSagaStepInfo().setLastStepNumberProccessed(event.getSagaStepInfo().
+                            getNextStepNumberToProccess());
+                }
                 this.commandEventPublisherPort.publish(SagaOrchestratorPort.SAGA_FROM_STEP_TOPIC, event);
                 logger.info("Se ha informado al orchestrator que la operación de compensación en el step "
                         + event.getSagaStepInfo().getNextStepNumberToProccess()
@@ -52,6 +55,10 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
             } else {
                 event.getSagaStepInfo().setLastStep(isLastStepInSaga());
                 orderSagaOperation(event);
+                if (event.getSagaStepInfo().getLastStepNumberProccessed() != -1) {
+                    event.getSagaStepInfo().setLastStepNumberProccessed(event.getSagaStepInfo().
+                            getNextStepNumberToProccess());
+                }
                 this.commandEventPublisherPort.publish(SagaOrchestratorPort.SAGA_FROM_STEP_TOPIC, event);
                 logger.info("Se ha informado al orchestrator que la operación de consolidación en el step "
                         + event.getSagaStepInfo().getNextStepNumberToProccess()
