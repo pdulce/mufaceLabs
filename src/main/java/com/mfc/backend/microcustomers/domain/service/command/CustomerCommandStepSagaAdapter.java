@@ -5,18 +5,21 @@ import com.mfc.infra.event.Event;
 import com.mfc.infra.exceptions.NotExistException;
 import com.mfc.infra.output.adapter.CommandAdapter;
 import com.mfc.infra.output.adapter.CommandStepSagaAdapter;
+import com.mfc.infra.output.port.SagaOrchestratorPort;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CustomerCommandStepSagaAdapter extends CommandStepSagaAdapter<Customer> {
 
-    /** personalized operations not in infra : acceder al repositorio de la infra y consultar **/
+    public static final String GROUP_ID = "saga-step-group-customerconsumer-service-step-1";
 
     public String getDocumentEntityClassname() {
         return "CustomerDocument";
     }
 
     @Override
+    @KafkaListener(topics = SagaOrchestratorPort.SAGA_ORDER_OPERATION_TOPIC, groupId = GROUP_ID)
     public void listen(Event<?> event) {
         super.processStepEvent(event);
     }

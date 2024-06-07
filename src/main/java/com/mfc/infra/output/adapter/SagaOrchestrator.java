@@ -49,7 +49,7 @@ public class SagaOrchestrator<T> implements SagaOrchestratorPort<T>, EventConsum
         this.eventStoreConsumerAdapter.saveEvent(sagaName, String.valueOf(transactionIdentifier), dataEvent);
 
         // Iniciar Saga
-        this.commandEventPublisherPort.publish(sagaName + "-" + DO_OPERATION_TOPIC_NAME + "1-topic", dataEvent);
+        this.commandEventPublisherPort.publish(SAGA_ORDER_OPERATION_TOPIC, dataEvent);
 
         logger.info("Saga iniciada con número de transacción: " + transactionIdentifier);
 
@@ -94,8 +94,7 @@ public class SagaOrchestrator<T> implements SagaOrchestratorPort<T>, EventConsum
         this.eventStoreConsumerAdapter.saveEvent(sagaName, String.valueOf(transactionIdentifier), data);
 
         // Iniciar Saga
-        this.commandEventPublisherPort.publish(sagaName + "-" + SAGA_DO_STEP_OPERATION_TOPIC + stepNumber
-                + "-topic", data);
+        this.commandEventPublisherPort.publish(SAGA_ORDER_OPERATION_TOPIC, data);
 
         logger.info("Saga continuada con step " + stepNumber + " para la transacción núm.: " + transactionIdentifier);
     }
@@ -105,8 +104,7 @@ public class SagaOrchestrator<T> implements SagaOrchestratorPort<T>, EventConsum
         Event<?> eventoTransaccion = searchPreviousStepTransation(sagaName, stepNumber, transactionIdentifier);
         if (eventoTransaccion != null) {
             eventoTransaccion.getSagaStepInfo().setDoCompensateOp(true);
-            this.commandEventPublisherPort.publish(sagaName + "-" + SAGA_DO_STEP_OPERATION_TOPIC
-                    + eventoTransaccion.getSagaStepInfo().getStepNumber() + "-topic", eventoTransaccion);
+            this.commandEventPublisherPort.publish(SAGA_ORDER_OPERATION_TOPIC, eventoTransaccion);
             logger.info("Solicitada operación de compensación en step " + stepNumber
                     + " para la transacción núm: " + transactionIdentifier);
         } else {

@@ -4,17 +4,20 @@ import com.mfc.backend.microdiplomas.domain.model.command.Diploma;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.exceptions.NotExistException;
 import com.mfc.infra.output.adapter.CommandStepSagaAdapter;
+import com.mfc.infra.output.port.SagaOrchestratorPort;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diploma> {
 
-    /** personalized operations not in infra : acceder al repositorio de la infra y consultar **/
+    public static final String GROUP_ID = "saga-step-group-diplomaconsumer-service-step-2";
 
     public String getDocumentEntityClassname() {
-        return null;
+        return "DiplomaDocument";
     } // este micro no usa CQRS
 
+    @KafkaListener(topics = SagaOrchestratorPort.SAGA_ORDER_OPERATION_TOPIC, groupId = GROUP_ID)
     @Override
     public void listen(Event<?> event) {
         super.processStepEvent(event);

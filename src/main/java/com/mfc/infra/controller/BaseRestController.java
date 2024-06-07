@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-@RequestMapping(value = "api")
 public abstract class BaseRestController {
 
     Logger logger = LoggerFactory.getLogger(BaseRestController.class);
@@ -42,7 +41,7 @@ public abstract class BaseRestController {
         return locale == null ? Locale.getDefault() : locale;
     }
 
-    protected String saludar() {
+    public String saludar() {
         logger.info("orchestratorManager charged ? " +  (this.orchestratorManager != null));
         String message = messageSource.getMessage(ConstantMessages.GREETING, null, getLocale(CASTELLANO));
         logger.info("mapLocales charged ? " +  mapLocales.isEmpty());

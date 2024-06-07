@@ -30,8 +30,9 @@ public class CustomerAPI extends BaseRestController {
     @Autowired
     EventStoreConsumerAdapter eventStoreConsumerAdapter;
 
+    @Override
     @GetMapping("saludar")
-    protected String saludar() {
+    public String saludar(){
         return super.saludar();
     }
 

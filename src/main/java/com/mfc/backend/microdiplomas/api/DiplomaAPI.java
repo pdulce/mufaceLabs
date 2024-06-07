@@ -15,10 +15,6 @@ public class DiplomaAPI extends BaseRestController {
     @Autowired
     DiplomaCommandStepSagaAdapter diplomaCommandStepSagaAdapter;
 
-    @GetMapping("saludar")
-    protected String saludar() {
-        return super.saludar();
-    }
 
     @GetMapping(value = "getAllFromCommandDB", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Diploma> getAllFromCommandDB() {
@@ -26,8 +22,8 @@ public class DiplomaAPI extends BaseRestController {
     }
 
 
-    @GetMapping(value = "getAllByCustomerFromDB", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Diploma> getAllByCustomerFromDB(@RequestParam String name) {
+    @GetMapping(value = "getAllByDiplomasFromDB", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<Diploma> getAllByDiplomasFromDB(@RequestParam String name) {
         return this.diplomaCommandStepSagaAdapter.findAllByFieldvalue("name", name);
     }
 

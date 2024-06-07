@@ -28,7 +28,7 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
 
      protected static final String GROUP_ID = "saga-step-group-<texto-libre>-<secuencial>";
 
-        @KafkaListener(topics = SagaOrchestratorPort.SAGA_DO_STEP_OPERATION_TOPIC groupId = SU_GROUP_ID)
+        @KafkaListener(topics = SagaOrchestratorPort.SAGA_ORDER_OPERATION_TOPIC groupId = SU_GROUP_ID)
         public void listen(Event<?> event) {
             super.procesarEvento(event);
         }
