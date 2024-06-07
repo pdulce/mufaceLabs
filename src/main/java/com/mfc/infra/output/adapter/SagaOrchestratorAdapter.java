@@ -68,7 +68,7 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
         } else {
             // puede ser que sea un mensaje de la finalización de una compensación de una operación de consolidación
             if (event.getSagaStepInfo().isDoCompensateOp()) {
-                // Ordenamos compensar al (step - 1) del que llega como evento en el bus
+                // Ordenamos compensar al (step - 1) respecto al que llega como evento en el bus
                 // SIEMPRE que no hayamos llegado al principio de la saga
                 if ((event.getSagaStepInfo().getStepNumber() - 1) > 1) {
                     backToStepToCompensate(event.getSagaStepInfo().getSagaName(),
@@ -76,9 +76,15 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
                             event.getSagaStepInfo().getTransactionIdentifier());
                 }
             } else {
-                continueNextStep(event.getSagaStepInfo().getSagaName(),
-                        event.getSagaStepInfo().getStepNumber() + 1,
-                        event, event.getSagaStepInfo().getTransactionIdentifier());
+                // guardamos en Redis el step-transac.obj. cuando tengamos la seguridad de que la operación fue OK
+                this.eventStoreConsumerAdapter.saveEvent(event.getSagaStepInfo().getSagaName(),
+                        String.valueOf(event.getSagaStepInfo().getTransactionIdentifier()), event);
+                if (!event.getSagaStepInfo().isLastStep()) {
+                    event.getSagaStepInfo().setStepNumber(event.getSagaStepInfo().getStepNumber() + 1);
+                    continueNextStep(event.getSagaStepInfo().getSagaName(),
+                            event.getSagaStepInfo().getStepNumber(),
+                            event, event.getSagaStepInfo().getTransactionIdentifier());
+                }
             }
 
         }
@@ -86,15 +92,9 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
     }
 
     /*** METODOS PRIVADOS ***/
-    private void continueNextStep(String sagaName, Integer stepNumber, Event<?> data, Long transactionIdentifier) {
-        // Buscamos el identificador de transacción justo en el objeto persistido en step anterior
-        SagaStepInfo sagaInfo = new SagaStepInfo(sagaName, stepNumber, transactionIdentifier);
-        data.setSagaStepInfo(sagaInfo);
-        // guardamos el objeto transaccional en Redis
-        this.eventStoreConsumerAdapter.saveEvent(sagaName, String.valueOf(transactionIdentifier), data);
-
+    private void continueNextStep(String sagaName, Integer stepNumber, Event<?> event, Long transactionIdentifier) {
         // Iniciar Saga
-        this.commandEventPublisherPort.publish(SAGA_ORDER_OPERATION_TOPIC, data);
+        this.commandEventPublisherPort.publish(SAGA_ORDER_OPERATION_TOPIC, event);
 
         logger.info("Saga continuada con step " + stepNumber + " para la transacción núm.: " + transactionIdentifier);
     }

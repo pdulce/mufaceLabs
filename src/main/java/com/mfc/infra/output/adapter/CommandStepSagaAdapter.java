@@ -42,7 +42,6 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
                 || event.getSagaStepInfo().getStepNumber() != getOrderStepInSaga()) {
             return; // mensaje descartado
         }
-
         if (event.getSagaStepInfo().isDoCompensateOp()) {
             orderSagaCompensation(event);
             this.commandEventPublisherPort.publish(SagaOrchestratorPort.SAGA_FROM_STEP_TOPIC, event);
@@ -51,6 +50,7 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
                     + " para la transacción núm: " + event.getSagaStepInfo().getTransactionIdentifier()
                     + " se ha realizado de forma satisfactoria");
         } else {
+            event.getSagaStepInfo().setLastStep(isLastStepInSaga());
             orderSagaOperation(event);
             this.commandEventPublisherPort.publish(SagaOrchestratorPort.SAGA_FROM_STEP_TOPIC, event);
             logger.info("Se ha informado al orchestrator que la operación de consolidación en el step "
@@ -72,6 +72,9 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
 
     @Override
     public abstract int getOrderStepInSaga();
+
+    @Override
+    public abstract boolean isLastStepInSaga();
 
     @Override
     public abstract String getTypeOrOperation();

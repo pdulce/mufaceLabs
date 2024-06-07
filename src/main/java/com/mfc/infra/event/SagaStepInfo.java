@@ -9,6 +9,7 @@ public class SagaStepInfo {
     private String sagaName;
     private Long transactionIdentifier;
     private boolean doCompensateOp;
+    private boolean lastStep;
 
     private SagaStepInfo(){}
 
@@ -17,6 +18,7 @@ public class SagaStepInfo {
         this.stepNumber = stepNumber;
         this.transactionIdentifier = transactionIdentifier;
         this.doCompensateOp = false;
+        this.lastStep = false;
     }
 
 

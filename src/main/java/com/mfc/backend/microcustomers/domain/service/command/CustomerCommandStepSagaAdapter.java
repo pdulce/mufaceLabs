@@ -40,6 +40,10 @@ public class CustomerCommandStepSagaAdapter extends CommandStepSagaAdapter<Custo
     }
 
     @Override
+    public boolean isLastStepInSaga() {
+        return false;
+    }
+    @Override
     public String getTypeOrOperation() {
         return Event.EVENT_TYPE_CREATE;
     }

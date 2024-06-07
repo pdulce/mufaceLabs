@@ -8,6 +8,8 @@ public interface SagaStepPort {
 
     int getOrderStepInSaga();
 
+    boolean isLastStepInSaga();
+
     public String getTypeOrOperation();
 
     void doSagaOperation(Event<?> event);

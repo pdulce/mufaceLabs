@@ -40,6 +40,11 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
     }
 
     @Override
+    public boolean isLastStepInSaga() {
+        return true;
+    }
+
+    @Override
     public String getTypeOrOperation() {
         return Event.EVENT_TYPE_CREATE;
     }
