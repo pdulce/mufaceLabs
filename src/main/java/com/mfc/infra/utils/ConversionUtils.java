@@ -54,13 +54,20 @@ public class ConversionUtils {
 
     public static <T> Map<String, Object> objectToMap(T object) {
         try {
+
             return objectMapper.convertValue(object, Map.class);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             return null;
         }
     }
-    
+
+    public static <T> T convertMapToObject(LinkedHashMap<String, Object> map, Class<T> clazz) {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.convertValue(map, clazz);
+    }
+
+
     public static Map<String, Object> jsonstring2Map( String json ) {
         if ( json == null ) return new HashMap<String, Object>();
 

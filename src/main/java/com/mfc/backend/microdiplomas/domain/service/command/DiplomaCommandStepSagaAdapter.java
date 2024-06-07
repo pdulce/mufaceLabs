@@ -5,8 +5,12 @@ import com.mfc.infra.event.Event;
 import com.mfc.infra.exceptions.NotExistException;
 import com.mfc.infra.output.adapter.CommandStepSagaAdapter;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
+import com.mfc.infra.utils.ConversionUtils;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+
+import java.util.LinkedHashMap;
+import java.util.UUID;
 
 @Service
 public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diploma> {
@@ -31,7 +35,7 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
 
     @Override
     public int getOrderStepInSaga() {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -42,7 +46,12 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
     @Override
     public void doSagaOperation(Event<?> event) {
         try {
-            this.insert((Diploma) event.getInnerEvent().getData());
+            Diploma diploma = ConversionUtils.
+                    convertMapToObject((LinkedHashMap<String, Object>) event.getInnerEvent().getData(), Diploma.class);
+            if (diploma.getId() == null) {
+                diploma.setId(UUID.randomUUID().getMostSignificantBits());
+            }
+            this.insert(diploma);
         } catch (Throwable exc) {
             event.getInnerEvent().setTypeEvent(Event.EVENT_FAILED_OPERATION);
             logger.error("doSagaOperation failed: Cause ", exc);
@@ -52,7 +61,9 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
     @Override
     public void doSagaCompensation(Event<?> event) {
         try {
-            this.delete((Diploma) event.getInnerEvent().getData());
+            Diploma diploma = ConversionUtils.
+                    convertMapToObject((LinkedHashMap<String, Object>) event.getInnerEvent().getData(), Diploma.class);
+            this.delete(diploma);
         } catch (NotExistException notExistException) {
             logger.error("doSagaCompensation failed: Cause ", notExistException);
             event.getInnerEvent().setTypeEvent(Event.EVENT_FAILED_OPERATION);

@@ -6,8 +6,12 @@ import com.mfc.infra.exceptions.NotExistException;
 import com.mfc.infra.output.adapter.CommandAdapter;
 import com.mfc.infra.output.adapter.CommandStepSagaAdapter;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
+import com.mfc.infra.utils.ConversionUtils;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+
+import java.util.LinkedHashMap;
+import java.util.UUID;
 
 @Service
 public class CustomerCommandStepSagaAdapter extends CommandStepSagaAdapter<Customer> {
@@ -21,6 +25,7 @@ public class CustomerCommandStepSagaAdapter extends CommandStepSagaAdapter<Custo
     @Override
     @KafkaListener(topics = SagaOrchestratorPort.SAGA_ORDER_OPERATION_TOPIC, groupId = GROUP_ID)
     public void listen(Event<?> event) {
+        // llega una orden del orchestrator
         super.processStepEvent(event);
     }
 
@@ -42,7 +47,12 @@ public class CustomerCommandStepSagaAdapter extends CommandStepSagaAdapter<Custo
     @Override
     public void doSagaOperation(Event<?> event) {
         try {
-            this.insert((Customer) event.getInnerEvent().getData());
+            Customer customer = ConversionUtils.
+                    convertMapToObject((LinkedHashMap<String, Object>) event.getInnerEvent().getData(), Customer.class);
+            if (customer.getId() == null) {
+                customer.setId(UUID.randomUUID().getMostSignificantBits());
+            }
+            this.insert(customer);
         } catch (Throwable exc) {
             event.getInnerEvent().setTypeEvent(Event.EVENT_FAILED_OPERATION);
             logger.error("doSagaOperation failed: Cause ", exc);
@@ -52,7 +62,9 @@ public class CustomerCommandStepSagaAdapter extends CommandStepSagaAdapter<Custo
     @Override
     public void doSagaCompensation(Event<?> event) {
         try {
-            this.delete((Customer) event.getInnerEvent().getData());
+            Customer customer = ConversionUtils.
+                    convertMapToObject((LinkedHashMap<String, Object>) event.getInnerEvent().getData(), Customer.class);
+            this.delete(customer);
         } catch (NotExistException notExistException) {
             logger.error("doSagaCompensation failed: Cause ", notExistException);
             event.getInnerEvent().setTypeEvent(Event.EVENT_FAILED_OPERATION);

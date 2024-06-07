@@ -101,7 +101,7 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
 
     private void backToStepToCompensate(String sagaName, Integer stepNumber, Long transactionIdentifier) {
 
-        Event<?> eventoTransaccion = searchPreviousStepTransation(sagaName, stepNumber, transactionIdentifier);
+        Event<?> eventoTransaccion = searchPreviousStepTransaction(sagaName, stepNumber, transactionIdentifier);
         if (eventoTransaccion != null) {
             eventoTransaccion.getSagaStepInfo().setDoCompensateOp(true);
             this.commandEventPublisherPort.publish(SAGA_ORDER_OPERATION_TOPIC, eventoTransaccion);
@@ -113,7 +113,7 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
         }
     }
 
-    private Event<?> searchPreviousStepTransation(String sagaName, Integer stepNumber, Long transactionIdentifier) {
+    private Event<?> searchPreviousStepTransaction(String sagaName, Integer stepNumber, Long transactionIdentifier) {
 
         List<Object> objetosTransaccionados = eventStoreConsumerAdapter.
                 findById(sagaName, String.valueOf(transactionIdentifier));
