@@ -69,7 +69,7 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
                 }
                 diploma.setRegion(customer.getCountry());
             }
-            diploma.setTitulo("Bienvenida diploma, señor(a) " + customer.getName());
+            diploma.setTitulo("Diploma de Bienvenida, señor(a) " + customer.getName());
 
             this.insert(diploma);
             event.getInnerEvent().setNewData(diploma);
