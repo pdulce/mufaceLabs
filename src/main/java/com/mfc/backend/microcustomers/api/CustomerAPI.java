@@ -2,16 +2,13 @@ package com.mfc.backend.microcustomers.api;
 
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.UUID;
 
 import com.mfc.backend.microcustomers.domain.model.command.Customer;
 import com.mfc.backend.microcustomers.domain.service.command.CustomerCommandAdapter;
 import com.mfc.backend.microcustomers.domain.service.query.CustomerQueryServiceConsumerAdapter;
 import com.mfc.infra.controller.BaseRestController;
 import com.mfc.infra.input.adapter.EventStoreConsumerAdapter;
-import com.mfc.infra.utils.ConstantMessages;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
