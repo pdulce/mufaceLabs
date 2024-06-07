@@ -38,27 +38,26 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
 
     public void processStepEvent(Event<?> event) {
         // hay que ver si desechar este mensaje por si pertenece a otra saga y/o a otro step que no sea esta instancia
-        if (!event.getSagaStepInfo().getSagaName().contentEquals(getSagaName())
-                || event.getSagaStepInfo().getNextStepNumberToProccess() != getOrderStepInSaga()) {
-            return; // mensaje descartado
-        }
-        if (event.getSagaStepInfo().isDoCompensateOp()) {
-            event.getSagaStepInfo().setStepNumberProccessed(event.getSagaStepInfo().getNextStepNumberToProccess());
-            orderSagaCompensation(event);
-            this.commandEventPublisherPort.publish(SagaOrchestratorPort.SAGA_FROM_STEP_TOPIC, event);
-            logger.info("Se ha informado al orchestrator que la operación de compensación en el step "
-                    + event.getSagaStepInfo().getNextStepNumberToProccess()
-                    + " para la transacción núm: " + event.getSagaStepInfo().getTransactionIdentifier()
-                    + " se ha realizado de forma satisfactoria");
-        } else {
-            event.getSagaStepInfo().setLastStep(isLastStepInSaga());
-            orderSagaOperation(event);
-            event.getSagaStepInfo().setStepNumberProccessed(event.getSagaStepInfo().getNextStepNumberToProccess());
-            this.commandEventPublisherPort.publish(SagaOrchestratorPort.SAGA_FROM_STEP_TOPIC, event);
-            logger.info("Se ha informado al orchestrator que la operación de consolidación en el step "
-                    + event.getSagaStepInfo().getNextStepNumberToProccess()
-                    + " para la transacción núm: " + event.getSagaStepInfo().getTransactionIdentifier()
-                    + " se ha realizado de forma satisfactoria");
+        if (event.getSagaStepInfo().getSagaName().contentEquals(getSagaName())
+             && event.getSagaStepInfo().getNextStepNumberToProccess() == getOrderStepInSaga()
+                && event.getSagaStepInfo().getLastStepNumberProccessed() != getOrderStepInSaga()) {
+            event.getSagaStepInfo().setLastStepNumberProccessed(event.getSagaStepInfo().getNextStepNumberToProccess());
+            if (event.getSagaStepInfo().isDoCompensateOp()) {
+                orderSagaCompensation(event);
+                this.commandEventPublisherPort.publish(SagaOrchestratorPort.SAGA_FROM_STEP_TOPIC, event);
+                logger.info("Se ha informado al orchestrator que la operación de compensación en el step "
+                        + event.getSagaStepInfo().getNextStepNumberToProccess()
+                        + " para la transacción núm: " + event.getSagaStepInfo().getTransactionIdentifier()
+                        + " se ha realizado de forma satisfactoria");
+            } else {
+                event.getSagaStepInfo().setLastStep(isLastStepInSaga());
+                orderSagaOperation(event);
+                this.commandEventPublisherPort.publish(SagaOrchestratorPort.SAGA_FROM_STEP_TOPIC, event);
+                logger.info("Se ha informado al orchestrator que la operación de consolidación en el step "
+                        + event.getSagaStepInfo().getNextStepNumberToProccess()
+                        + " para la transacción núm: " + event.getSagaStepInfo().getTransactionIdentifier()
+                        + " se ha realizado de forma satisfactoria");
+            }
         }
     }
     private void orderSagaOperation(Event<?> event) {

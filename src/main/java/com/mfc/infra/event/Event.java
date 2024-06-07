@@ -11,7 +11,7 @@ public class Event<T> implements Serializable {
     public static final String EVENT_TYPE_DELETE = "delete";
     public static final String EVENT_TYPE_CREATE = "create";
     public static final String EVENT_TYPE_UPDATE = "update";
-    public static final String EVENT_FAILED_OPERATION = "failed";
+
     private String id;
     private ContextInfo contextInfo;
     private SagaStepInfo sagaStepInfo;

@@ -7,7 +7,7 @@ public class SagaStepInfo {
     private String sagaName;
     private Long transactionIdentifier;
     private int nextStepNumberToProccess;
-    private int stepNumberProccessed;
+    private int lastStepNumberProccessed; // : -1 es que ha fallado ese last step procesado (el intento de hacer el next)
     private boolean doCompensateOp;
     private boolean lastStep;
 
