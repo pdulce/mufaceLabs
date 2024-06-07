@@ -30,14 +30,6 @@ public class CustomerAPI extends BaseRestController {
     @Autowired
     EventStoreConsumerAdapter eventStoreConsumerAdapter;
 
-    @PostMapping(produces=MediaType.APPLICATION_JSON_VALUE)
-    public Customer create(@RequestBody @NotNull Customer customer) {
-        Locale locale = "es" != null ? new Locale("es") : Locale.getDefault();
-        String message = this.messageSource.getMessage(ConstantMessages.SUCCESS_CREATED, null, locale);
-        customer.setId(UUID.randomUUID().getMostSignificantBits());
-        return customerCommandService.insert(customer);
-    }
-
     @PutMapping(produces=MediaType.APPLICATION_JSON_VALUE)
     public Customer update(@RequestBody @NotNull Customer customer) {
         try{
