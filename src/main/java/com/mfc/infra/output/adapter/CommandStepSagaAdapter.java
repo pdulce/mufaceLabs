@@ -43,7 +43,7 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
                 && event.getSagaStepInfo().getLastStepNumberProccessed() != getOrderStepInSaga()) {
             if (event.getSagaStepInfo().isDoCompensateOp()) {
                 orderSagaCompensation(event);
-                if (event.getSagaStepInfo().getLastStepNumberProccessed() != -1) {
+                if (event.getSagaStepInfo().getLastStepNumberProccessed() != Event.SAGA_OPE_FAILED) {
                     event.getSagaStepInfo().setLastStepNumberProccessed(event.getSagaStepInfo().
                             getNextStepNumberToProccess());
                 }
@@ -51,11 +51,12 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
                 logger.info("Se ha informado al orchestrator que la operación de compensación en el step "
                         + event.getSagaStepInfo().getNextStepNumberToProccess()
                         + " para la transacción núm: " + event.getSagaStepInfo().getTransactionIdentifier()
-                        + " se ha realizado de forma satisfactoria");
+                        + (event.getSagaStepInfo().getLastStepNumberProccessed() == Event.SAGA_OPE_FAILED
+                        ? " ha fallado" : " se ha realizado de forma satisfactoria"));
             } else {
                 event.getSagaStepInfo().setLastStep(isLastStepInSaga());
                 orderSagaOperation(event);
-                if (event.getSagaStepInfo().getLastStepNumberProccessed() != -1) {
+                if (event.getSagaStepInfo().getLastStepNumberProccessed() != Event.SAGA_OPE_FAILED) {
                     event.getSagaStepInfo().setLastStepNumberProccessed(event.getSagaStepInfo().
                             getNextStepNumberToProccess());
                 }
@@ -63,7 +64,8 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
                 logger.info("Se ha informado al orchestrator que la operación de consolidación en el step "
                         + event.getSagaStepInfo().getNextStepNumberToProccess()
                         + " para la transacción núm: " + event.getSagaStepInfo().getTransactionIdentifier()
-                        + " se ha realizado de forma satisfactoria");
+                        + (event.getSagaStepInfo().getLastStepNumberProccessed() == Event.SAGA_OPE_FAILED
+                        ? " ha fallado" : " se ha realizado de forma satisfactoria"));
             }
         }
     }

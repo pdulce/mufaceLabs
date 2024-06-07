@@ -53,10 +53,8 @@ public class CustomerCommandStepSagaAdapter extends CommandStepSagaAdapter<Custo
         try {
             Customer customer = ConversionUtils.
                     convertMapToObject((LinkedHashMap<String, Object>) event.getInnerEvent().getData(), Customer.class);
-            if (customer.getId() == null) {
-                customer.setId(Math.abs(UUID.randomUUID().getMostSignificantBits()));
-            }
             this.insert(customer);
+            event.getInnerEvent().setNewData(customer);
         } catch (Throwable exc) {
             event.getSagaStepInfo().setLastStepNumberProccessed(Event.SAGA_OPE_FAILED);
             logger.error("doSagaOperation failed: Cause ", exc);

@@ -60,7 +60,7 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
     public void listen(Event<?> event) {
         // Aquí tenemos decidir en función del mensaje que mande el step antes invocado, si continuar con la siguiente
         // operación de la SAGA o mandar compensar los steps anteriores
-        if (event.getSagaStepInfo().getLastStepNumberProccessed() == -1
+        if (event.getSagaStepInfo().getLastStepNumberProccessed() == Event.SAGA_OPE_FAILED
                 && event.getSagaStepInfo().getNextStepNumberToProccess() > 1) {
             event.getSagaStepInfo().setNextStepNumberToProccess(event.getSagaStepInfo().
                     getLastStepNumberProccessed() - 1);
@@ -81,13 +81,15 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
                 }
             } else {
                 // guardamos en Redis el step-transac.obj. cuando tengamos la seguridad de que la operación fue OK
-                this.eventStoreConsumerAdapter.saveEvent(event.getSagaStepInfo().getSagaName(),
-                        String.valueOf(event.getSagaStepInfo().getTransactionIdentifier()), event);
                 if (!event.getSagaStepInfo().isLastStep()) {
                     event.getSagaStepInfo().setNextStepNumberToProccess(event.getSagaStepInfo().
                             getLastStepNumberProccessed() + 1);
+                }
+                this.eventStoreConsumerAdapter.saveEvent(event.getSagaStepInfo().getSagaName(),
+                        String.valueOf(event.getSagaStepInfo().getTransactionIdentifier()), event);
+                if (!event.getSagaStepInfo().isLastStep()) {
                     continueNextStep(event.getSagaStepInfo().getSagaName(),
-                            event.getSagaStepInfo().getNextStepNumberToProccess(),
+                            //event.getSagaStepInfo().getNextStepNumberToProccess(),
                             event, event.getSagaStepInfo().getTransactionIdentifier());
                 }
             }
@@ -96,11 +98,12 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
     }
 
     /*** METODOS PRIVADOS ***/
-    private void continueNextStep(String sagaName, Integer stepNumber, Event<?> event, Long transactionIdentifier) {
+    private void continueNextStep(String sagaName, Event<?> event, Long transactionIdentifier) {
         // Iniciar Saga
         this.commandEventPublisherPort.publish(SAGA_ORDER_OPERATION_TOPIC, event);
 
-        logger.info("Saga continuada con step " + stepNumber + " para la transacción núm.: " + transactionIdentifier);
+        logger.info("Saga continuada con step " + event.getSagaStepInfo().getNextStepNumberToProccess()
+                + " para la transacción núm.: " + transactionIdentifier);
     }
 
     private void backToStepToCompensate(String sagaName, Integer stepNumber, Long transactionIdentifier) {
