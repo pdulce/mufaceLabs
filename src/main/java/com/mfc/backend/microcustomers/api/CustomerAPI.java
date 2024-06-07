@@ -55,6 +55,11 @@ public class CustomerAPI extends BaseRestController {
         }
     }
 
+    @DeleteMapping(value = "deleteAll")
+    public void deleteAll() {
+        this.customerCommandService.deleteAll();
+    }
+
     @GetMapping(value = "getAllFromCommandDB", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Customer> getAllFromCommandDB() {
         return this.customerCommandService.findAll();
