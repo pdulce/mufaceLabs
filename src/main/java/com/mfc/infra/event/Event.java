@@ -26,11 +26,5 @@ public class Event<T> implements Serializable {
         this.innerEvent = new InnerEvent<T>(typeEvent, data);
     }
 
-    public Event(String almacen, String author, String applicationId, String id, String typeEvent) {
-        this.contextInfo = new ContextInfo(almacen, author, applicationId);
-        this.id = id;
-        this.innerEvent = new InnerEvent<T>(EVENT_FAILED_OPERATION, null);
-    }
-
 
 }

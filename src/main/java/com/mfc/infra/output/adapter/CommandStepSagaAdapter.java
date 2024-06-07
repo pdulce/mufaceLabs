@@ -70,6 +70,9 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
     public abstract int getOrderStepInSaga();
 
     @Override
+    public abstract String getTypeOrOperation();
+
+    @Override
     public abstract void doSagaOperation(Event<?> event);
 
     @Override

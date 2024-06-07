@@ -4,10 +4,11 @@ import com.mfc.infra.event.Event;
 
 public interface SagaStepPort {
 
-    void listen(Event<?> event);
     String getSagaName();
 
     int getOrderStepInSaga();
+
+    public String getTypeOrOperation();
 
     void doSagaOperation(Event<?> event);
 

@@ -2,9 +2,9 @@ package com.mfc.infra.output.port;
 
 import com.mfc.infra.event.Event;
 
-public interface SagaOrchestratorPort {
+public interface SagaOrchestratorPort<T> {
 
-    Long startSaga(String sagaName, Event<?> data);
+    Event<?> startSaga(String sagaName, String operation, T data);
 
     String SAGA_DO_STEP_OPERATION_TOPIC = "saga-order-operation-topic";
     String SAGA_FROM_STEP_TOPIC = "saga-from-step-topic";
