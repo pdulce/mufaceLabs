@@ -30,6 +30,11 @@ public class CustomerAPI extends BaseRestController {
     @Autowired
     EventStoreConsumerAdapter eventStoreConsumerAdapter;
 
+    @GetMapping("saludar")
+    protected String saludar() {
+        return super.saludar();
+    }
+
     @PutMapping(produces=MediaType.APPLICATION_JSON_VALUE)
     public Customer update(@RequestBody @NotNull Customer customer) {
         try{

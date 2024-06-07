@@ -15,6 +15,11 @@ public class DiplomaAPI extends BaseRestController {
     @Autowired
     DiplomaCommandStepSagaAdapter diplomaCommandStepSagaAdapter;
 
+    @GetMapping("saludar")
+    protected String saludar() {
+        return super.saludar();
+    }
+
     @GetMapping(value = "getAllFromCommandDB", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Diploma> getAllFromCommandDB() {
         return this.diplomaCommandStepSagaAdapter.findAll();
