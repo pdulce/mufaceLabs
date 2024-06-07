@@ -1,7 +1,9 @@
 package com.mfc.infra.controller;
 
-
+import com.mfc.infra.saga.port.SagaOrchestratorPort;
 import com.mfc.infra.utils.ConstantMessages;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
@@ -12,13 +14,9 @@ import java.util.*;
 @RestController
 public abstract class BaseRestController {
 
-   /*@Autowired
-    CustomerCommandAdapter customerCommandService;
+    Logger logger = LoggerFactory.getLogger(BaseRestController.class);
     @Autowired
-    CustomerQueryServiceConsumerAdapter customerQueryService;
-
-    @Autowired
-    EventStoreConsumerAdapter eventStoreConsumerAdapter;*/
+    private SagaOrchestratorPort sagaOrchestrator;
 
     @Autowired
     protected MessageSource messageSource;

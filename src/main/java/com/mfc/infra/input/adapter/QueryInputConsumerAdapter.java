@@ -4,6 +4,8 @@ import com.mfc.infra.event.Event;
 import com.mfc.infra.input.port.EventConsumer;
 import com.mfc.infra.input.port.QueryInputPort;
 import com.mfc.infra.utils.ConversionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
@@ -15,6 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public abstract class QueryInputConsumerAdapter<T> implements QueryInputPort<T>, EventConsumer {
+    Logger logger = LoggerFactory.getLogger(QueryInputConsumerAdapter.class);
     @Autowired
     MongoRepository<T, String> repository;
 

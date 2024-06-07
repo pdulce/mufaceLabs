@@ -6,6 +6,4 @@ public interface EventConsumer {
 
     void listen(Event<?> event);
 
-    void procesarEvento(Event<?> event);
-
 }

@@ -2,10 +2,12 @@ package com.mfc.infra.output.adapter;
 
 import com.mfc.infra.event.Event;
 import com.mfc.infra.exceptions.NotExistException;
-import com.mfc.infra.output.port.CommandEventPublisher;
+import com.mfc.infra.output.port.CommandEventPublisherPort;
 import com.mfc.infra.output.port.CommandPort;
 import com.mfc.infra.utils.ConversionUtils;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,8 +19,9 @@ import java.util.List;
 @Transactional
 public abstract class CommandAdapter<T> implements CommandPort<T> {
 
+    Logger logger = LoggerFactory.getLogger(CommandAdapter.class);
     @Autowired
-    CommandEventPublisher commandEventPublisher;
+    CommandEventPublisherPort commandEventPublisherPort;
     @Autowired
     protected JpaRepository<T, Long> repository;
 
@@ -33,7 +36,7 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
             Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
                     ConversionUtils.convertToMap(saved).get("id").toString(),
                     Event.EVENT_TYPE_CREATE, entity);
-            commandEventPublisher.publish(Event.EVENT_TOPIC, eventArch);
+            commandEventPublisherPort.publish(Event.EVENT_TOPIC, eventArch);
         }
         return saved;
     }
@@ -45,7 +48,7 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
             Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
                     ConversionUtils.convertToMap(entity).get("id").toString(),
                     Event.EVENT_TYPE_UPDATE, updated);
-            commandEventPublisher.publish(Event.EVENT_TOPIC, eventArch);
+            commandEventPublisherPort.publish(Event.EVENT_TOPIC, eventArch);
         }
         return updated;
     }
@@ -58,7 +61,7 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
             Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
                     ConversionUtils.convertToMap(entity).get("id").toString(),
                     Event.EVENT_TYPE_DELETE, entity);
-            commandEventPublisher.publish(Event.EVENT_TOPIC, eventArch);
+            commandEventPublisherPort.publish(Event.EVENT_TOPIC, eventArch);
         } else {
             throw new NotExistException();
         }
@@ -70,7 +73,7 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
             Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
                     ConversionUtils.convertToMap(record).get("id").toString(),
                     Event.EVENT_TYPE_DELETE, record);
-            commandEventPublisher.publish(Event.EVENT_TOPIC, eventArch);
+            commandEventPublisherPort.publish(Event.EVENT_TOPIC, eventArch);
         });
         this.repository.deleteAll();
     }

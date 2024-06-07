@@ -3,6 +3,8 @@ package com.mfc.infra.input.adapter;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.input.port.EventConsumer;
 import com.mfc.infra.input.port.EventStoreInputPort;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -15,6 +17,8 @@ import java.util.Map;
 
 @Service
 public class EventStoreConsumerAdapter implements EventStoreInputPort, EventConsumer {
+
+    Logger logger = LoggerFactory.getLogger(EventStoreConsumerAdapter.class);
     protected static final String GROUP_ID = "event-adapter";
 
     @Autowired
@@ -26,14 +30,19 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort, EventCons
     }
 
     public void procesarEvento(Event<?> eventArch) {
+
+        this.saveEvent(eventArch.getContextInfo().getAlmacen(), eventArch.getId(), eventArch);
+    }
+
+    public void saveEvent(String almacen, String id, Event<?> eventArch) {
         HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
-        if (hashOps.entries(eventArch.getContextInfo().getAlmacen()).get(eventArch.getId()) == null) {
+        if (hashOps.entries(almacen).get(id) == null) {
             List<Object> agregados = new ArrayList<>();
-            hashOps.put(eventArch.getContextInfo().getAlmacen(), eventArch.getId(), agregados);
+            hashOps.put(almacen, id, agregados);
         }
-        List<Object> agregados = hashOps.entries(eventArch.getContextInfo().getAlmacen()).get(eventArch.getId());
+        List<Object> agregados = hashOps.entries(almacen).get(id);
         agregados.add(eventArch.getInnerEvent());
-        hashOps.put(eventArch.getContextInfo().getAlmacen(), eventArch.getId(), agregados);
+        hashOps.put(almacen, id, agregados);
     }
 
     public List<Object> findById(String almacen, String id) {

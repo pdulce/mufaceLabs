@@ -37,9 +37,9 @@ spring:
         hibernate:
           format_sql: true
 
-# Event bus configuration
+# Event bus configuration: localhost:9092
   kafka:
-    bootstrap-servers: 192.168.1.137:9092
+    bootstrap-servers: localhost:9092
     consumer:
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer

@@ -1,5 +1,8 @@
 package com.mfc.infra.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -7,6 +10,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class ZipUtil {
+
+    Logger logger = LoggerFactory.getLogger(ZipUtil.class);
 
     public final byte[] generarZipDesdeTareas(final List<String> tareas) throws Exception {
 
