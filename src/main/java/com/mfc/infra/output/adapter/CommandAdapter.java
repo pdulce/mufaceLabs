@@ -43,6 +43,11 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
 
     @Override
     public T update(T entity) throws NotExistException {
+        Long id = Long.valueOf(ConversionUtils.convertToMap(entity).get("id").toString());
+        if (!this.repository.findById(id).isPresent()) {
+            //"entity with id: " + String.valueOf(id) + " not found"
+            throw new NotExistException();
+        }
         T updated =  this.repository.save(entity);
         if (updated != null) {
             Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
@@ -55,16 +60,16 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
 
     @Override
     public void delete(T entity) throws NotExistException {
-        if (this.repository.findById(Long.valueOf(ConversionUtils.convertToMap(entity).get("id").toString()))
-                .isPresent()) {
-            this.repository.delete(entity);
-            Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
-                    ConversionUtils.convertToMap(entity).get("id").toString(),
-                    Event.EVENT_TYPE_DELETE, entity);
-            commandEventPublisherPort.publish(Event.EVENT_TOPIC, eventArch);
-        } else {
+        Long id = Long.valueOf(ConversionUtils.convertToMap(entity).get("id").toString());
+        if (!this.repository.findById(id).isPresent()) {
+            //"entity with id: " + String.valueOf(id) + " not found"
             throw new NotExistException();
         }
+        this.repository.delete(entity);
+        Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
+                ConversionUtils.convertToMap(entity).get("id").toString(),
+                Event.EVENT_TYPE_DELETE, entity);
+        commandEventPublisherPort.publish(Event.EVENT_TOPIC, eventArch);
     }
 
     @Override

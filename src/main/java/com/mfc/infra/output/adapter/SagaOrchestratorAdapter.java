@@ -38,7 +38,7 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
 
         Long transactionIdentifier = Math.abs(UUID.randomUUID().getMostSignificantBits());
 
-        Event<?> dataEvent = new Event<T>(sagaName, "author", "applicationId-999",
+        Event<?> dataEvent = new Event(sagaName, "author", "applicationId-999",
                 String.valueOf(transactionIdentifier), operation, data);
 
         // Al iniciar la Saga el orquestador asigna un id único a la transacc. distribuida
@@ -88,9 +88,7 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
                 this.eventStoreConsumerAdapter.saveEvent(event.getSagaStepInfo().getSagaName(),
                         String.valueOf(event.getSagaStepInfo().getTransactionIdentifier()), event);
                 if (!event.getSagaStepInfo().isLastStep()) {
-                    continueNextStep(event.getSagaStepInfo().getSagaName(),
-                            //event.getSagaStepInfo().getNextStepNumberToProccess(),
-                            event, event.getSagaStepInfo().getTransactionIdentifier());
+                    continueNextStep(event);
                 }
             }
         }
@@ -98,12 +96,12 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
     }
 
     /*** METODOS PRIVADOS ***/
-    private void continueNextStep(String sagaName, Event<?> event, Long transactionIdentifier) {
+    private void continueNextStep(Event<?> event) {
         // Iniciar Saga
         this.commandEventPublisherPort.publish(SAGA_ORDER_OPERATION_TOPIC, event);
 
         logger.info("Saga continuada con step " + event.getSagaStepInfo().getNextStepNumberToProccess()
-                + " para la transacción núm.: " + transactionIdentifier);
+                + " para la transacción núm.: " + event.getSagaStepInfo().getTransactionIdentifier());
     }
 
     private void backToStepToCompensate(String sagaName, Integer stepNumber, Long transactionIdentifier) {
@@ -139,7 +137,6 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
         return objetoSearched != null ? objetoSearched.get() : null;
 
     }
-
 
 
 }
