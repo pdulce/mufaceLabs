@@ -1,10 +1,13 @@
-package com.mfc.infra.saga.port;
+package com.mfc.infra.output.port;
 
 import com.mfc.infra.event.Event;
 
 public interface SagaStepPort {
 
-    Integer getOrderStepInSaga();
+    void listen(Event<?> event);
+    String getSagaName();
+
+    int getOrderStepInSaga();
 
     void doSagaOperation(Event<?> event);
 

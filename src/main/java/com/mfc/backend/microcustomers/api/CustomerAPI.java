@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import com.mfc.backend.microcustomers.domain.model.command.Customer;
 import com.mfc.backend.microcustomers.domain.service.command.CustomerCommandAdapter;
+import com.mfc.backend.microcustomers.domain.service.command.CustomerCommandStepSagaAdapter;
 import com.mfc.backend.microcustomers.domain.service.query.CustomerQueryServiceConsumerAdapter;
 import com.mfc.infra.controller.BaseRestController;
 import com.mfc.infra.input.adapter.EventStoreConsumerAdapter;
@@ -23,6 +24,10 @@ public class CustomerAPI extends BaseRestController {
 
     @Autowired
     CustomerCommandAdapter customerCommandService;
+
+    @Autowired
+    CustomerCommandStepSagaAdapter customerCommandStepSagaAdapter;
+
     @Autowired
     CustomerQueryServiceConsumerAdapter customerQueryService;
 
@@ -34,6 +39,7 @@ public class CustomerAPI extends BaseRestController {
         Locale locale = "es" != null ? new Locale("es") : Locale.getDefault();
         String message = this.messageSource.getMessage(ConstantMessages.SUCCESS_CREATED, null, locale);
         customer.setId(UUID.randomUUID().getMostSignificantBits());
+        //return orchestratorManager.startSaga("sagaSample", customer);
         return customerCommandService.insert(customer);
     }
 

@@ -1,24 +1,47 @@
-package com.mfc.infra.saga.adapter;
+package com.mfc.infra.output.adapter;
 
 import com.mfc.infra.event.Event;
 import com.mfc.infra.output.port.CommandEventPublisherPort;
-import com.mfc.infra.saga.port.SagaOrchestratorPort;
-import com.mfc.infra.saga.port.SagaStepPort;
+import com.mfc.infra.output.port.SagaOrchestratorPort;
+import com.mfc.infra.output.port.SagaStepPort;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public abstract class SagaStepAdapter implements SagaStepPort {
 
-    Logger logger = LoggerFactory.getLogger(SagaStepAdapter.class);
+@Transactional
+public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implements SagaStepPort {
 
-    protected static final String GROUP_ID = "saga-step-group";
+    protected Logger logger = LoggerFactory.getLogger(CommandStepSagaAdapter.class);
     @Autowired
     CommandEventPublisherPort commandEventPublisherPort;
+    @Autowired
+    protected JpaRepository<T, Long> repository;
 
-    @KafkaListener(topics = SagaOrchestratorPort.SAGA_DO_STEP_OPERATION_TOPIC, groupId = GROUP_ID)
-    public void listen(Event<?> event) {
+    /** metodos para conectar con transacciones distribuidas bajo el patrón SAGA **/
+
+    /****
+     Las clases Service que extienda de CommandStepSagaAdapter deberán implementar el método listen, cada una con un
+     group-id diferente:
+
+     protected static final String GROUP_ID = "saga-step-group-<texto-libre>-<secuencial>";
+
+        @KafkaListener(topics = SagaOrchestratorPort.SAGA_DO_STEP_OPERATION_TOPIC groupId = SU_GROUP_ID)
+        public void listen(Event<?> event) {
+            super.procesarEvento(event);
+        }
+     ***/
+    public abstract void listen(Event<?> event);
+
+    public void processStepEvent(Event<?> event) {
+        // hay que ver si desechar este mensaje por si pertenece a otra saga y/o a otro step que no sea esta instancia
+        if (!event.getSagaStepInfo().getSagaName().contentEquals(getSagaName())
+                || event.getSagaStepInfo().getStepNumber() != getOrderStepInSaga()) {
+            return; // mensaje descartado
+        }
+
         if (event.getSagaStepInfo().isDoCompensateOp()) {
             doSagaCompensation(event);
             this.commandEventPublisherPort.publish(event.getSagaStepInfo().getSagaName() + "-" +
@@ -40,7 +63,11 @@ public abstract class SagaStepAdapter implements SagaStepPort {
         }
     }
 
-    public abstract Integer getOrderStepInSaga();
+    @Override
+    public abstract String getSagaName();
+
+    @Override
+    public abstract int getOrderStepInSaga();
 
     @Override
     public abstract void doSagaOperation(Event<?> event);

@@ -1,11 +1,11 @@
-package com.mfc.infra.saga.adapter;
+package com.mfc.infra.output.adapter;
 
 import com.mfc.infra.event.Event;
 import com.mfc.infra.event.SagaStepInfo;
 import com.mfc.infra.input.port.EventConsumer;
 import com.mfc.infra.input.port.EventStoreInputPort;
 import com.mfc.infra.output.port.CommandEventPublisherPort;
-import com.mfc.infra.saga.port.SagaOrchestratorPort;
+import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.utils.SagaStepComparator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

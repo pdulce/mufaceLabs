@@ -1,4 +1,4 @@
-package com.mfc.infra.saga.port;
+package com.mfc.infra.output.port;
 
 import com.mfc.infra.event.Event;
 
