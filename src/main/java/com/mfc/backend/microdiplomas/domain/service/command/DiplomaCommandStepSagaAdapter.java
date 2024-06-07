@@ -20,6 +20,7 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
     @KafkaListener(topics = SagaOrchestratorPort.SAGA_ORDER_OPERATION_TOPIC, groupId = GROUP_ID)
     @Override
     public void listen(Event<?> event) {
+        // llega una orden del orchestrator
         super.processStepEvent(event);
     }
 

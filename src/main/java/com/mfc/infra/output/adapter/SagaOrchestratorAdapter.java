@@ -17,7 +17,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
-public class SagaOrchestrator<T> implements SagaOrchestratorPort<T>, EventConsumer {
+public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, EventConsumer {
 
     Logger logger = LoggerFactory.getLogger(SagaOrchestratorPort.class);
     private static final String GROUP_ID = "saga-orchestrator-group";
