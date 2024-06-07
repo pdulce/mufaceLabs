@@ -50,7 +50,7 @@ public class CustomerCommandStepSagaAdapter extends CommandStepSagaAdapter<Custo
             Customer customer = ConversionUtils.
                     convertMapToObject((LinkedHashMap<String, Object>) event.getInnerEvent().getData(), Customer.class);
             if (customer.getId() == null) {
-                customer.setId(UUID.randomUUID().getMostSignificantBits());
+                customer.setId(Math.abs(UUID.randomUUID().getMostSignificantBits()));
             }
             this.insert(customer);
         } catch (Throwable exc) {

@@ -26,7 +26,7 @@ public class CustomerStepSagaAPI extends BaseRestController {
     public Customer create(@RequestBody @NotNull Customer customer) {
         Locale locale = "es" != null ? new Locale("es") : Locale.getDefault();
         String message = this.messageSource.getMessage(ConstantMessages.SUCCESS_CREATED, null, locale);
-        customer.setId(UUID.randomUUID().getMostSignificantBits());
+        customer.setId(Math.abs(UUID.randomUUID().getMostSignificantBits()));
         Event<?> event = this.orchestratorManager.startSaga(customerCommandStepSagaAdapter.getSagaName(),
                 customerCommandStepSagaAdapter.getTypeOrOperation(), customer);
         return (Customer) event.getInnerEvent().getData();

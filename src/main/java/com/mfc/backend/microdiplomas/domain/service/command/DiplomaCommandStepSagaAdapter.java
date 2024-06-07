@@ -1,9 +1,8 @@
 package com.mfc.backend.microdiplomas.domain.service.command;
 
-import com.mfc.backend.microcustomers.domain.model.command.Customer;
+import com.mfc.backend.microdiplomas.domain.model.command.CustomerWrapper;
 import com.mfc.backend.microdiplomas.domain.model.command.Diploma;
 import com.mfc.infra.event.Event;
-import com.mfc.infra.exceptions.NotExistException;
 import com.mfc.infra.output.adapter.CommandStepSagaAdapter;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.utils.ConversionUtils;
@@ -48,10 +47,11 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
     @Override
     public void doSagaOperation(Event<?> event) {
         try {
-            Customer customer = ConversionUtils.
-                    convertMapToObject((LinkedHashMap<String, Object>) event.getInnerEvent().getData(), Customer.class);
+            CustomerWrapper customer = ConversionUtils.
+                    convertMapToObject((LinkedHashMap<String, Object>) event.getInnerEvent().getData(),
+                            CustomerWrapper.class);
             Diploma diploma = new Diploma();
-            diploma.setId(UUID.randomUUID().getMostSignificantBits());
+            diploma.setId(Math.abs(UUID.randomUUID().getMostSignificantBits()));
             diploma.setName(customer.getName());
             diploma.setIdcustomer(customer.getId());
             if (customer.getCountry() != null) {
@@ -76,8 +76,9 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
     @Override
     public void doSagaCompensation(Event<?> event) {
         try {
-            Customer customer = ConversionUtils.
-                    convertMapToObject((LinkedHashMap<String, Object>) event.getInnerEvent().getData(), Customer.class);
+            CustomerWrapper customer = ConversionUtils.
+                    convertMapToObject((LinkedHashMap<String, Object>) event.getInnerEvent().getData(),
+                            CustomerWrapper.class);
             List<Diploma> diplomas = this.findAllByFieldvalue("idcustomer", customer.getId());
             if (diplomas == null || diplomas.isEmpty()) {
                 throw new Throwable ("Error de negocio: " +

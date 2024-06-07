@@ -28,7 +28,7 @@ public class OrderAPI extends BaseRestController {
     @PostMapping(value = "create", produces=MediaType.APPLICATION_JSON_VALUE)
     public CustomerOrder create(@PathVariable @NotNull CustomerOrder customerOrder) {
         try{
-            customerOrder.setId(UUID.randomUUID().getMostSignificantBits());
+            customerOrder.setId(Math.abs(UUID.randomUUID().getMostSignificantBits()));
             return customerOrderCommandService.insert(customerOrder);
         } catch (Throwable exc) {
             return null;

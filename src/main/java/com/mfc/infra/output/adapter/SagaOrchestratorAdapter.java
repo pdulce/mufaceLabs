@@ -36,7 +36,7 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
      */
     public Event<?> startSaga(String sagaName, String operation, T data) {
 
-        Long transactionIdentifier = UUID.randomUUID().getMostSignificantBits();
+        Long transactionIdentifier = Math.abs(UUID.randomUUID().getMostSignificantBits());
 
         Event<?> dataEvent = new Event<T>(sagaName, "author", "applicationId-999",
                 String.valueOf(transactionIdentifier), operation, data);
@@ -77,7 +77,7 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
                 }
             } else {
                 continueNextStep(event.getSagaStepInfo().getSagaName(),
-                        event.getSagaStepInfo().getStepNumber(),
+                        event.getSagaStepInfo().getStepNumber() + 1,
                         event, event.getSagaStepInfo().getTransactionIdentifier());
             }
 
