@@ -42,7 +42,7 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
 
     @Override
     public boolean isLastStepInSaga() {
-        return true;
+        return false;
     }
 
     @Override
