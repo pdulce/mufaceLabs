@@ -1,9 +1,9 @@
-package com.mfc.backend.microdiplomas.domain.model.command;
+package com.mfc.backend.microregalos.domain.model;
 
 import lombok.Data;
 
 @Data
-public class CustomerWrapper {
+public class DiplomaWrapper {
     private Long id;
 
     private String country;

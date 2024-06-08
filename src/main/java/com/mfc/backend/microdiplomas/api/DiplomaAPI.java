@@ -1,7 +1,7 @@
 package com.mfc.backend.microdiplomas.api;
 
-import com.mfc.backend.microdiplomas.domain.model.command.Diploma;
-import com.mfc.backend.microdiplomas.domain.service.command.DiplomaCommandStepSagaAdapter;
+import com.mfc.backend.microdiplomas.domain.model.Diploma;
+import com.mfc.backend.microdiplomas.domain.service.DiplomaCommandStepSagaAdapter;
 import com.mfc.infra.controller.BaseRestController;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +17,14 @@ public class DiplomaAPI extends BaseRestController {
     DiplomaCommandStepSagaAdapter diplomaCommandStepSagaAdapter;
 
 
-    @GetMapping(value = "getAllFromCommandDB", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Diploma> getAllFromCommandDB() {
+    @GetMapping(value = "getAllFromBussinessDomain", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<Diploma> getAllFromBussinessDomain() {
         return this.diplomaCommandStepSagaAdapter.findAll();
     }
 
 
-    @GetMapping(value = "getAllByDiplomasFromDB", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Diploma> getAllByDiplomasFromDB(@RequestParam String name) {
+    @GetMapping(value = "getAllByDiplomasByCustomer", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<Diploma> getAllByDiplomasByCustomer(@RequestParam String name) {
         return this.diplomaCommandStepSagaAdapter.findAllByFieldvalue("name", name);
     }
 

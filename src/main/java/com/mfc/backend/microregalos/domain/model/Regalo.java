@@ -1,12 +1,11 @@
-package com.mfc.backend.microdiplomas.domain.model.command;
+package com.mfc.backend.microregalos.domain.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Entity
 @Data
-public class Diploma {
+public class Regalo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

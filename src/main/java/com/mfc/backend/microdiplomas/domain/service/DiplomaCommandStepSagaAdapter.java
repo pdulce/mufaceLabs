@@ -1,7 +1,7 @@
-package com.mfc.backend.microdiplomas.domain.service.command;
+package com.mfc.backend.microdiplomas.domain.service;
 
-import com.mfc.backend.microdiplomas.domain.model.command.CustomerWrapper;
-import com.mfc.backend.microdiplomas.domain.model.command.Diploma;
+import com.mfc.backend.microdiplomas.domain.model.CustomerWrapper;
+import com.mfc.backend.microdiplomas.domain.model.Diploma;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.output.adapter.CommandStepSagaAdapter;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
