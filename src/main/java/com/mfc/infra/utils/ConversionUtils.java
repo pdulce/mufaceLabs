@@ -63,7 +63,8 @@ public class ConversionUtils {
         }
     }
 
-    public static <T> T convertMapToObject(LinkedHashMap<String, Object> map, Class<T> clazz) {
+    public static <T> T convertMapToObject(Object data, Class<T> clazz) {
+        LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>) data;
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return mapper.convertValue(map, clazz);

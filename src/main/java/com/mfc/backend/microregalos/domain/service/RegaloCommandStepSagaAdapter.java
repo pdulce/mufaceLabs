@@ -53,9 +53,8 @@ public class RegaloCommandStepSagaAdapter extends CommandStepSagaAdapter<Regalo>
     @Override
     public void doSagaOperation(Event<?> event) {
         try {
-            DiplomaWrapper customer = ConversionUtils.
-                    convertMapToObject((LinkedHashMap<String, Object>) event.getInnerEvent().getData(),
-                            DiplomaWrapper.class);
+            DiplomaWrapper customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(),
+                    DiplomaWrapper.class);
             Regalo regalo = new Regalo();
             regalo.setName(customer.getName());
             regalo.setIdcustomer(customer.getId());
