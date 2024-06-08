@@ -6,7 +6,7 @@ public interface SagaOrchestratorPort<T> {
 
     Event<?> startSaga(String sagaName, String operation, T data);
 
-    String SAGA_ORDER_OPERATION_TOPIC = "saga-order-operation-topic";
+    String DO_OPERATION = "exec-ope";
     String SAGA_FROM_STEP_TOPIC = "saga-from-step-topic";
 
 }

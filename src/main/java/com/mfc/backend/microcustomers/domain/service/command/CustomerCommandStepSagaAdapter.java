@@ -3,7 +3,6 @@ package com.mfc.backend.microcustomers.domain.service.command;
 import com.mfc.backend.microcustomers.domain.model.command.Customer;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.exceptions.NotExistException;
-import com.mfc.infra.output.adapter.CommandAdapter;
 import com.mfc.infra.output.adapter.CommandStepSagaAdapter;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.utils.ConversionUtils;
@@ -11,19 +10,20 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
-import java.util.UUID;
 
 @Service
 public class CustomerCommandStepSagaAdapter extends CommandStepSagaAdapter<Customer> {
 
-    public static final String GROUP_ID = "saga-step-group-customerconsumer-service-step-1";
+    private static final String SAGA_NAME = "sagaBienvenidaCustomer";
+    private static final int SAGA_STEP_NUMBER = 1;
+    private static final String TOPIC_FOR_ME = SagaOrchestratorPort.DO_OPERATION + "-" + SAGA_NAME + "-" + SAGA_STEP_NUMBER;
+    private static final String GROUP_ID = "saga-step-group-customerconsumer-service-step-1";
 
     public String getDocumentEntityClassname() {
         return "CustomerDocument";
     }
 
-    @Override
-    @KafkaListener(topics = SagaOrchestratorPort.SAGA_ORDER_OPERATION_TOPIC, groupId = GROUP_ID)
+    @KafkaListener(topics = TOPIC_FOR_ME, groupId = GROUP_ID)
     public void listen(Event<?> event) {
         // llega una orden del orchestrator
         super.processStepEvent(event);
@@ -31,12 +31,12 @@ public class CustomerCommandStepSagaAdapter extends CommandStepSagaAdapter<Custo
 
     @Override
     public String getSagaName() {
-        return "misaga";
+        return SAGA_NAME;
     }
 
     @Override
     public int getOrderStepInSaga() {
-        return 1;
+        return SAGA_STEP_NUMBER;
     }
 
     @Override

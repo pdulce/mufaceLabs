@@ -11,20 +11,20 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.UUID;
 
 @Service
 public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diploma> {
 
-    public static final String GROUP_ID = "saga-step-group-diplomaconsumer-service-step-2";
+    private static final String SAGA_NAME = "sagaBienvenidaCustomer";
+    private static final int SAGA_STEP_NUMBER = 2;
+    private static final String TOPIC_FOR_ME = SagaOrchestratorPort.DO_OPERATION + "-" + SAGA_NAME + "-" + SAGA_STEP_NUMBER;
+    private static final String GROUP_ID = "saga-step-group-diplomaconsumer-service-step-2";
 
     public String getDocumentEntityClassname() {
         return "DiplomaDocument";
     } // este micro no usa CQRS
 
-    @KafkaListener(topics = SagaOrchestratorPort.SAGA_ORDER_OPERATION_TOPIC, groupId = GROUP_ID)
-    @Override
+    @KafkaListener(topics = TOPIC_FOR_ME , groupId = GROUP_ID)
     public void listen(Event<?> event) {
         // llega una orden del orchestrator
         super.processStepEvent(event);
@@ -32,12 +32,12 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
 
     @Override
     public String getSagaName() {
-        return "misaga";
+        return SAGA_NAME;
     }
 
     @Override
     public int getOrderStepInSaga() {
-        return 2;
+        return SAGA_STEP_NUMBER;
     }
 
     @Override

@@ -49,7 +49,7 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
         this.eventStoreConsumerAdapter.saveEvent(sagaName, String.valueOf(transactionIdentifier), dataEvent);
 
         // Iniciar Saga
-        this.commandEventPublisherPort.publish(SAGA_ORDER_OPERATION_TOPIC, dataEvent);
+        this.commandEventPublisherPort.publish(DO_OPERATION, dataEvent);
 
         logger.info("Saga iniciada con número de transacción: " + transactionIdentifier);
 
@@ -98,7 +98,9 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
     /*** METODOS PRIVADOS ***/
     private void continueNextStep(Event<?> event) {
         // Iniciar Saga
-        this.commandEventPublisherPort.publish(SAGA_ORDER_OPERATION_TOPIC, event);
+        this.commandEventPublisherPort.publish(DO_OPERATION + "-"
+                + event.getSagaStepInfo().getSagaName() + "-" + event.getSagaStepInfo().getNextStepNumberToProccess(),
+                event);
 
         logger.info("Saga continuada con step " + event.getSagaStepInfo().getNextStepNumberToProccess()
                 + " para la transacción núm.: " + event.getSagaStepInfo().getTransactionIdentifier());
@@ -109,7 +111,9 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
         Event<?> eventoTransaccion = searchPreviousStepTransaction(sagaName, stepNumber, transactionIdentifier);
         if (eventoTransaccion != null) {
             eventoTransaccion.getSagaStepInfo().setDoCompensateOp(true);
-            this.commandEventPublisherPort.publish(SAGA_ORDER_OPERATION_TOPIC, eventoTransaccion);
+            this.commandEventPublisherPort.publish(
+                    DO_OPERATION + "-" + eventoTransaccion.getSagaStepInfo().getSagaName() +
+                    "-" + eventoTransaccion.getSagaStepInfo().getLastStepNumberProccessed(), eventoTransaccion);
             logger.info("Solicitada operación de compensación en step " + stepNumber
                     + " para la transacción núm: " + transactionIdentifier);
         } else {
