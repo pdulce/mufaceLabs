@@ -7,7 +7,7 @@ public class SagaStepInfo {
     private String sagaName;
     private Long transactionIdentifier;
     private int nextStepNumberToProccess;
-    private int lastStepNumberProccessed; // : -1 es que ha fallado ese last step procesado (el intento de hacer el next)
+    private int stateOfFinalization;
     private boolean doCompensateOp;
     private boolean lastStep;
 
@@ -16,6 +16,7 @@ public class SagaStepInfo {
     public SagaStepInfo(String sagaName, Integer nextStepNumberToProccess, Long transactionIdentifier){
         this.sagaName = sagaName;
         this.nextStepNumberToProccess = nextStepNumberToProccess;
+        this.stateOfFinalization = 0; // este valor es que aún no se ha ejecutado esta operación
         this.transactionIdentifier = transactionIdentifier;
         this.doCompensateOp = false;
         this.lastStep = false;

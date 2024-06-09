@@ -6,6 +6,9 @@ public final class ConstantMessages {
     public static final String GREETING = "greeting";
 
     public static final String DISTRIBUTED_INITIADED = "transacc_distruted_initiated";
+    public static final String DISTRIBUTED_FIN_STATE_OK = "saga_fin_ok";
+    public static final String DISTRIBUTED_RUNNING = "saga_fin_running";
+    public static final String DISTRIBUTED_FIN_STATE_KO = "saga_fin_ko";
 
     // Informational 1xx
     public static final String INFO_CONTINUE = "info.continue";

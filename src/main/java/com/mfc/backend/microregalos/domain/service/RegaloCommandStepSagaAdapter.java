@@ -59,10 +59,10 @@ public class RegaloCommandStepSagaAdapter extends CommandStepSagaAdapter<Regalo>
             this.insert(regalo);
             event.getInnerEvent().setNewData(regalo);
         } catch (ConstraintViolationException exc) {
-            event.getSagaStepInfo().setLastStepNumberProccessed(Event.SAGA_OPE_FAILED);
+            event.getSagaStepInfo().setStateOfFinalization(Event.SAGA_OPE_FAILED);
             logger.error("doSagaOperation failed: Cause ", exc.getLocalizedMessage());
         } catch (Throwable exc) {
-            event.getSagaStepInfo().setLastStepNumberProccessed(Event.SAGA_OPE_FAILED);
+            event.getSagaStepInfo().setStateOfFinalization(Event.SAGA_OPE_FAILED);
             logger.error("doSagaOperation failed: Cause ", exc);
         }
     }
@@ -91,7 +91,7 @@ public class RegaloCommandStepSagaAdapter extends CommandStepSagaAdapter<Regalo>
             Regalo regalo = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Regalo.class);
             this.delete(regalo);
         } catch (Throwable notExistException) {
-            event.getSagaStepInfo().setLastStepNumberProccessed(Event.SAGA_OPE_FAILED);
+            event.getSagaStepInfo().setStateOfFinalization(Event.SAGA_OPE_FAILED);
             logger.error("doSagaCompensation failed: Cause ", notExistException);
         }
     }

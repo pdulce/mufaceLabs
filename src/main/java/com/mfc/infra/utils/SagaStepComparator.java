@@ -11,9 +11,9 @@ public class SagaStepComparator implements Comparator<Object> {
         Event<?> event1 = (Event<?>) data1;
         Event<?> event2 = (Event<?>) data2;
         int retorno = 0;
-        if (event1.getSagaStepInfo().getLastStepNumberProccessed() > event2.getSagaStepInfo().getLastStepNumberProccessed()) {
+        if (event1.getSagaStepInfo().getStateOfFinalization() > event2.getSagaStepInfo().getStateOfFinalization()) {
             retorno = -1;
-        } else if (event1.getSagaStepInfo().getLastStepNumberProccessed() < event2.getSagaStepInfo().getLastStepNumberProccessed()) {
+        } else if (event1.getSagaStepInfo().getStateOfFinalization() < event2.getSagaStepInfo().getStateOfFinalization()) {
             retorno = 1;
         }
         return retorno;

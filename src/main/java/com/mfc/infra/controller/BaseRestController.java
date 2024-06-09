@@ -1,7 +1,9 @@
 package com.mfc.infra.controller;
 
+import com.mfc.infra.event.Event;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.utils.ConstantMessages;
+import jakarta.validation.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,5 +50,11 @@ public abstract class BaseRestController {
                 getLocale(CASTELLANO)) : message;
     }
 
+    public String getSagaEstadoFinalizacion(@RequestParam @NotEmpty String saga,
+                                            @RequestParam @NotEmpty String transaccionId) {
+        logger.info("vemos si la saga finalizó la saga " + saga + " en su transacción number: " + transaccionId);
+        String messageKey = this.orchestratorManager.getLastStateOfTansactionInSaga(saga, transaccionId);
+        return messageSource.getMessage(messageKey, null, getLocale(CASTELLANO));
+    }
 
 }

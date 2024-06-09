@@ -1,6 +1,5 @@
 package com.mfc.backend.microclientes.api.eventdomain;
 
-
 import com.mfc.backend.microclientes.domain.service.command.CustomerCommandAdapter;
 import com.mfc.infra.controller.BaseRestController;
 import com.mfc.infra.input.adapter.EventStoreConsumerAdapter;
@@ -27,6 +26,11 @@ public class EventControllerAPI extends BaseRestController {
     @GetMapping(value = "getAllFromEventStoreCustomers", produces=MediaType.APPLICATION_JSON_VALUE)
     public Map<String, List<Object>> getAllFromEventStoreCustomers() {
         return this.eventStoreConsumerAdapter.findAll(customerCommandService.getDocumentEntityClassname());
+    }
+
+    @GetMapping(value = "getTransactionsEvents", produces=MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, List<Object>> getTransactionsEvents(@RequestParam String saga) {
+        return this.eventStoreConsumerAdapter.findAll(saga);
     }
 
     @GetMapping(value = "getAllEventsFromCustomerId", produces=MediaType.APPLICATION_JSON_VALUE)

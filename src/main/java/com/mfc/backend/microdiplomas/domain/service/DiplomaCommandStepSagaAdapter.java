@@ -57,10 +57,10 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
             this.insert(diploma);
             event.getInnerEvent().setNewData(diploma);
         } catch (ConstraintViolationException exc) {
-            event.getSagaStepInfo().setLastStepNumberProccessed(Event.SAGA_OPE_FAILED);
+            event.getSagaStepInfo().setStateOfFinalization(Event.SAGA_OPE_FAILED);
             logger.error("doSagaOperation failed: Cause ", exc.getLocalizedMessage());
         } catch (Throwable exc) {
-            event.getSagaStepInfo().setLastStepNumberProccessed(Event.SAGA_OPE_FAILED);
+            event.getSagaStepInfo().setStateOfFinalization(Event.SAGA_OPE_FAILED);
             logger.error("doSagaOperation failed: Cause ", exc);
         }
     }
@@ -89,7 +89,7 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
             Diploma diploma = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Diploma.class);
             this.delete(diploma);
         } catch (Throwable notExistException) {
-            event.getSagaStepInfo().setLastStepNumberProccessed(Event.SAGA_OPE_FAILED);
+            event.getSagaStepInfo().setStateOfFinalization(Event.SAGA_OPE_FAILED);
             logger.error("doSagaCompensation failed: Cause ", notExistException);
         }
     }
