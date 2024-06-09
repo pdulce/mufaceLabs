@@ -49,20 +49,11 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
     }
 
     @Override
-    public void doSagaOperation(Event<?> event) {
-        try {
-            CustomerWrapper customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(),
-                    CustomerWrapper.class);
-            Diploma diploma = getDiploma(customer);
-            this.insert(diploma);
-            event.getInnerEvent().setNewData(diploma);
-        } catch (ConstraintViolationException exc) {
-            event.getSagaStepInfo().setStateOfFinalization(Event.SAGA_OPE_FAILED);
-            logger.error("doSagaOperation failed: Cause ", exc.getLocalizedMessage());
-        } catch (Throwable exc) {
-            event.getSagaStepInfo().setStateOfFinalization(Event.SAGA_OPE_FAILED);
-            logger.error("doSagaOperation failed: Cause ", exc);
-        }
+    public Object doSagaOperation(Event<?> event) throws Throwable {
+        CustomerWrapper customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(),
+                CustomerWrapper.class);
+        Diploma diploma = getDiploma(customer);
+        return this.insert(diploma);
     }
 
     private static Diploma getDiploma(CustomerWrapper customer) throws Throwable {

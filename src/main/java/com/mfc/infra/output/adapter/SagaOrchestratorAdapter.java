@@ -40,8 +40,8 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
 
         Long transactionIdentifier = Math.abs(UUID.randomUUID().getMostSignificantBits());
 
-        Event<?> dataEvent = new Event(sagaName, "author", "applicationId-999",
-                String.valueOf(transactionIdentifier), operation, data);
+        Event<?> dataEvent = new Event(sagaName, "author", "applicationId-999", "step-1",
+                operation, data);
 
         // Al iniciar la Saga el orquestador asigna un id único a la transacc. distribuida
 
@@ -64,10 +64,8 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
         if (event.getSagaStepInfo().getStateOfFinalization() == Event.SAGA_OPE_FAILED
                 && event.getSagaStepInfo().getNextStepNumberToProccess() > 1) {
             event.getSagaStepInfo().setNextStepNumberToProccess(event.getSagaStepInfo().
-                    getStateOfFinalization() - 1);
-            backToStepToCompensate(event.getSagaStepInfo().getSagaName(),
-                    event.getSagaStepInfo().getNextStepNumberToProccess(),
-                    event.getSagaStepInfo().getTransactionIdentifier());
+                    getNextStepNumberToProccess() - 1);
+            backToStepToCompensate(event);
         } else {
             // puede ser que sea un mensaje de la finalización de una compensación de una operación de consolidación
             if (event.getSagaStepInfo().isDoCompensateOp()) {
@@ -75,21 +73,22 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
                 // SIEMPRE que no hayamos llegado al principio de la saga
                 if ((event.getSagaStepInfo().getStateOfFinalization() - 1) > 1) {
                     event.getSagaStepInfo().setNextStepNumberToProccess(event.getSagaStepInfo().
-                            getStateOfFinalization() - 1);
-                    backToStepToCompensate(event.getSagaStepInfo().getSagaName(),
-                            event.getSagaStepInfo().getNextStepNumberToProccess(),
-                            event.getSagaStepInfo().getTransactionIdentifier());
+                            getNextStepNumberToProccess() - 1);
+                    backToStepToCompensate(event);
                 }
             } else {
                 // guardamos en Redis el step-transac.obj. cuando tengamos la seguridad de que la operación fue OK
                 if (!event.getSagaStepInfo().isLastStep()) {
                     event.getSagaStepInfo().setNextStepNumberToProccess(event.getSagaStepInfo().
-                            getStateOfFinalization() + 1);
+                            getNextStepNumberToProccess() + 1);
                 }
                 this.eventStoreConsumerAdapter.saveEvent(event.getSagaStepInfo().getSagaName(),
                         String.valueOf(event.getSagaStepInfo().getTransactionIdentifier()), event);
                 if (!event.getSagaStepInfo().isLastStep()) {
                     continueNextStep(event);
+                } else {
+                    logger.info("Saga con número de transacción: " + event.getSagaStepInfo().getTransactionIdentifier()
+                            + ", finalizada de forma exitosa");
                 }
             }
         }
@@ -97,6 +96,9 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
 
     public String getLastStateOfTansactionInSaga(String saganame, String transaccId) {
         List<Object> objetos = this.eventStoreConsumerAdapter.findById(saganame, transaccId);
+        if (objetos == null || objetos.isEmpty()) {
+            return ConstantMessages.ERROR_NOT_FOUND;
+        }
         boolean failedSaga = false;
         boolean lastFinished = false;
         int i = 0;
@@ -128,19 +130,23 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
                 + " para la transacción núm.: " + event.getSagaStepInfo().getTransactionIdentifier());
     }
 
-    private void backToStepToCompensate(String sagaName, Integer stepNumber, Long transactionIdentifier) {
-
-        Event<?> eventoTransaccion = searchPreviousStepTransaction(sagaName, stepNumber, transactionIdentifier);
+    private void backToStepToCompensate(Event event) {
+        Event<?> eventoTransaccion = searchPreviousStepTransaction(event.getSagaStepInfo().getSagaName(),
+                event.getSagaStepInfo().getNextStepNumberToProccess(),
+                event.getSagaStepInfo().getTransactionIdentifier());
         if (eventoTransaccion != null) {
             eventoTransaccion.getSagaStepInfo().setDoCompensateOp(true);
             this.commandEventPublisherPort.publish(
                     DO_OPERATION + "-" + eventoTransaccion.getSagaStepInfo().getSagaName() +
                     "-" + eventoTransaccion.getSagaStepInfo().getStateOfFinalization(), eventoTransaccion);
-            logger.info("Solicitada operación de compensación en step " + stepNumber
-                    + " para la transacción núm: " + transactionIdentifier);
+            logger.info("Solicitada operación de compensación en step "
+                    + event.getSagaStepInfo().getNextStepNumberToProccess()
+                    + " para la transacción núm: " + event.getSagaStepInfo().getTransactionIdentifier());
         } else {
-            logger.error("No se ha localizado la transacción de la saga " + sagaName + " step " + stepNumber
-                    + " para la transacc. núm: " + transactionIdentifier + " para poder compensar esa step-transacc.");
+            logger.error("No se ha localizado la transacción de la saga " + event.getSagaStepInfo().getSagaName()
+                    + " step " + event.getSagaStepInfo().getNextStepNumberToProccess()
+                    + " para la transacc. núm: " + event.getSagaStepInfo().getTransactionIdentifier()
+                    + " para poder compensar esa step-transacc.");
         }
     }
 

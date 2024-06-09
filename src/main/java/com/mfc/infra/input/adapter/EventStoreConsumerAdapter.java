@@ -41,7 +41,7 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort, EventCons
             hashOps.put(almacen, id, agregados);
         }
         List<Object> agregados = hashOps.entries(almacen).get(id);
-        agregados.add(eventArch.getInnerEvent());
+        agregados.add(eventArch);//.getInnerEvent());
         hashOps.put(almacen, id, agregados);
     }
 

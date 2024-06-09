@@ -12,8 +12,8 @@ public interface SagaStepPort {
 
     public String getTypeOrOperation();
 
-    void doSagaOperation(Event<?> event);
+    Object doSagaOperation(Event<?> event) throws Throwable;
 
-    void doSagaCompensation(Event<?> event);
+    void doSagaCompensation(Event<?> event) throws Throwable;
 
 }

@@ -26,7 +26,7 @@ public class InnerEvent<T> implements Serializable {
     }
 
     public void setNewData(Object object) {
-        // Hacer algo con el objeto
+        this.classname = object.getClass().getName();
         this.data = (T) object;
     }
 

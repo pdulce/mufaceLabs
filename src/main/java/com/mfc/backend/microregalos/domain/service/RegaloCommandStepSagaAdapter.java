@@ -18,7 +18,7 @@ public class RegaloCommandStepSagaAdapter extends CommandStepSagaAdapter<Regalo>
     private static final String SAGA_NAME = "sagaBienvenidaCustomer";
     private static final int SAGA_STEP_NUMBER = 3;
     private static final String TOPIC_FOR_ME = SagaOrchestratorPort.DO_OPERATION + "-" + SAGA_NAME + "-" + SAGA_STEP_NUMBER;
-    private static final String GROUP_ID = "saga-step-group-diplomaconsumer-service-step-3";
+    private static final String GROUP_ID = "saga-step-group-regaloconsumer-service-step-3";
 
     public String getDocumentEntityClassname() {
         return "RegaloDocument";
@@ -51,35 +51,19 @@ public class RegaloCommandStepSagaAdapter extends CommandStepSagaAdapter<Regalo>
     }
 
     @Override
-    public void doSagaOperation(Event<?> event) {
-        try {
-            DiplomaWrapper customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(),
-                    DiplomaWrapper.class);
-            Regalo regalo = getRegalo(customer);
-            this.insert(regalo);
-            event.getInnerEvent().setNewData(regalo);
-        } catch (ConstraintViolationException exc) {
-            event.getSagaStepInfo().setStateOfFinalization(Event.SAGA_OPE_FAILED);
-            logger.error("doSagaOperation failed: Cause ", exc.getLocalizedMessage());
-        } catch (Throwable exc) {
-            event.getSagaStepInfo().setStateOfFinalization(Event.SAGA_OPE_FAILED);
-            logger.error("doSagaOperation failed: Cause ", exc);
-        }
+    public Object doSagaOperation(Event<?> event) {
+        DiplomaWrapper customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(),
+                DiplomaWrapper.class);
+        Regalo regalo = getRegalo(customer);
+        return this.insert(regalo);
     }
 
-    private static Regalo getRegalo(DiplomaWrapper customer) throws Throwable {
+    private static Regalo getRegalo(DiplomaWrapper diploma) {
         Regalo regalo = new Regalo();
-        regalo.setTexto_tarjeta("¡¡Disfrute de su tarjeta reagalo, " + customer.getName() + "!!");
-        regalo.setCustomerid(customer.getId());
-        if (customer.getCountry() != null) {
-            if (customer.getCountry() == null || "".contentEquals(customer.getCountry())) {
-                throw new Throwable ("forzando exception en SAGA step 2 para probar la arquitectura");
-            }
-            if (customer.getCountry().contentEquals("Afganistán")) {
-                throw new Throwable ("Error de negocio: " +
-                        "exception por país FORBIDDEN en SAGA step 2 para probar la arquitectura");
-            }
-            regalo.setColor_caja(customer.getCountry().contentEquals("France") ? "Blanco-azul" : "Verde");
+        regalo.setTexto_tarjeta("¡¡Disfrute de su tarjeta reagalo, " + diploma.getName() + "!!");
+        regalo.setCustomerid(diploma.getId());
+        if (diploma.getTitulo() != null) {
+            regalo.setColor_caja(diploma.getTitulo().contentEquals("Juan") ? "Blanco-azul" : "Verde");
         }
         regalo.setValor_bono_regalo(new BigDecimal(50)); //50 euros
         return regalo;

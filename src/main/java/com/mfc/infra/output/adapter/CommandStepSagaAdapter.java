@@ -5,6 +5,7 @@ import com.mfc.infra.output.port.CommandEventPublisherPort;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.output.port.SagaStepPort;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +66,17 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
     }
     private void orderSagaOperation(Event<?> event) {
         //invocamos a la implementación específica del service del microservicio
-        this.doSagaOperation(event);
+        try{
+            Object data = this.doSagaOperation(event);
+            event.getInnerEvent().setNewData(data);
+            event.setId("step-" + getOrderStepInSaga());
+        } catch (ConstraintViolationException exc) {
+            event.getSagaStepInfo().setStateOfFinalization(Event.SAGA_OPE_FAILED);
+            logger.error("doSagaOperation failed: Cause ", exc.getLocalizedMessage());
+        } catch (Throwable exc) {
+            event.getSagaStepInfo().setStateOfFinalization(Event.SAGA_OPE_FAILED);
+            logger.error("doSagaOperation failed: Cause ", exc);
+        }
     }
 
     private void orderSagaCompensation(Event<?> event) {
@@ -74,7 +85,7 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
     }
 
     @Override
-    public abstract void doSagaOperation(Event<?> event);
+    public abstract Object doSagaOperation(Event<?> event) throws Throwable;
 
     @Override
     public abstract void doSagaCompensation(Event<?> event);

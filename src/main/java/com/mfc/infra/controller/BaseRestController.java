@@ -54,7 +54,11 @@ public abstract class BaseRestController {
                                             @RequestParam @NotEmpty String transaccionId) {
         logger.info("vemos si la saga finalizó la saga " + saga + " en su transacción number: " + transaccionId);
         String messageKey = this.orchestratorManager.getLastStateOfTansactionInSaga(saga, transaccionId);
-        return messageSource.getMessage(messageKey, null, getLocale(CASTELLANO));
+        Object[] args = null;
+        if (messageKey.contentEquals(ConstantMessages.ERROR_NOT_FOUND)) {
+            args = new Object[]{"núm. transaction: " + transaccionId + " in saga: " + saga};
+        }
+        return messageSource.getMessage(messageKey, args, getLocale(CASTELLANO));
     }
 
 }
