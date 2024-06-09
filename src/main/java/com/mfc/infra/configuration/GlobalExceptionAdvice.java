@@ -51,6 +51,15 @@ public class GlobalExceptionAdvice {
         // Manejamos todas las excepciones que tienen que ver con la validaicón sintáctica de cualquier mapeo de entidad
         return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(NoSuchFieldException.class)
+    public ResponseEntity<String> handleResourceNotFoundException(NoSuchFieldException ex,
+                                                                  WebRequest request, Locale locale) {
+        String errorMessage = messageSource.getMessage(ConstantMessages.ERROR_NOT_FOUND,
+                new Object[]{ex.getCause().getMessage()}, locale);
+        return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(NotExistException.class)
     public ResponseEntity<String> handleResourceNotFoundException(NotExistException ex,
                                                                   WebRequest request, Locale locale) {

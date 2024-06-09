@@ -14,6 +14,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.List;
 
 @Transactional
@@ -44,11 +45,13 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public T update(T entity) throws NotExistException {
+    public T update(T entity) {
         Long id = Long.valueOf(ConversionUtils.convertToMap(entity).get("id").toString());
         if (!this.repository.findById(id).isPresent()) {
-            //"entity with id: " + String.valueOf(id) + " not found"
-            throw new NotExistException();
+            NotExistException e = new NotExistException();
+            e.setMsgError("entity with id: " + String.valueOf(id) + " not found");
+            RuntimeException exc = new RuntimeException(e);
+            throw exc;
         }
         T updated =  this.repository.save(entity);
         if (updated != null) {
@@ -62,11 +65,13 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void delete(T entity) throws NotExistException {
+    public void delete(T entity) {
         Long id = Long.valueOf(ConversionUtils.convertToMap(entity).get("id").toString());
         if (!this.repository.findById(id).isPresent()) {
-            //"entity with id: " + String.valueOf(id) + " not found"
-            throw new NotExistException();
+            NotExistException e = new NotExistException();
+            e.setMsgError("entity with id: " + String.valueOf(id) + " not found");
+            RuntimeException exc = new RuntimeException(e);
+            throw exc;
         }
         this.repository.delete(entity);
         Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
@@ -77,9 +82,9 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void deleteAllList(List<T> entities) throws NotExistException {
+    public void deleteAllList(List<T> entities) {
         entities.forEach((record) -> {
-            this.repository.delete(record);
+            this.delete(record);
             Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
                     ConversionUtils.convertToMap(record).get("id").toString(),
                     Event.EVENT_TYPE_DELETE, record);
@@ -90,22 +95,28 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
     @SuppressWarnings("unchecked")
     @Override
     public void deleteAll() {
+        List<Event> events = new ArrayList<>();
         findAll().forEach((record) -> {
-            Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
+            events.add(new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
                     ConversionUtils.convertToMap(record).get("id").toString(),
-                    Event.EVENT_TYPE_DELETE, record);
-            commandEventPublisherPort.publish(Event.EVENT_TOPIC, eventArch);
+                    Event.EVENT_TYPE_DELETE, record));
         });
         this.repository.deleteAll();
+        events.forEach((event) -> {
+            commandEventPublisherPort.publish(Event.EVENT_TOPIC, event);
+        });
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public T findById(Long id) throws NotExistException {
+    public T findById(Long id) {
         if (this.repository.findById(id).isPresent()) {
            return this.repository.findById(id).get();
         }
-        throw new NotExistException();
+        NotExistException e = new NotExistException();
+        e.setMsgError("id: " + id);
+        RuntimeException exc = new RuntimeException(e);
+        throw exc;
     }
 
     @SuppressWarnings("unchecked")

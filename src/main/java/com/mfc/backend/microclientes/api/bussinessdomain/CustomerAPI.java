@@ -28,27 +28,14 @@ public class CustomerAPI extends BaseRestController {
 
     @PutMapping(produces=MediaType.APPLICATION_JSON_VALUE)
     public Customer update(@RequestBody @NotNull Customer customer) {
-        try{
-            return customerCommandService.update(customer);
-        } catch (Throwable exc) {
-            throw new RuntimeException(exc);
-        }
+        return customerCommandService.update(customer);
     }
 
     @DeleteMapping(produces=MediaType.APPLICATION_JSON_VALUE)
     public void deleteById(@RequestParam Long id) {
         if (id != null) {
-            Customer customer = null;
-            try {
-                customer = this.customerCommandService.findById(id);
-            } catch (NotExistException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                this.customerCommandService.delete(customer);
-            } catch (NotExistException e) {
-                throw new RuntimeException(e);
-            }
+            Customer customer = this.customerCommandService.findById(id);
+            this.customerCommandService.delete(customer);
         } else {
             this.customerCommandService.deleteAll();
         }
@@ -76,11 +63,7 @@ public class CustomerAPI extends BaseRestController {
 
     @GetMapping(value = "get", produces=MediaType.APPLICATION_JSON_VALUE)
     public Customer get(@RequestParam Long customerId) {
-        try{
-            return this.customerCommandService.findById(customerId);
-        } catch (Throwable exc) {
-            return null;
-        }
+        return this.customerCommandService.findById(customerId);
     }
 
 

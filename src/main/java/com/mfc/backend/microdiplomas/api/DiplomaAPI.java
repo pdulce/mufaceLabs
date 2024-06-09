@@ -35,11 +35,7 @@ public class DiplomaAPI extends BaseRestController {
 
     @PutMapping(produces=MediaType.APPLICATION_JSON_VALUE)
     public Diploma update(@RequestBody @NotNull Diploma diploma) {
-        try{
-            return diplomaCommandStepSagaAdapter.update(diploma);
-        } catch (Throwable exc) {
-            return null;
-        }
+        return diplomaCommandStepSagaAdapter.update(diploma);
     }
 
     @DeleteMapping(value = "deleteAll", produces=MediaType.APPLICATION_JSON_VALUE)

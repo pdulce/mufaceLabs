@@ -30,11 +30,7 @@ public class RegaloAPI extends BaseRestController {
 
     @PutMapping(produces=MediaType.APPLICATION_JSON_VALUE)
     public Regalo update(@RequestBody @NotNull Regalo regalo) {
-        try{
-            return this.regaloCommandStepSagaAdapter.update(regalo);
-        } catch (Throwable exc) {
-            return null;
-        }
+        return this.regaloCommandStepSagaAdapter.update(regalo);
     }
 
     @DeleteMapping(value = "deleteAll", produces=MediaType.APPLICATION_JSON_VALUE)

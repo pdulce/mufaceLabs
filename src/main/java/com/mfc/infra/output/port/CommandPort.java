@@ -7,16 +7,16 @@ import java.util.List;
 
 public interface CommandPort<T> {
 
-    T insert(T entity) throws NoSuchFieldException;
+    T insert(T entity);
 
-    T update(T entity) throws NotExistException;
+    T update(T entity);
 
-    void delete(T entity) throws NotExistException;
+    void delete(T entity);
 
-    void deleteAllList(List<T> entities) throws NotExistException;
+    void deleteAllList(List<T> entities);
     void deleteAll();
 
-    T findById(Long id) throws NotExistException;
+    T findById(Long id);
 
     List<T> findAll();
 

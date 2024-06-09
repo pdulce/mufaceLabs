@@ -2,7 +2,6 @@ package com.mfc.backend.microclientes.domain.service.command;
 
 import com.mfc.backend.microclientes.domain.model.command.Customer;
 import com.mfc.infra.event.Event;
-import com.mfc.infra.exceptions.NotExistException;
 import com.mfc.infra.output.adapter.CommandStepSagaAdapter;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.utils.ConversionUtils;
@@ -14,7 +13,8 @@ public class CustomerCommandStepSagaAdapter extends CommandStepSagaAdapter<Custo
 
     private static final String SAGA_NAME = "sagaBienvenidaCustomer";
     private static final int SAGA_STEP_NUMBER = 1;
-    private static final String TOPIC_FOR_ME = SagaOrchestratorPort.DO_OPERATION + "-" + SAGA_NAME + "-" + SAGA_STEP_NUMBER;
+    private static final String TOPIC_FOR_ME = SagaOrchestratorPort.DO_OPERATION + "-" + SAGA_NAME + "-"
+            + SAGA_STEP_NUMBER;
     private static final String GROUP_ID = "saga-step-group-customerconsumer-service-step-1";
 
     public String getDocumentEntityClassname() {
@@ -48,25 +48,15 @@ public class CustomerCommandStepSagaAdapter extends CommandStepSagaAdapter<Custo
 
     @Override
     public void doSagaOperation(Event<?> event) {
-        try {
-            Customer customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Customer.class);
-            this.insert(customer);
-            event.getInnerEvent().setNewData(customer);
-        } catch (Throwable exc) {
-            event.getSagaStepInfo().setLastStepNumberProccessed(Event.SAGA_OPE_FAILED);
-            logger.error("doSagaOperation failed: Cause ", exc);
-        }
+        Customer customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Customer.class);
+        this.insert(customer);
+        event.getInnerEvent().setNewData(customer);
     }
 
     @Override
     public void doSagaCompensation(Event<?> event) {
-        try {
-            Customer customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Customer.class);
-            this.delete(customer);
-        } catch (NotExistException notExistException) {
-            event.getSagaStepInfo().setLastStepNumberProccessed(Event.SAGA_OPE_FAILED);
-            logger.error("doSagaCompensation failed: Cause ", notExistException);
-        }
+        Customer customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Customer.class);
+        this.delete(customer);
     }
 
 
