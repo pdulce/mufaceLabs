@@ -6,6 +6,7 @@ import java.util.List;
 import com.mfc.backend.microclientes.domain.model.command.Customer;
 import com.mfc.backend.microclientes.domain.service.command.CustomerCommandAdapter;
 import com.mfc.infra.controller.BaseRestController;
+import com.mfc.infra.exceptions.NotExistException;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -30,21 +31,24 @@ public class CustomerAPI extends BaseRestController {
         try{
             return customerCommandService.update(customer);
         } catch (Throwable exc) {
-            return null;
+            throw new RuntimeException(exc);
         }
     }
 
     @DeleteMapping(produces=MediaType.APPLICATION_JSON_VALUE)
-    public void deleteByname(@RequestParam String name) {
-        if (name != null) {
-            List<Customer> customers = this.customerCommandService.findAllByFieldvalue("name", name);
-            customers.forEach((customer) -> {
-                try {
-                    this.customerCommandService.delete(customer);
-                } catch (Throwable exc) {
-                    return;
-                }
-            });
+    public void deleteById(@RequestParam Long id) {
+        if (id != null) {
+            Customer customer = null;
+            try {
+                customer = this.customerCommandService.findById(id);
+            } catch (NotExistException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                this.customerCommandService.delete(customer);
+            } catch (NotExistException e) {
+                throw new RuntimeException(e);
+            }
         } else {
             this.customerCommandService.deleteAll();
         }

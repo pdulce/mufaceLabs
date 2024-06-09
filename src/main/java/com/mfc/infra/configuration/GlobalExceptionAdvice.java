@@ -1,6 +1,7 @@
 package com.mfc.infra.configuration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.mfc.infra.exceptions.NotExistException;
 import com.mfc.infra.utils.ConstantMessages;
 import jakarta.validation.ConstraintViolationException;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
@@ -50,10 +51,18 @@ public class GlobalExceptionAdvice {
         // Manejamos todas las excepciones que tienen que ver con la validaicón sintáctica de cualquier mapeo de entidad
         return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(NotExistException.class)
+    public ResponseEntity<String> handleResourceNotFoundException(NotExistException ex,
+                                                                  WebRequest request, Locale locale) {
+        String errorMessage = messageSource.getMessage(ConstantMessages.ERROR_NOT_FOUND, new Object[]{ex.getMessage()},
+                locale);
+        return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
+    }
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex,
                                                                   WebRequest request, Locale locale) {
-        String errorMessage = messageSource.getMessage(ConstantMessages.ERROR_NOT_FOUND, null, locale);
+        String errorMessage = messageSource.getMessage(ConstantMessages.ERROR_NOT_FOUND, new Object[]{ex.getMessage()},
+                locale);
         return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
     }
 
