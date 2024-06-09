@@ -55,18 +55,18 @@ public class CustomerAPI extends BaseRestController {
         this.customerCommandService.deleteAll();
     }
 
-    @GetMapping(value = "getAllFromBussinessDomain", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Customer> getAllFromBussinessDomain() {
+    @GetMapping(value = "allCustomers", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<Customer> getAllCustomers() {
         return this.customerCommandService.findAll();
     }
 
-    @GetMapping(value = "getByNameFromCommandDB", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Customer> getAllWithName(@RequestParam String name) {
+    @GetMapping(value = "allCustomersByName", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<Customer> getAllCustomersByName(@RequestParam String name) {
         return this.customerCommandService.findAllByFieldvalue("name", name);
     }
 
-    @GetMapping(value = "getByCountryFromCommandDB", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Customer> getAllOfThisCountry(@RequestParam String country) {
+    @GetMapping(value = "allCustomersByCountry", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<Customer> getAllCustomersByCountry(@RequestParam String country) {
         return this.customerCommandService.findAllByFieldvalue("country", country);
     }
 

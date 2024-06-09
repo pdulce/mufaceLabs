@@ -17,20 +17,15 @@ public class RegaloAPI extends BaseRestController {
     RegaloCommandStepSagaAdapter regaloCommandStepSagaAdapter;
 
 
-    @GetMapping(value = "getAllFromBussinessDomain", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Regalo> getAllFromBussinessDomain() {
+    @GetMapping(value = "allRegalos", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<Regalo> getAllRegalos() {
         return this.regaloCommandStepSagaAdapter.findAll();
     }
 
 
-    @GetMapping(value = "getAllFromBussinessDomain", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Regalo> getAllFromBussinessDomain(@RequestParam String name) {
-        return this.regaloCommandStepSagaAdapter.findAllByFieldvalue("name", name);
-    }
-
-    @GetMapping(value = "getAllByDiplomasByIdcustomerFromDB", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Regalo> getAllByDiplomasFromDB(@RequestParam Long idcustomer) {
-        return this.regaloCommandStepSagaAdapter.findAllByFieldvalue("idcustomer", idcustomer);
+    @GetMapping(value = "allRegalosByCustomerId", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<Regalo> getAllRegalosByCustomerId(@RequestParam Long customerid) {
+        return this.regaloCommandStepSagaAdapter.findAllByFieldvalue("customerid", customerid);
     }
 
     @PutMapping(produces=MediaType.APPLICATION_JSON_VALUE)

@@ -17,20 +17,20 @@ public class DiplomaAPI extends BaseRestController {
     DiplomaCommandStepSagaAdapter diplomaCommandStepSagaAdapter;
 
 
-    @GetMapping(value = "getAllFromBussinessDomain", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Diploma> getAllFromBussinessDomain() {
+    @GetMapping(value = "allDiplomas", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<Diploma> getAllDiplomas() {
         return this.diplomaCommandStepSagaAdapter.findAll();
     }
 
 
-    @GetMapping(value = "getAllByDiplomasByCustomer", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Diploma> getAllByDiplomasByCustomer(@RequestParam String name) {
+    @GetMapping(value = "allDiplomasByCustomerName", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<Diploma> getAllDiplomasByCustomerName(@RequestParam String name) {
         return this.diplomaCommandStepSagaAdapter.findAllByFieldvalue("name", name);
     }
 
-    @GetMapping(value = "getAllByDiplomasByIdcustomerFromDB", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Diploma> getAllByDiplomasFromDB(@RequestParam Long idcustomer) {
-        return this.diplomaCommandStepSagaAdapter.findAllByFieldvalue("idcustomer", idcustomer);
+    @GetMapping(value = "allDiplomasByCustomerID", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<Diploma> getAllDiplomasByCustomerID(@RequestParam Long customerid) {
+        return this.diplomaCommandStepSagaAdapter.findAllByFieldvalue("customerid", customerid);
     }
 
     @PutMapping(produces=MediaType.APPLICATION_JSON_VALUE)
