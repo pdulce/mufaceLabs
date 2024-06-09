@@ -2,8 +2,10 @@ package com.mfc.infra.event;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class SagaStepInfo {
+public class SagaStepInfo implements Serializable {
     private String sagaName;
     private Long transactionIdentifier;
     private int nextStepNumberToProccess;

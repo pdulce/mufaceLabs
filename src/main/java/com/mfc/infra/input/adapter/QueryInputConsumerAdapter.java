@@ -34,10 +34,10 @@ public abstract class QueryInputConsumerAdapter<T> implements QueryInputPort<T>,
             return;
         }
 
-        if (event.getInnerEvent().getTypeEvent().contentEquals(Event.EVENT_TYPE_CREATE)
-                || event.getInnerEvent().getTypeEvent().contentEquals(Event.EVENT_TYPE_UPDATE)) {
+        if (event.getInnerEvent().getTypeOfEvent().contentEquals(Event.EVENT_TYPE_CREATE)
+                || event.getInnerEvent().getTypeOfEvent().contentEquals(Event.EVENT_TYPE_UPDATE)) {
             saveReg((LinkedHashMap) event.getInnerEvent().getData(), entityClass);
-        } else if (event.getInnerEvent().getTypeEvent().contentEquals(Event.EVENT_TYPE_DELETE)) {
+        } else if (event.getInnerEvent().getTypeOfEvent().contentEquals(Event.EVENT_TYPE_DELETE)) {
             this.deleteReg(event.getId());
         }
     }
