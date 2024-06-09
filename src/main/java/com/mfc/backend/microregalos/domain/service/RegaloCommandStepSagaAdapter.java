@@ -56,20 +56,7 @@ public class RegaloCommandStepSagaAdapter extends CommandStepSagaAdapter<Regalo>
         try {
             DiplomaWrapper customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(),
                     DiplomaWrapper.class);
-            Regalo regalo = new Regalo();
-            regalo.setTexto_tarjeta("¡¡Disfrute de su tarjeta reagalo, " + customer.getName() + "!!");
-            regalo.setCustomerid(customer.getId());
-            if (customer.getCountry() != null) {
-                if (customer.getCountry() == null || "".contentEquals(customer.getCountry())) {
-                    throw new Throwable ("forzando exception en SAGA step 2 para probar la arquitectura");
-                }
-                if (customer.getCountry().contentEquals("Afganistán")) {
-                    throw new Throwable ("Error de negocio: " +
-                            "exception por país FORBIDDEN en SAGA step 2 para probar la arquitectura");
-                }
-                regalo.setColor_caja(customer.getCountry().contentEquals("France") ? "Blanco-azul" : "Verde");
-            }
-            regalo.setValor_bono_regalo(new BigDecimal(50)); //50 euros
+            Regalo regalo = getRegalo(customer);
             this.insert(regalo);
             event.getInnerEvent().setNewData(regalo);
         } catch (ConstraintViolationException exc) {
@@ -79,6 +66,24 @@ public class RegaloCommandStepSagaAdapter extends CommandStepSagaAdapter<Regalo>
             event.getSagaStepInfo().setLastStepNumberProccessed(Event.SAGA_OPE_FAILED);
             logger.error("doSagaOperation failed: Cause ", exc);
         }
+    }
+
+    private static Regalo getRegalo(DiplomaWrapper customer) throws Throwable {
+        Regalo regalo = new Regalo();
+        regalo.setTexto_tarjeta("¡¡Disfrute de su tarjeta reagalo, " + customer.getName() + "!!");
+        regalo.setCustomerid(customer.getId());
+        if (customer.getCountry() != null) {
+            if (customer.getCountry() == null || "".contentEquals(customer.getCountry())) {
+                throw new Throwable ("forzando exception en SAGA step 2 para probar la arquitectura");
+            }
+            if (customer.getCountry().contentEquals("Afganistán")) {
+                throw new Throwable ("Error de negocio: " +
+                        "exception por país FORBIDDEN en SAGA step 2 para probar la arquitectura");
+            }
+            regalo.setColor_caja(customer.getCountry().contentEquals("France") ? "Blanco-azul" : "Verde");
+        }
+        regalo.setValor_bono_regalo(new BigDecimal(50)); //50 euros
+        return regalo;
     }
 
     @Override

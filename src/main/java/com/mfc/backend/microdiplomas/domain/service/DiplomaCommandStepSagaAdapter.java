@@ -55,21 +55,7 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
         try {
             CustomerWrapper customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(),
                     CustomerWrapper.class);
-            Diploma diploma = new Diploma();
-            diploma.setName(customer.getName());
-            diploma.setIdcustomer(customer.getId());
-            if (customer.getCountry() != null) {
-                if (customer.getCountry() == null || "".contentEquals(customer.getCountry())) {
-                    throw new Throwable ("forzando exception en SAGA step 2 para probar la arquitectura");
-                }
-                if (customer.getCountry().contentEquals("Afganistán")) {
-                    throw new Throwable ("Error de negocio: " +
-                            "exception por país FORBIDDEN en SAGA step 2 para probar la arquitectura");
-                }
-                diploma.setRegion(customer.getCountry());
-            }
-            diploma.setTitulo("Diploma de Bienvenida, señor(a) " + customer.getName());
-
+            Diploma diploma = getDiploma(customer);
             this.insert(diploma);
             event.getInnerEvent().setNewData(diploma);
         } catch (ConstraintViolationException exc) {
@@ -79,6 +65,24 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
             event.getSagaStepInfo().setLastStepNumberProccessed(Event.SAGA_OPE_FAILED);
             logger.error("doSagaOperation failed: Cause ", exc);
         }
+    }
+
+    private static Diploma getDiploma(CustomerWrapper customer) throws Throwable {
+        Diploma diploma = new Diploma();
+        diploma.setName(customer.getName());
+        diploma.setIdcustomer(customer.getId());
+        if (customer.getCountry() != null) {
+            if (customer.getCountry() == null || "".contentEquals(customer.getCountry())) {
+                throw new Throwable ("forzando exception en SAGA step 2 para probar la arquitectura");
+            }
+            if (customer.getCountry().contentEquals("Afganistán")) {
+                throw new Throwable ("Error de negocio: " +
+                        "exception por país FORBIDDEN en SAGA step 2 para probar la arquitectura");
+            }
+            diploma.setRegion(customer.getCountry());
+        }
+        diploma.setTitulo("Diploma de Bienvenida, señor(a) " + customer.getName());
+        return diploma;
     }
 
     @Override
