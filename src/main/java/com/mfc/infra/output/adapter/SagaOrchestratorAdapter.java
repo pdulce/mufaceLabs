@@ -48,7 +48,7 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
 
         // Iniciar Saga
         this.commandEventPublisherPort.publish(DO_OPERATION + "-" + dataEvent.getSagaStepInfo().getSagaName() +
-                "-" + dataEvent.getSagaStepInfo().getLastStepNumberProccessed(), dataEvent);
+                "-1", dataEvent);
 
         logger.info("Saga iniciada con número de transacción: " + transactionIdentifier);
 
