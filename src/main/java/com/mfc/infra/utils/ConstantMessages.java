@@ -5,6 +5,8 @@ public final class ConstantMessages {
     // Greeting
     public static final String GREETING = "greeting";
 
+    public static final String DISTRIBUTED_INITIADED = "transacc_distruted_initiated";
+
     // Informational 1xx
     public static final String INFO_CONTINUE = "info.continue";
     public static final String INFO_SWITCHING_PROTOCOLS = "info.switching_protocols";

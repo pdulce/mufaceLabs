@@ -22,13 +22,14 @@ public class CustomerStepSagaAPI extends BaseRestController {
 
 
     @PostMapping(produces=MediaType.APPLICATION_JSON_VALUE)
-    public Customer create(@RequestBody @NotNull Customer customer) {
+    public String create(@RequestBody @NotNull Customer customer) {
         Locale locale = "es" != null ? new Locale("es") : Locale.getDefault();
-        String message = this.messageSource.getMessage(ConstantMessages.SUCCESS_CREATED, null, locale);
         Event<?> event = this.orchestratorManager.startSaga(customerCommandStepSagaAdapter.getSagaName(),
                 customerCommandStepSagaAdapter.getTypeOrOperation(), customer);
-        return event != null ? (Customer) event.getInnerEvent().getData() : null;
-
+        String message = this.messageSource.getMessage(ConstantMessages.DISTRIBUTED_INITIADED,
+                new Object[]{event == null ? "" : event.getSagaStepInfo().getSagaName(),
+                    String.valueOf(event == null ? "" : event.getSagaStepInfo().getTransactionIdentifier())}, locale);
+        return event != null ? message : null;
     }
 
 
