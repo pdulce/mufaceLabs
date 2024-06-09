@@ -54,7 +54,7 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler(NotExistException.class)
     public ResponseEntity<String> handleResourceNotFoundException(NotExistException ex,
                                                                   WebRequest request, Locale locale) {
-        String errorMessage = messageSource.getMessage(ConstantMessages.ERROR_NOT_FOUND, new Object[]{ex.getMessage()},
+        String errorMessage = messageSource.getMessage(ConstantMessages.ERROR_NOT_FOUND, new Object[]{""},
                 locale);
         return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
     }
