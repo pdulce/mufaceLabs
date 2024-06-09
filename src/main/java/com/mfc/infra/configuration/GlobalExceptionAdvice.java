@@ -24,9 +24,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
-public class ArchControllerAdvice {
+public class GlobalExceptionAdvice {
 
-    Logger logger = LoggerFactory.getLogger(ArchControllerAdvice.class);
+    Logger logger = LoggerFactory.getLogger(GlobalExceptionAdvice.class);
 
     @Autowired
     private MessageSource messageSource;
@@ -35,7 +35,8 @@ public class ArchControllerAdvice {
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<String> handleResourceNotFoundException(ConstraintViolationException ex,
                                                                   WebRequest request, Locale locale) {
-        return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        // Manejamos todas las excepciones que tienen que ver con la validaicón sintáctica de cualquier mapeo de entidad
+        return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex,

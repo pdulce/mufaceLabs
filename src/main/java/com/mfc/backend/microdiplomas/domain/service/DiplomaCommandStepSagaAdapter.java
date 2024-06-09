@@ -10,8 +10,6 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedHashMap;
-
 @Service
 public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diploma> {
 

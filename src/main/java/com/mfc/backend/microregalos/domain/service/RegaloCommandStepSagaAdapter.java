@@ -11,7 +11,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.LinkedHashMap;
 
 @Service
 public class RegaloCommandStepSagaAdapter extends CommandStepSagaAdapter<Regalo> {

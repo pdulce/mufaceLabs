@@ -9,8 +9,6 @@ import com.mfc.infra.utils.ConversionUtils;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedHashMap;
-
 @Service
 public class CustomerCommandStepSagaAdapter extends CommandStepSagaAdapter<Customer> {
 
