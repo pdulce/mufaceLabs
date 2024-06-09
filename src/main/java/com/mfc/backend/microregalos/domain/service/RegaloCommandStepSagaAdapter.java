@@ -10,6 +10,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
 @Service
@@ -56,8 +57,8 @@ public class RegaloCommandStepSagaAdapter extends CommandStepSagaAdapter<Regalo>
             DiplomaWrapper customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(),
                     DiplomaWrapper.class);
             Regalo regalo = new Regalo();
-            regalo.setName(customer.getName());
-            regalo.setIdcustomer(customer.getId());
+            regalo.setTexto_tarjeta("¡¡Disfrute de su tarjeta reagalo, " + customer.getName() + "!!");
+            regalo.setCustomerid(customer.getId());
             if (customer.getCountry() != null) {
                 if (customer.getCountry() == null || "".contentEquals(customer.getCountry())) {
                     throw new Throwable ("forzando exception en SAGA step 2 para probar la arquitectura");
@@ -66,10 +67,9 @@ public class RegaloCommandStepSagaAdapter extends CommandStepSagaAdapter<Regalo>
                     throw new Throwable ("Error de negocio: " +
                             "exception por país FORBIDDEN en SAGA step 2 para probar la arquitectura");
                 }
-                regalo.setRegion(customer.getCountry());
+                regalo.setColor_caja(customer.getCountry().contentEquals("France") ? "Blanco-azul" : "Verde");
             }
-            regalo.setTitulo("Diploma de Bienvenida, señor(a) " + customer.getName());
-
+            regalo.setValor_bono_regalo(new BigDecimal(50)); //50 euros
             this.insert(regalo);
             event.getInnerEvent().setNewData(regalo);
         } catch (ConstraintViolationException exc) {
@@ -84,10 +84,8 @@ public class RegaloCommandStepSagaAdapter extends CommandStepSagaAdapter<Regalo>
     @Override
     public void doSagaCompensation(Event<?> event) {
         try {
-            Regalo diploma = ConversionUtils.
-                    convertMapToObject((LinkedHashMap<String, Object>) event.getInnerEvent().getData(),
-                            Regalo.class);
-            this.delete(diploma);
+            Regalo regalo = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Regalo.class);
+            this.delete(regalo);
         } catch (Throwable notExistException) {
             event.getSagaStepInfo().setLastStepNumberProccessed(Event.SAGA_OPE_FAILED);
             logger.error("doSagaCompensation failed: Cause ", notExistException);

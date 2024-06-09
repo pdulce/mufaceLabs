@@ -3,6 +3,8 @@ package com.mfc.backend.microregalos.domain.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Entity
 @Data
 public class Regalo {
@@ -12,16 +14,16 @@ public class Regalo {
     private Long id;
 
     @Column
-    private Long idcustomer;
+    private Long customerid;
 
     @Column
-    private String name;
+    private String color_caja;
 
     @Column
-    private String titulo;
+    private String texto_tarjeta;
 
     @Column
-    private String region;
+    private BigDecimal valor_bono_regalo;
 
 
 }

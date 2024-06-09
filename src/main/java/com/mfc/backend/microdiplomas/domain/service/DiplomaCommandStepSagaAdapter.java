@@ -84,9 +84,7 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
     @Override
     public void doSagaCompensation(Event<?> event) {
         try {
-            Diploma diploma = ConversionUtils.
-                    convertMapToObject((LinkedHashMap<String, Object>) event.getInnerEvent().getData(),
-                            Diploma.class);
+            Diploma diploma = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Diploma.class);
             this.delete(diploma);
         } catch (Throwable notExistException) {
             event.getSagaStepInfo().setLastStepNumberProccessed(Event.SAGA_OPE_FAILED);

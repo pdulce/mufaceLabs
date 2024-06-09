@@ -63,8 +63,7 @@ public class CustomerCommandStepSagaAdapter extends CommandStepSagaAdapter<Custo
     @Override
     public void doSagaCompensation(Event<?> event) {
         try {
-            Customer customer = ConversionUtils.
-                    convertMapToObject((LinkedHashMap<String, Object>) event.getInnerEvent().getData(), Customer.class);
+            Customer customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Customer.class);
             this.delete(customer);
         } catch (NotExistException notExistException) {
             event.getSagaStepInfo().setLastStepNumberProccessed(Event.SAGA_OPE_FAILED);
