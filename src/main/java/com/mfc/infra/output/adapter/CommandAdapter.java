@@ -18,13 +18,13 @@ import java.util.List;
 
 @Transactional
 public abstract class CommandAdapter<T> implements CommandPort<T> {
-
     Logger logger = LoggerFactory.getLogger(CommandAdapter.class);
     @Autowired
     CommandEventPublisherPort commandEventPublisherPort;
     @Autowired
     protected JpaRepository<T, Long> repository;
 
+    @SuppressWarnings("unchecked")
     @Override
     public T insert(T entity) {
         T saved = this.repository.save(entity);
@@ -41,6 +41,8 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
         return saved;
     }
 
+
+    @SuppressWarnings("unchecked")
     @Override
     public T update(T entity) throws NotExistException {
         Long id = Long.valueOf(ConversionUtils.convertToMap(entity).get("id").toString());
@@ -58,6 +60,7 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
         return updated;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void delete(T entity) throws NotExistException {
         Long id = Long.valueOf(ConversionUtils.convertToMap(entity).get("id").toString());
@@ -72,6 +75,7 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
         commandEventPublisherPort.publish(Event.EVENT_TOPIC, eventArch);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void deleteAllList(List<T> entities) throws NotExistException {
         entities.forEach((record) -> {
@@ -83,6 +87,7 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
         });
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void deleteAll() {
         findAll().forEach((record) -> {
@@ -94,6 +99,7 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
         this.repository.deleteAll();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public T findById(Long id) throws NotExistException {
         if (this.repository.findById(id).isPresent()) {
@@ -102,6 +108,7 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
         throw new NotExistException();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<T> findAll() {
         return this.repository.findAll().stream().toList();
@@ -109,6 +116,7 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
 
     /** método generíco para buscar dentro de cualquier campo de un entidad T **/
 
+    @SuppressWarnings("unchecked")
     public List<T> findAllByFieldvalue(String fieldName, Object fieldValue) {
 
         try {

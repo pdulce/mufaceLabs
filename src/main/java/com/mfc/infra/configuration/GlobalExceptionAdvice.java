@@ -1,5 +1,6 @@
 package com.mfc.infra.configuration;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mfc.infra.utils.ConstantMessages;
 import jakarta.validation.ConstraintViolationException;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
@@ -31,6 +32,17 @@ public class GlobalExceptionAdvice {
     @Autowired
     private MessageSource messageSource;
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleResourceNotFoundException(IllegalArgumentException ex,
+                                                                  WebRequest request, Locale locale) {
+        return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(JsonProcessingException.class)
+    public ResponseEntity<String> handleResourceNotFoundException(JsonProcessingException ex,
+                                                                  WebRequest request, Locale locale) {
+        return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<String> handleResourceNotFoundException(ConstraintViolationException ex,

@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -55,8 +56,8 @@ public class ConversionUtils {
 
     public static <T> Map<String, Object> objectToMap(T object) {
         try {
-
-            return objectMapper.convertValue(object, Map.class);
+            return objectMapper.convertValue(object, new TypeReference<Map<String, Object>>() {
+            });
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             return null;
@@ -64,25 +65,26 @@ public class ConversionUtils {
     }
 
     public static <T> T convertMapToObject(Object data, Class<T> clazz) {
-        LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>) data;
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        return mapper.convertValue(map, clazz);
-    }
-
-
-    public static Map<String, Object> jsonstring2Map( String json ) {
-        if ( json == null ) return new HashMap<String, Object>();
-
-        try {
-            return objectMapper.readValue( json, Map.class);
-        } catch (JsonProcessingException e) {
-           e.printStackTrace();
+        if (data instanceof LinkedHashMap) {
+            LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>) data;
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            return mapper.convertValue(map, clazz);
+        } else {
+            throw new IllegalArgumentException("Data must be of type LinkedHashMap<String, Object>");
         }
-
-        return new HashMap<String, Object>();
     }
 
+
+    public static Map<String, Object> jsonstring2Map(String json) {
+        if (json == null) return new HashMap<>();
+        try {
+            return objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {});
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return new HashMap<>();
+    }
     public static <T> Map<String, Object> convertLinkedHashMapToMap(T obj) {
         Map<String, Object> resultMap = new HashMap<>();
         Iterator<Map.Entry> iteratorMap = ((LinkedHashMap) obj).entrySet().iterator();

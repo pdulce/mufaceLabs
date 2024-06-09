@@ -27,7 +27,7 @@ public class CustomerStepSagaAPI extends BaseRestController {
         String message = this.messageSource.getMessage(ConstantMessages.SUCCESS_CREATED, null, locale);
         Event<?> event = this.orchestratorManager.startSaga(customerCommandStepSagaAdapter.getSagaName(),
                 customerCommandStepSagaAdapter.getTypeOrOperation(), customer);
-        return (Customer) event.getInnerEvent().getData();
+        return event != null ? (Customer) event.getInnerEvent().getData() : null;
 
     }
 
