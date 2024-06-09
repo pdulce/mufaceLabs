@@ -45,8 +45,6 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
 
         SagaStepInfo sagaInfo = new SagaStepInfo(sagaName, 1, transactionIdentifier);
         dataEvent.setSagaStepInfo(sagaInfo);
-        // guardamos el objeto transaccional en Redis
-        this.eventStoreConsumerAdapter.saveEvent(sagaName, String.valueOf(transactionIdentifier), dataEvent);
 
         // Iniciar Saga
         this.commandEventPublisherPort.publish(DO_OPERATION + "-" + dataEvent.getSagaStepInfo().getSagaName() +
