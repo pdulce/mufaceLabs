@@ -136,7 +136,7 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
                     DO_OPERATION + "-" + eventoTransaccion.getSagaStepInfo().getSagaName() +
                     "-" + eventoTransaccion.getSagaStepInfo().getStepNumber(), eventoTransaccion);
             logger.info("Solicitada operación de compensación en step "
-                    + event.getSagaStepInfo().getNextStepNumberToProccess()
+                    + event.getSagaStepInfo().getStepNumber()
                     + " para la transacción núm: " + event.getSagaStepInfo().getTransactionIdentifier());
         } else {
             logger.error("No se ha localizado la transacción de la saga " + event.getSagaStepInfo().getSagaName()

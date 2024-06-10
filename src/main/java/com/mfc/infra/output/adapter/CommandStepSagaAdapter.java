@@ -44,7 +44,7 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
             orderSagaCompensation(event);
             this.commandEventPublisherPort.publish(SagaOrchestratorPort.SAGA_FROM_STEP_TOPIC, event);
             logger.info("Se ha informado al orchestrator que la operación de compensación en el step "
-                    + event.getSagaStepInfo().getNextStepNumberToProccess()
+                    + event.getSagaStepInfo().getStepNumber()
                     + " para la transacción núm: " + event.getSagaStepInfo().getTransactionIdentifier()
                     + (event.getSagaStepInfo().getStateOfOperation() == Event.SAGA_OPE_FAILED
                     ? " ha fallado" : " se ha realizado de forma satisfactoria"));
