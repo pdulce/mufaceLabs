@@ -1,5 +1,6 @@
 package com.mfc.infra.input.adapter;
 
+import com.mfc.infra.configuration.EventBrokerProperties;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.input.port.EventConsumer;
 import com.mfc.infra.input.port.QueryInputPort;
@@ -18,13 +19,19 @@ import java.util.stream.Collectors;
 
 public abstract class QueryInputConsumerAdapter<T> implements QueryInputPort<T>, EventConsumer {
     Logger logger = LoggerFactory.getLogger(QueryInputConsumerAdapter.class);
+
+    @Autowired
+    EventBrokerProperties eventBrokerProperties;
     @Autowired
     MongoRepository<T, String> repository;
 
     public abstract void listen(Event<?> eventArch);
 
     public void procesarEvento(Event<?> event) {
-
+        if (!eventBrokerProperties.isActive()) {
+            logger.error("Debe tener activa la configuración de uso de mensajería en la arquitectura");
+            return;
+        }
         Class<T> entityClass = (Class<T>) ((ParameterizedType) getClass()
                 .getGenericSuperclass())
                 .getActualTypeArguments()[0];

@@ -1,6 +1,5 @@
 package com.mfc.infra.controller;
 
-import com.mfc.infra.event.Event;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.utils.ConstantMessages;
 import jakarta.validation.constraints.NotEmpty;

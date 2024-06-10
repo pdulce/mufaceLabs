@@ -37,6 +37,10 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
      ***/
 
     public void processStepEvent(Event event) {
+        if (!eventBrokerProperties.isActive()) {
+            logger.error("Debe tener activa la configuración de uso de mensajería en la arquitectura");
+            return;
+        }
         event.getSagaStepInfo().setStepNumber(getOrderStepInSaga());
         if (event.getSagaStepInfo().isDoCompensateOp()) {
             orderSagaCompensation(event);

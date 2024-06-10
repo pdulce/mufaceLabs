@@ -1,9 +1,12 @@
 server:
   port: 8086
 
-mail:
-  password:
-    encoded: ewzqlzdstujochya
+arch:
+  mail:
+    password:
+      encoded: ewzqlzdstujochya
+  eventbroker:
+    active: false
 
 spring:
   # command domain: 192.168.1.163

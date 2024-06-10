@@ -14,7 +14,7 @@ import java.util.Properties;
 @ConfigurationProperties(prefix = "mail")
 public class ArchJavaMailSender {
 
-    @Value("${mail.password.encoded}")
+    @Value("${arch.mail.password.encoded}")
     private String encodedPasswd;
 
     @Bean

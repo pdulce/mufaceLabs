@@ -1,5 +1,6 @@
 package com.mfc.infra.output.adapter;
 
+import com.mfc.infra.configuration.EventBrokerProperties;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.exceptions.NotExistException;
 import com.mfc.infra.output.port.CommandEventPublisherPort;
@@ -21,6 +22,8 @@ import java.util.List;
 public abstract class CommandAdapter<T> implements CommandPort<T> {
     Logger logger = LoggerFactory.getLogger(CommandAdapter.class);
     @Autowired
+    EventBrokerProperties eventBrokerProperties;
+    @Autowired
     CommandEventPublisherPort commandEventPublisherPort;
     @Autowired
     protected JpaRepository<T, Long> repository;
@@ -29,7 +32,7 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
     @Override
     public T insert(T entity) {
         T saved = this.repository.save(entity);
-        if (saved != null) {
+        if (saved != null && eventBrokerProperties.isActive()) {
             /*** Mando el evento al bus para que los recojan los dos consumers:
              *  - consumer responsable del dominio de eventos que persiste en MongoDB (patrón Event-Sourcing)
              *  - consumer responsable del dominio de consultas que persiste en Redis (patrón CQRS)
@@ -54,7 +57,7 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
             throw exc;
         }
         T updated =  this.repository.save(entity);
-        if (updated != null) {
+        if (updated != null && eventBrokerProperties.isActive()) {
             Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
                     ConversionUtils.convertToMap(entity).get("id").toString(),
                     Event.EVENT_TYPE_UPDATE, updated);
@@ -74,10 +77,12 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
             throw exc;
         }
         this.repository.delete(entity);
-        Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
-                ConversionUtils.convertToMap(entity).get("id").toString(),
-                Event.EVENT_TYPE_DELETE, entity);
-        commandEventPublisherPort.publish(Event.EVENT_TOPIC, eventArch);
+        if (eventBrokerProperties.isActive()) {
+            Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
+                    ConversionUtils.convertToMap(entity).get("id").toString(),
+                    Event.EVENT_TYPE_DELETE, entity);
+            commandEventPublisherPort.publish(Event.EVENT_TOPIC, eventArch);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -85,10 +90,12 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
     public void deleteAllList(List<T> entities) {
         entities.forEach((record) -> {
             this.delete(record);
-            Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
-                    ConversionUtils.convertToMap(record).get("id").toString(),
-                    Event.EVENT_TYPE_DELETE, record);
-            commandEventPublisherPort.publish(Event.EVENT_TOPIC, eventArch);
+            if (eventBrokerProperties.isActive()) {
+                Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
+                        ConversionUtils.convertToMap(record).get("id").toString(),
+                        Event.EVENT_TYPE_DELETE, record);
+                commandEventPublisherPort.publish(Event.EVENT_TOPIC, eventArch);
+            }
         });
     }
 
@@ -102,9 +109,11 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
                     Event.EVENT_TYPE_DELETE, record));
         });
         this.repository.deleteAll();
-        events.forEach((event) -> {
-            commandEventPublisherPort.publish(Event.EVENT_TOPIC, event);
-        });
+        if (eventBrokerProperties.isActive()) {
+            events.forEach((event) -> {
+                commandEventPublisherPort.publish(Event.EVENT_TOPIC, event);
+            });
+        }
     }
 
     @SuppressWarnings("unchecked")
