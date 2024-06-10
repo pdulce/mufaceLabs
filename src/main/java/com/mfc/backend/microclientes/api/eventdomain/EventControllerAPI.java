@@ -1,8 +1,7 @@
 package com.mfc.backend.microclientes.api.eventdomain;
 
-import com.mfc.backend.microclientes.domain.service.command.CustomerCommandAdapter;
+import com.mfc.backend.microclientes.domain.model.query.CustomerDocument;
 import com.mfc.infra.controller.BaseRestController;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,15 +12,12 @@ import java.util.Map;
 @RequestMapping(value = "events")
 public class EventControllerAPI extends BaseRestController {
 
-    @Autowired
-    CustomerCommandAdapter customerCommandService;
-
 
     /*** CONSULTAS CONTRA EL DOMINIO DE EVENTOS ***/
 
     @GetMapping(value = "getAllFromEventStoreCustomers", produces=MediaType.APPLICATION_JSON_VALUE)
     public Map<String, List<Object>> getAllFromEventStoreCustomers() {
-        return this.eventStoreConsumerAdapter.findAll(customerCommandService.getDocumentEntityClassname());
+        return this.eventStoreConsumerAdapter.findAll(CustomerDocument.class.getSimpleName());
     }
 
     @GetMapping(value = "getTransactionsEvents", produces=MediaType.APPLICATION_JSON_VALUE)
@@ -31,15 +27,13 @@ public class EventControllerAPI extends BaseRestController {
 
     @GetMapping(value = "getAllEventsFromCustomerId", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Object> getAllEventsFromIdFromRedis(@RequestParam String customerId) {
-        return this.eventStoreConsumerAdapter.findById(customerCommandService.getDocumentEntityClassname(), customerId);
+        return this.eventStoreConsumerAdapter.findById(CustomerDocument.class.getSimpleName(), customerId);
     }
 
     @DeleteMapping(value = "deleteAlmacenCustomers", produces=MediaType.APPLICATION_JSON_VALUE)
     public void deleteAlmacenCustomers() {
-        this.eventStoreConsumerAdapter.deleteAll(customerCommandService.getDocumentEntityClassname());
+        this.eventStoreConsumerAdapter.deleteAll(CustomerDocument.class.getSimpleName());
     }
-
-
 
 
 }
