@@ -25,8 +25,9 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
     Logger logger = LoggerFactory.getLogger(SagaOrchestratorPort.class);
     private static final String GROUP_ID = "saga-orchestrator-group";
 
-    @Autowired
+    @Autowired(required = false)
     CommandEventPublisherPort commandEventPublisher;
+
     @Autowired
     EventStoreInputPort eventStoreConsumer;
 

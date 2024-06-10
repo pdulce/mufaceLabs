@@ -23,8 +23,10 @@ public class CommandAdapter<T> implements CommandPort<T> {
     Logger logger = LoggerFactory.getLogger(CommandAdapter.class);
     @Autowired
     EventBrokerProperties eventBrokerProperties;
-    @Autowired
+
+    @Autowired(required = false)
     CommandEventPublisherPort commandEventPublisherPort;
+
     @Autowired
     protected JpaRepository<T, Long> repository;
 

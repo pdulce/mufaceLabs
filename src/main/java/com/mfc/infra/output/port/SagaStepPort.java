@@ -2,7 +2,7 @@ package com.mfc.infra.output.port;
 
 import com.mfc.infra.event.Event;
 
-public interface SagaStepPort {
+public interface SagaStepPort<T> {
 
     String getSagaName();
 

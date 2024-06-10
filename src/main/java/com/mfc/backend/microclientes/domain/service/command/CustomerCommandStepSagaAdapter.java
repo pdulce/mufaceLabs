@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @ConditionalOnProperty(name = "arch.eventbroker.active", havingValue = "true", matchIfMissing = false)
-public class CustomerCommandStepSagaAdapter extends CommandStepSagaAdapter<Customer> {
+public class CustomerCommandStepSagaAdapter<T> extends CommandStepSagaAdapter<Customer> {
 
     private static final String SAGA_NAME = "sagaBienvenidaCustomer";
     private static final int SAGA_STEP_NUMBER = 1;

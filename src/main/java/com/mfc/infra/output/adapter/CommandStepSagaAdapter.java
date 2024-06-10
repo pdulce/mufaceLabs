@@ -13,10 +13,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 @Transactional
-public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implements SagaStepPort {
+public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implements SagaStepPort<T> {
 
     protected Logger logger = LoggerFactory.getLogger(CommandStepSagaAdapter.class);
-    @Autowired
+    @Autowired(required = false)
     protected CommandEventPublisherPort commandEventPublisherPort;
 
     @Autowired
