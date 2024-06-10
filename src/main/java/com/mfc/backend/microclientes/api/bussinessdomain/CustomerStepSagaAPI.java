@@ -7,21 +7,26 @@ import com.mfc.infra.event.Event;
 import com.mfc.infra.output.port.SagaStepPort;
 import com.mfc.infra.utils.ConstantMessages;
 import jakarta.validation.constraints.NotNull;
+import org.apache.poi.util.NotImplemented;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.Locale;
 
 @RestController
 @RequestMapping(value = "customer")
 public class CustomerStepSagaAPI extends BaseRestController {
-    @Autowired
+    @Autowired(required=false)
     SagaStepPort<Customer> customerCommandStepSagaAdapter;
 
     @PostMapping(produces=MediaType.APPLICATION_JSON_VALUE)
     public String create(@RequestBody @NotNull Customer customer) {
+        if (this.orchestratorManager == null || this.customerCommandStepSagaAdapter == null) {
+            throw new RuntimeException("Saga no puede iniciarse: arch.eventbroker.active está a false");
+        }
         Locale locale = "es" != null ? new Locale("es") : Locale.getDefault();
         Event event = this.orchestratorManager.startSaga(customerCommandStepSagaAdapter.getSagaName(),
                 customerCommandStepSagaAdapter.getTypeOrOperation(), customer);
