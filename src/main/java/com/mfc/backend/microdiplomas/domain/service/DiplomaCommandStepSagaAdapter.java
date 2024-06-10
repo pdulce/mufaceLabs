@@ -51,25 +51,24 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
     public Object doSagaOperation(Event<?> event) throws Throwable {
         CustomerWrapper customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(),
                 CustomerWrapper.class);
-        Diploma diploma = getDiploma(customer);
+        Diploma diploma = (Diploma) getNewData(customer);
+        if (customer.getCountry() == null || "".contentEquals(customer.getCountry())) {
+            throw new Throwable ("forzando exception en SAGA step 2 para probar la arquitectura");
+        }
+        if (customer.getCountry().contentEquals("Afganistán")) {
+            throw new Throwable ("Error de negocio: " +
+                    "exception por país FORBIDDEN en SAGA step 2 para probar la arquitectura");
+        }
         return this.insert(diploma);
     }
 
-    private static Diploma getDiploma(CustomerWrapper customer) throws Throwable {
+    @Override
+    protected Object getNewData(Object customer) {
         Diploma diploma = new Diploma();
-        diploma.setName(customer.getName());
-        diploma.setIdcustomer(customer.getId());
-        if (customer.getCountry() != null) {
-            if (customer.getCountry() == null || "".contentEquals(customer.getCountry())) {
-                throw new Throwable ("forzando exception en SAGA step 2 para probar la arquitectura");
-            }
-            if (customer.getCountry().contentEquals("Afganistán")) {
-                throw new Throwable ("Error de negocio: " +
-                        "exception por país FORBIDDEN en SAGA step 2 para probar la arquitectura");
-            }
-            diploma.setRegion(customer.getCountry());
-        }
-        diploma.setTitulo("Diploma de Bienvenida, señor(a) " + customer.getName());
+        diploma.setName(((CustomerWrapper)customer).getName());
+        diploma.setIdcustomer(((CustomerWrapper)customer).getId());
+        diploma.setRegion(((CustomerWrapper)customer).getCountry());
+        diploma.setTitulo("Diploma de Bienvenida, señor(a) " + ((CustomerWrapper)customer).getName());
         return diploma;
     }
 

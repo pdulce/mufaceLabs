@@ -62,7 +62,6 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
         //invocamos a la implementación específica del service del microservicio
         try{
             Object data = this.doSagaOperation(event);
-            event.getInnerEvent().setNewData(data);
             event.setId(Event.STEP_ID_PREFIX + getOrderStepInSaga());
             event.getSagaStepInfo().setStateOfOperation(Event.SAGA_OPE_SUCCESS);
         } catch (ConstraintViolationException exc) {
@@ -82,6 +81,8 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
         } catch (Throwable notExistException) {
             event.getSagaStepInfo().setStateOfCompensation(Event.SAGA_OPE_FAILED);
             logger.error("doSagaCompensation failed: Cause ", notExistException);
+        } finally {
+            event.getInnerEvent().setNewData(event);
         }
 
     }
@@ -104,8 +105,7 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
     @Override
     public abstract String getTypeOrOperation();
 
-
-
+    protected abstract Object getNewData(Object dataReceivedFromPreviousStep);
 
 
 

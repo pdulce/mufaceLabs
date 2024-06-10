@@ -53,16 +53,17 @@ public class RegaloCommandStepSagaAdapter extends CommandStepSagaAdapter<Regalo>
     public Object doSagaOperation(Event<?> event) {
         DiplomaWrapper customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(),
                 DiplomaWrapper.class);
-        Regalo regalo = getRegalo(customer);
+        Regalo regalo = (Regalo) getNewData(customer);
         return this.insert(regalo);
     }
 
-    private static Regalo getRegalo(DiplomaWrapper diploma) {
+    protected Object getNewData(Object diploma) {
         Regalo regalo = new Regalo();
-        regalo.setTexto_tarjeta("¡¡Disfrute de su tarjeta regalo, " + diploma.getName() + "!!");
-        regalo.setCustomerid(diploma.getIdcustomer());
-        if (diploma.getTitulo() != null) {
-            regalo.setColor_caja(diploma.getTitulo().contentEquals("Juan") ? "Blanco-azul" : "Verde");
+        regalo.setTexto_tarjeta("¡¡Disfrute de su tarjeta regalo, " + ((DiplomaWrapper)diploma).getName() + "!!");
+        regalo.setCustomerid(((DiplomaWrapper)diploma).getIdcustomer());
+        if (((DiplomaWrapper)diploma).getTitulo() != null) {
+            regalo.setColor_caja(((DiplomaWrapper)diploma).getTitulo().contentEquals("Juan")
+                    ? "Blanco-azul" : "Verde");
         }
         regalo.setValor_bono_regalo(new BigDecimal(50)); //50 euros
         return regalo;

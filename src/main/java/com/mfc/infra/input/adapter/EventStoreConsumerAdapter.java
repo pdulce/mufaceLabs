@@ -57,8 +57,8 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort, EventCons
         int i = 0;
         while (!found && i < listaDelAgregado.size()) {
             Object obj = listaDelAgregado.get(i++);
-            String idObjiesmo = ConversionUtils.convertToMap(obj).get("id").toString();
-            if (idObjiesmo.contentEquals(idObjectSearched)) {
+            Event event = ConversionUtils.convertMapToObject(obj, Event.class);
+            if (event.getId().contentEquals(idObjectSearched)) {
                 listaDelAgregado.remove(obj);
                 found = true;
             }

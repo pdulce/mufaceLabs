@@ -28,6 +28,11 @@ public class CustomerCommandStepSagaAdapter extends CommandStepSagaAdapter<Custo
     }
 
     @Override
+    protected Object getNewData(Object customer) {
+        return customer;
+    }
+
+    @Override
     public String getSagaName() {
         return SAGA_NAME;
     }
