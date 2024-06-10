@@ -48,9 +48,8 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
     }
 
     @Override
-    public Object doSagaOperation(Event<?> event) throws Throwable {
-        CustomerWrapper customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(),
-                CustomerWrapper.class);
+    public Object doSagaOperation(Event event) throws Throwable {
+        CustomerWrapper customer = (CustomerWrapper) getWrapper(event);
         Diploma diploma = (Diploma) getNewData(customer);
         if (customer.getCountry() == null || "".contentEquals(customer.getCountry())) {
             throw new Throwable ("forzando exception en SAGA step 2 para probar la arquitectura");
@@ -60,6 +59,13 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
                     "exception por país FORBIDDEN en SAGA step 2 para probar la arquitectura");
         }
         return this.insert(diploma);
+    }
+
+    @Override
+    public Object doSagaCompensation(Event event) {
+        Diploma diploma = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Diploma.class);
+        this.delete(diploma);
+        return diploma;
     }
 
     @Override
@@ -73,10 +79,10 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
     }
 
     @Override
-    public void doSagaCompensation(Event<?> event) {
-        Diploma diploma = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Diploma.class);
-        this.delete(diploma);
+    protected Object getWrapper(Event event) {
+        CustomerWrapper customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(),
+                CustomerWrapper.class);
+        return customer;
     }
-
 
 }

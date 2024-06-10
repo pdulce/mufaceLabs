@@ -31,12 +31,12 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
      protected static final String GROUP_ID = "saga-step-group-<texto-libre>-<secuencial>";
 
         @KafkaListener(topics = <topic_Step> groupId = <SU_GROUP_ID>)
-        public void listen(Event<?> event) {
+        public void listen(Event event) {
             super.procesarEvento(event);
         }
      ***/
 
-    public void processStepEvent(Event<?> event) {
+    public void processStepEvent(Event event) {
         event.getSagaStepInfo().setStepNumber(getOrderStepInSaga());
         if (event.getSagaStepInfo().isDoCompensateOp()) {
             orderSagaCompensation(event);
@@ -58,10 +58,11 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
         }
 
     }
-    private void orderSagaOperation(Event<?> event) {
+    private void orderSagaOperation(Event event) {
         //invocamos a la implementación específica del service del microservicio
+        Object newdata = getNewData(getWrapper(event));
         try{
-            Object data = this.doSagaOperation(event);
+            newdata = this.doSagaOperation(event);
             event.setId(Event.STEP_ID_PREFIX + getOrderStepInSaga());
             event.getSagaStepInfo().setStateOfOperation(Event.SAGA_OPE_SUCCESS);
         } catch (ConstraintViolationException exc) {
@@ -70,28 +71,30 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
         } catch (Throwable exc) {
             event.getSagaStepInfo().setStateOfOperation(Event.SAGA_OPE_FAILED);
             logger.error("doSagaOperation failed " + exc.getLocalizedMessage());
+        } finally {
+            event.getInnerEvent().setNewData(newdata);
         }
     }
 
-    private void orderSagaCompensation(Event<?> event) {
+    private void orderSagaCompensation(Event event) {
         //invocamos a la implementación específica del service del microservicio
+        Object newdata = getNewData(getWrapper(event));
         try {
-            this.doSagaCompensation(event);
+            newdata = this.doSagaCompensation(event);
             event.getSagaStepInfo().setStateOfCompensation(Event.SAGA_OPE_SUCCESS);
         } catch (Throwable notExistException) {
             event.getSagaStepInfo().setStateOfCompensation(Event.SAGA_OPE_FAILED);
             logger.error("doSagaCompensation failed: Cause ", notExistException);
         } finally {
-            event.getInnerEvent().setNewData(event);
+            event.getInnerEvent().setNewData(newdata);
         }
-
     }
 
     @Override
-    public abstract Object doSagaOperation(Event<?> event) throws Throwable;
+    public abstract Object doSagaOperation(Event event) throws Throwable;
 
     @Override
-    public abstract void doSagaCompensation(Event<?> event);
+    public abstract Object doSagaCompensation(Event event) throws Throwable;
 
     @Override
     public abstract String getSagaName();
@@ -107,6 +110,7 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
 
     protected abstract Object getNewData(Object dataReceivedFromPreviousStep);
 
+    protected abstract Object getWrapper(Event event);
 
 
 }

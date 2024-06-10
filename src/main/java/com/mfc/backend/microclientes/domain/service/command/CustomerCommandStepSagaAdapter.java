@@ -33,6 +33,11 @@ public class CustomerCommandStepSagaAdapter extends CommandStepSagaAdapter<Custo
     }
 
     @Override
+    protected Object getWrapper(Event event) {
+        return event;
+    }
+
+    @Override
     public String getSagaName() {
         return SAGA_NAME;
     }
@@ -52,15 +57,16 @@ public class CustomerCommandStepSagaAdapter extends CommandStepSagaAdapter<Custo
     }
 
     @Override
-    public Object doSagaOperation(Event<?> event) {
+    public Object doSagaOperation(Event event) {
         Customer customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Customer.class);
         return this.insert(customer);
     }
 
     @Override
-    public void doSagaCompensation(Event<?> event) {
+    public Object doSagaCompensation(Event event) {
         Customer customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Customer.class);
         this.delete(customer);
+        return customer;
     }
 
 

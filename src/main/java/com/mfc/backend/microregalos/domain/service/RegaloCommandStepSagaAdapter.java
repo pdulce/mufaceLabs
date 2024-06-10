@@ -50,11 +50,17 @@ public class RegaloCommandStepSagaAdapter extends CommandStepSagaAdapter<Regalo>
     }
 
     @Override
-    public Object doSagaOperation(Event<?> event) {
-        DiplomaWrapper customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(),
-                DiplomaWrapper.class);
+    public Object doSagaOperation(Event event) {
+        DiplomaWrapper customer = (DiplomaWrapper) getWrapper(event);
         Regalo regalo = (Regalo) getNewData(customer);
         return this.insert(regalo);
+    }
+
+    @Override
+    public Object doSagaCompensation(Event event) {
+        Regalo regalo = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Regalo.class);
+        this.delete(regalo);
+        return regalo;
     }
 
     protected Object getNewData(Object diploma) {
@@ -70,9 +76,10 @@ public class RegaloCommandStepSagaAdapter extends CommandStepSagaAdapter<Regalo>
     }
 
     @Override
-    public void doSagaCompensation(Event<?> event) {
-        Regalo regalo = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Regalo.class);
-        this.delete(regalo);
+    protected Object getWrapper(Event event) {
+        DiplomaWrapper customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(),
+                DiplomaWrapper.class);
+        return customer;
     }
 
 

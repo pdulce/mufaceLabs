@@ -6,7 +6,6 @@ import java.util.List;
 import com.mfc.backend.microclientes.domain.model.command.Customer;
 import com.mfc.backend.microclientes.domain.service.command.CustomerCommandAdapter;
 import com.mfc.infra.controller.BaseRestController;
-import com.mfc.infra.exceptions.NotExistException;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
