@@ -3,6 +3,7 @@ package com.mfc.infra.input.adapter;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.input.port.EventConsumer;
 import com.mfc.infra.input.port.EventStoreInputPort;
+import com.mfc.infra.utils.ConversionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +41,30 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort, EventCons
             List<Object> agregados = new ArrayList<>();
             hashOps.put(almacen, id, agregados);
         }
-        List<Object> agregados = hashOps.entries(almacen).get(id);
-        agregados.add(eventArch);//.getInnerEvent());
-        hashOps.put(almacen, id, agregados);
+        List<Object> listaDelAgregado = hashOps.entries(almacen).get(id);
+        listaDelAgregado.add(eventArch);
+        hashOps.put(almacen, id, listaDelAgregado);
+    }
+
+    public void update(String almacen, String id, String idObjectSearched, Event<?> eventArch) {
+        HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
+        if (hashOps.entries(almacen).get(id) == null) {
+            List<Object> agregados = new ArrayList<>();
+            hashOps.put(almacen, id, agregados);
+        }
+        List<Object> listaDelAgregado = hashOps.entries(almacen).get(id);
+        boolean found = false;
+        int i = 0;
+        while (!found && i < listaDelAgregado.size()) {
+            Object obj = listaDelAgregado.get(i++);
+            String idObjiesmo = ConversionUtils.convertToMap(obj).get("id").toString();
+            if (idObjiesmo.contentEquals(idObjectSearched)) {
+                listaDelAgregado.remove(obj);
+                found = true;
+            }
+        }
+        listaDelAgregado.add(eventArch);
+        hashOps.put(almacen, id, listaDelAgregado);
     }
 
     public List<Object> findById(String almacen, String id) {

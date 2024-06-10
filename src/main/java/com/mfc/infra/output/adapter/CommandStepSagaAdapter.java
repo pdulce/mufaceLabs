@@ -1,11 +1,9 @@
 package com.mfc.infra.output.adapter;
 
-import com.mfc.backend.microregalos.domain.model.Regalo;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.output.port.CommandEventPublisherPort;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.output.port.SagaStepPort;
-import com.mfc.infra.utils.ConversionUtils;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
@@ -65,7 +63,7 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
         try{
             Object data = this.doSagaOperation(event);
             event.getInnerEvent().setNewData(data);
-            event.setId("step-" + getOrderStepInSaga());
+            event.setId(Event.STEP_ID_PREFIX + getOrderStepInSaga());
             event.getSagaStepInfo().setStateOfOperation(Event.SAGA_OPE_SUCCESS);
         } catch (ConstraintViolationException exc) {
             event.getSagaStepInfo().setStateOfOperation(Event.SAGA_OPE_FAILED);
