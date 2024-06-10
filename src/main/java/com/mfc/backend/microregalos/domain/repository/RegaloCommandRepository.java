@@ -1,7 +1,7 @@
 package com.mfc.backend.microregalos.domain.repository;
 
 import com.mfc.backend.microregalos.domain.model.Regalo;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.mfc.infra.output.port.GenericRepositoryPort;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface RegaloCommandRepository extends JpaRepository<Regalo, Long> {
+public interface RegaloCommandRepository extends GenericRepositoryPort<Regalo, Long> {
 
 
 }
