@@ -98,8 +98,9 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
         boolean failedSaga = false;
         boolean lastFinished = false;
         int i = 0;
+        Event event = null;
         while (!lastFinished && !failedSaga && i < objetos.size()) {
-            Event event = ConversionUtils.convertMapToObject(objetos.get(i++), Event.class);
+            event = ConversionUtils.convertMapToObject(objetos.get(i++), Event.class);
             failedSaga = event.getSagaStepInfo().getStateOfOperation() == Event.SAGA_OPE_FAILED;
             if (event.getSagaStepInfo().isLastStep()) {
                 lastFinished = true;
@@ -108,7 +109,13 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
         String msgKey = ConstantMessages.DISTRIBUTED_FIN_STATE_OK;
         boolean running = !lastFinished && !failedSaga;
         if (running) {
-            msgKey = ConstantMessages.DISTRIBUTED_RUNNING;
+            // revisamos si se trata de un caso de transacción compensada
+            if (event != null && event.getSagaStepInfo().isDoCompensateOp() &&
+                    event.getSagaStepInfo().getStateOfOperation() == Event.SAGA_OPE_SUCCESS) {
+                msgKey = ConstantMessages.DISTRIBUTED_FIN_STATE_KO;
+            } else {
+                msgKey = ConstantMessages.DISTRIBUTED_RUNNING;
+            }
         } else if (failedSaga) {
             msgKey = ConstantMessages.DISTRIBUTED_FIN_STATE_KO;
         }
@@ -136,8 +143,10 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
                     DO_OPERATION + "-" + eventoTransaccion.getSagaStepInfo().getSagaName() +
                     "-" + eventoTransaccion.getSagaStepInfo().getStepNumber(), eventoTransaccion);
             logger.info("Solicitada operación de compensación en step "
-                    + event.getSagaStepInfo().getStepNumber()
-                    + " para la transacción núm: " + event.getSagaStepInfo().getTransactionIdentifier());
+                    + eventoTransaccion.getSagaStepInfo().getStepNumber()
+                    + " para la transacción núm: " + eventoTransaccion.getSagaStepInfo().getTransactionIdentifier());
+            this.eventStoreConsumerAdapter.saveEvent(eventoTransaccion.getSagaStepInfo().getSagaName(),
+                    String.valueOf(eventoTransaccion.getSagaStepInfo().getTransactionIdentifier()), eventoTransaccion);
         } else {
             logger.error("No se ha localizado la transacción de la saga " + event.getSagaStepInfo().getSagaName()
                     + " step " + event.getSagaStepInfo().getNextStepNumberToProccess()
