@@ -3,7 +3,7 @@ package com.mfc.backend.microregalos.domain.service;
 import com.mfc.backend.microregalos.domain.model.DiplomaWrapper;
 import com.mfc.backend.microregalos.domain.model.Regalo;
 import com.mfc.infra.event.Event;
-import com.mfc.infra.output.adapter.CommandStepSagaAdapter;
+import com.mfc.infra.output.adapter.CommandServiceStepSagaAdapter;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.utils.ConversionUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 
 @Service
 @ConditionalOnProperty(name = "arch.eventbroker.active", havingValue = "true", matchIfMissing = false)
-public class RegaloCommandStepSagaAdapter extends CommandStepSagaAdapter<Regalo, Long> {
+public class RegaloCommandStepSagaAdapterService extends CommandServiceStepSagaAdapter<Regalo, Long> {
 
     private static final String SAGA_NAME = "sagaBienvenidaCustomer";
     private static final int SAGA_STEP_NUMBER = 3;

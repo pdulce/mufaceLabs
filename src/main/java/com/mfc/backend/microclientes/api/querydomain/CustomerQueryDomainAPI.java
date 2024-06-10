@@ -3,7 +3,7 @@ package com.mfc.backend.microclientes.api.querydomain;
 
 import com.mfc.backend.microclientes.domain.model.query.CustomerDocument;
 import com.mfc.infra.controller.BaseRestController;
-import com.mfc.infra.input.adapter.QueryInputConsumerAdapter;
+import com.mfc.infra.input.port.QueryInputPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +16,7 @@ import java.util.Map;
 public class CustomerQueryDomainAPI extends BaseRestController {
 
     @Autowired(required=false)
-    QueryInputConsumerAdapter<CustomerDocument> customerQueryService;
+    QueryInputPort<CustomerDocument> customerQueryService;
 
 
     /*** CONSULTAS CONTRA EL DOMINIO DE QUERIES ***/

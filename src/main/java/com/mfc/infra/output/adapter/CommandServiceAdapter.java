@@ -4,14 +4,14 @@ import com.mfc.infra.configuration.EventBrokerProperties;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.exceptions.NotExistException;
 import com.mfc.infra.output.port.CommandEventPublisherPort;
-import com.mfc.infra.output.port.CommandPort;
+import com.mfc.infra.output.port.CommandServicePort;
+import com.mfc.infra.output.port.GenericRepositoryPort;
 import com.mfc.infra.utils.ConversionUtils;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Transactional
-public class CommandAdapter<T, ID> implements CommandPort<T, ID> {
-    Logger logger = LoggerFactory.getLogger(CommandAdapter.class);
+public class CommandServiceAdapter<T, ID> implements CommandServicePort<T, ID> {
+    Logger logger = LoggerFactory.getLogger(CommandServiceAdapter.class);
     @Autowired
     EventBrokerProperties eventBrokerProperties;
 
@@ -28,7 +28,7 @@ public class CommandAdapter<T, ID> implements CommandPort<T, ID> {
     CommandEventPublisherPort commandEventPublisherPort;
 
     @Autowired
-    protected JpaRepository<T, Long> repository;
+    protected GenericRepositoryPort<T, ID> repository;
 
     public final String getDocumentEntityClassname() {
         Class<T> entityClass = (Class<T>) ((ParameterizedType) getClass()
@@ -58,7 +58,7 @@ public class CommandAdapter<T, ID> implements CommandPort<T, ID> {
     @SuppressWarnings("unchecked")
     @Override
     public T update(T entity) {
-        Long id = Long.valueOf(ConversionUtils.convertToMap(entity).get("id").toString());
+        ID id = (ID) ConversionUtils.convertToMap(entity).get("id");
         if (!this.repository.findById(id).isPresent()) {
             NotExistException e = new NotExistException();
             e.setMsgError("entity with id: " + String.valueOf(id) + " not found");
@@ -78,7 +78,7 @@ public class CommandAdapter<T, ID> implements CommandPort<T, ID> {
     @SuppressWarnings("unchecked")
     @Override
     public void delete(T entity) {
-        Long id = Long.valueOf(ConversionUtils.convertToMap(entity).get("id").toString());
+        ID id = (ID) ConversionUtils.convertToMap(entity).get("id");
         if (!this.repository.findById(id).isPresent()) {
             NotExistException e = new NotExistException();
             e.setMsgError("entity with id: " + String.valueOf(id) + " not found");
@@ -128,8 +128,8 @@ public class CommandAdapter<T, ID> implements CommandPort<T, ID> {
     @SuppressWarnings("unchecked")
     @Override
     public T findById(ID id) {
-        if (this.repository.findById(Long.valueOf(id.toString())).isPresent()) {
-           return this.repository.findById(Long.valueOf(id.toString())).get();
+        if (this.repository.findById(id).isPresent()) {
+           return this.repository.findById(id).get();
         }
         NotExistException e = new NotExistException();
         e.setMsgError("id: " + id);

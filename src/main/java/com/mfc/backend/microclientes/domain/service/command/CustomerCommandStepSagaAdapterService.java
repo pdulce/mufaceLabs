@@ -2,7 +2,7 @@ package com.mfc.backend.microclientes.domain.service.command;
 
 import com.mfc.backend.microclientes.domain.model.command.Customer;
 import com.mfc.infra.event.Event;
-import com.mfc.infra.output.adapter.CommandStepSagaAdapter;
+import com.mfc.infra.output.adapter.CommandServiceStepSagaAdapter;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.utils.ConversionUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @ConditionalOnProperty(name = "arch.eventbroker.active", havingValue = "true", matchIfMissing = false)
-public class CustomerCommandStepSagaAdapter extends CommandStepSagaAdapter<Customer, Long> {
+public class CustomerCommandStepSagaAdapterService extends CommandServiceStepSagaAdapter<Customer, Long> {
 
     private static final String SAGA_NAME = "sagaBienvenidaCustomer";
     private static final int SAGA_STEP_NUMBER = 1;

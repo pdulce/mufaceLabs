@@ -1,7 +1,6 @@
 package com.mfc.backend.microclientes.api.bussinessdomain;
 
 import com.mfc.backend.microclientes.domain.model.command.Customer;
-import com.mfc.backend.microclientes.domain.service.command.CustomerCommandStepSagaAdapter;
 import com.mfc.infra.controller.BaseRestController;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.output.port.SagaStepPort;

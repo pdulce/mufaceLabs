@@ -2,6 +2,7 @@ package com.mfc.infra.output.adapter;
 
 import com.mfc.infra.event.Event;
 import com.mfc.infra.output.port.CommandEventPublisherPort;
+import com.mfc.infra.output.port.GenericRepositoryPort;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.output.port.SagaStepPort;
 import jakarta.transaction.Transactional;
@@ -9,18 +10,17 @@ import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 
 @Transactional
-public abstract class CommandStepSagaAdapter<T, ID> extends CommandAdapter<T, ID> implements SagaStepPort<T, ID> {
+public abstract class CommandServiceStepSagaAdapter<T, ID> extends CommandServiceAdapter<T, ID> implements SagaStepPort<T, ID> {
 
-    protected Logger logger = LoggerFactory.getLogger(CommandStepSagaAdapter.class);
+    protected Logger logger = LoggerFactory.getLogger(CommandServiceStepSagaAdapter.class);
     @Autowired(required = false)
     protected CommandEventPublisherPort commandEventPublisherPort;
 
     @Autowired
-    protected JpaRepository<T, Long> repository;
+    protected GenericRepositoryPort<T, ID> repository;
 
     /** metodos para conectar con transacciones distribuidas bajo el patrón SAGA **/
 
