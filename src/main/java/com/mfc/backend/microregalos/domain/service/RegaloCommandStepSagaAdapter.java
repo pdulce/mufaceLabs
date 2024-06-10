@@ -21,9 +21,6 @@ public class RegaloCommandStepSagaAdapter extends CommandStepSagaAdapter<Regalo>
     private static final String TOPIC_FOR_ME = SagaOrchestratorPort.DO_OPERATION + "-" + SAGA_NAME + "-" + SAGA_STEP_NUMBER;
     private static final String GROUP_ID = "saga-step-group-regaloconsumer-service-step-3";
 
-    public String getDocumentEntityClassname() {
-        return "RegaloDocument";
-    } // este micro no usa CQRS
 
     @KafkaListener(topics = TOPIC_FOR_ME , groupId = GROUP_ID)
     public void listen(Event<?> event) {

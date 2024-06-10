@@ -7,8 +7,5 @@ import org.springframework.stereotype.Service;
 @Service
 public class RegaloCommandAdapter extends CommandAdapter<Regalo> {
 
-    @Override
-    public String getDocumentEntityClassname() {
-        return null;
-    }
+
 }

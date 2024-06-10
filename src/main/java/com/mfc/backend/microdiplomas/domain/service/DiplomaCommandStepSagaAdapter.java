@@ -19,10 +19,6 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
     private static final String TOPIC_FOR_ME = SagaOrchestratorPort.DO_OPERATION + "-" + SAGA_NAME + "-" + SAGA_STEP_NUMBER;
     private static final String GROUP_ID = "saga-step-group-diplomaconsumer-service-step-2";
 
-    public String getDocumentEntityClassname() {
-        return "DiplomaDocument";
-    } // este micro no usa CQRS
-
     @KafkaListener(topics = TOPIC_FOR_ME , groupId = GROUP_ID)
     public void listen(Event<?> event) {
         // llega una orden del orchestrator

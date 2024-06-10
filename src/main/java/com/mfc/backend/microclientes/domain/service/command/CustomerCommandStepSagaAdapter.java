@@ -19,10 +19,6 @@ public class CustomerCommandStepSagaAdapter extends CommandStepSagaAdapter<Custo
             + SAGA_STEP_NUMBER;
     private static final String GROUP_ID = "saga-step-group-customerconsumer-service-step-1";
 
-    public String getDocumentEntityClassname() {
-        return "CustomerDocument";
-    }
-
     @KafkaListener(topics = TOPIC_FOR_ME, groupId = GROUP_ID)
     public void listen(Event<?> event) {
         // llega una orden del orchestrator

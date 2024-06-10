@@ -1,7 +1,7 @@
 package com.mfc.backend.microclientes.domain.repository.command;
 
 import com.mfc.backend.microclientes.domain.model.command.Customer;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.mfc.infra.output.port.GenericRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface CustomerCommandRepository extends JpaRepository<Customer, Long> {
+public interface CustomerCommandRepository extends GenericRepository<Customer, Long> {
 
 
 }

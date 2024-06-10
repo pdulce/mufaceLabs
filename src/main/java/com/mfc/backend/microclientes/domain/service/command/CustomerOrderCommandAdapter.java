@@ -6,8 +6,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CustomerOrderCommandAdapter extends CommandAdapter<CustomerOrder> {
-    public String getDocumentEntityClassname() {
-        return "CustomerOrderDocument";
-    }
 
 }

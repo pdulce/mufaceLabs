@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Transactional
-public abstract class CommandAdapter<T> implements CommandPort<T> {
+public class CommandAdapter<T> implements CommandPort<T> {
     Logger logger = LoggerFactory.getLogger(CommandAdapter.class);
     @Autowired
     EventBrokerProperties eventBrokerProperties;
@@ -27,6 +27,13 @@ public abstract class CommandAdapter<T> implements CommandPort<T> {
     CommandEventPublisherPort commandEventPublisherPort;
     @Autowired
     protected JpaRepository<T, Long> repository;
+
+    public final String getDocumentEntityClassname() {
+        Class<T> entityClass = (Class<T>) ((ParameterizedType) getClass()
+                .getGenericSuperclass())
+                .getActualTypeArguments()[0];
+        return entityClass.getSimpleName();
+    }
 
     @SuppressWarnings("unchecked")
     @Override

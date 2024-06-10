@@ -2,10 +2,10 @@ package com.mfc.backend.microclientes.domain.repository.command;
 
 
 import com.mfc.backend.microclientes.domain.model.command.CustomerOrder;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.mfc.infra.output.port.GenericRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CustomerOrderCommandRepository extends JpaRepository<CustomerOrder, Long> {
+public interface CustomerOrderCommandRepository extends GenericRepository<CustomerOrder, Long> {
 
 }
