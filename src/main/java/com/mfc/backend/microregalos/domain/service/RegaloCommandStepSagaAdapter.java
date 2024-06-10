@@ -6,7 +6,6 @@ import com.mfc.infra.event.Event;
 import com.mfc.infra.output.adapter.CommandStepSagaAdapter;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.utils.ConversionUtils;
-import jakarta.validation.ConstraintViolationException;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -71,13 +70,8 @@ public class RegaloCommandStepSagaAdapter extends CommandStepSagaAdapter<Regalo>
 
     @Override
     public void doSagaCompensation(Event<?> event) {
-        try {
-            Regalo regalo = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Regalo.class);
-            this.delete(regalo);
-        } catch (Throwable notExistException) {
-            event.getSagaStepInfo().setStateOfFinalization(Event.SAGA_OPE_FAILED);
-            logger.error("doSagaCompensation failed: Cause ", notExistException);
-        }
+        Regalo regalo = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Regalo.class);
+        this.delete(regalo);
     }
 
 

@@ -1,9 +1,11 @@
 package com.mfc.infra.output.adapter;
 
+import com.mfc.backend.microregalos.domain.model.Regalo;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.output.port.CommandEventPublisherPort;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.output.port.SagaStepPort;
+import com.mfc.infra.utils.ConversionUtils;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
@@ -40,26 +42,23 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
 
         if (event.getSagaStepInfo().isDoCompensateOp()) {
             orderSagaCompensation(event);
-            if (event.getSagaStepInfo().getStateOfFinalization() != Event.SAGA_OPE_FAILED) {
-                event.getSagaStepInfo().setStateOfFinalization(Event.SAGA_OPE_SUCCESS);
-            }
             this.commandEventPublisherPort.publish(SagaOrchestratorPort.SAGA_FROM_STEP_TOPIC, event);
             logger.info("Se ha informado al orchestrator que la operación de compensación en el step "
                     + event.getSagaStepInfo().getNextStepNumberToProccess()
                     + " para la transacción núm: " + event.getSagaStepInfo().getTransactionIdentifier()
-                    + (event.getSagaStepInfo().getStateOfFinalization() == Event.SAGA_OPE_FAILED
+                    + (event.getSagaStepInfo().getStateOfOperation() == Event.SAGA_OPE_FAILED
                     ? " ha fallado" : " se ha realizado de forma satisfactoria"));
         } else {
             event.getSagaStepInfo().setLastStep(isLastStepInSaga());
             orderSagaOperation(event);
-            if (event.getSagaStepInfo().getStateOfFinalization() != Event.SAGA_OPE_FAILED) {
-                event.getSagaStepInfo().setStateOfFinalization(Event.SAGA_OPE_SUCCESS);
+            if (event.getSagaStepInfo().getStateOfOperation() != Event.SAGA_OPE_FAILED) {
+                event.getSagaStepInfo().setStateOfOperation(Event.SAGA_OPE_SUCCESS);
             }
             this.commandEventPublisherPort.publish(SagaOrchestratorPort.SAGA_FROM_STEP_TOPIC, event);
             logger.info("Se ha informado al orchestrator que la operación de consolidación en el step "
                     + event.getSagaStepInfo().getNextStepNumberToProccess()
                     + " para la transacción núm: " + event.getSagaStepInfo().getTransactionIdentifier()
-                    + (event.getSagaStepInfo().getStateOfFinalization() == Event.SAGA_OPE_FAILED
+                    + (event.getSagaStepInfo().getStateOfOperation() == Event.SAGA_OPE_FAILED
                     ? " ha fallado" : " se ha realizado de forma satisfactoria"));
         }
 
@@ -70,18 +69,26 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
             Object data = this.doSagaOperation(event);
             event.getInnerEvent().setNewData(data);
             event.setId("step-" + getOrderStepInSaga());
+            event.getSagaStepInfo().setStateOfOperation(Event.SAGA_OPE_SUCCESS);
         } catch (ConstraintViolationException exc) {
-            event.getSagaStepInfo().setStateOfFinalization(Event.SAGA_OPE_FAILED);
+            event.getSagaStepInfo().setStateOfOperation(Event.SAGA_OPE_FAILED);
             logger.error("doSagaOperation failed: Cause ", exc.getLocalizedMessage());
         } catch (Throwable exc) {
-            event.getSagaStepInfo().setStateOfFinalization(Event.SAGA_OPE_FAILED);
+            event.getSagaStepInfo().setStateOfOperation(Event.SAGA_OPE_FAILED);
             logger.error("doSagaOperation failed: Cause ", exc);
         }
     }
 
     private void orderSagaCompensation(Event<?> event) {
         //invocamos a la implementación específica del service del microservicio
-        this.doSagaCompensation(event);
+        try {
+            this.doSagaCompensation(event);
+            event.getSagaStepInfo().setStateOfCompensation(Event.SAGA_OPE_SUCCESS);
+        } catch (Throwable notExistException) {
+            event.getSagaStepInfo().setStateOfCompensation(Event.SAGA_OPE_FAILED);
+            logger.error("doSagaCompensation failed: Cause ", notExistException);
+        }
+
     }
 
     @Override

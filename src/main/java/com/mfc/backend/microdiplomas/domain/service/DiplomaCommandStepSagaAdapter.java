@@ -6,7 +6,6 @@ import com.mfc.infra.event.Event;
 import com.mfc.infra.output.adapter.CommandStepSagaAdapter;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.utils.ConversionUtils;
-import jakarta.validation.ConstraintViolationException;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -76,13 +75,8 @@ public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diplom
 
     @Override
     public void doSagaCompensation(Event<?> event) {
-        try {
-            Diploma diploma = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Diploma.class);
-            this.delete(diploma);
-        } catch (Throwable notExistException) {
-            event.getSagaStepInfo().setStateOfFinalization(Event.SAGA_OPE_FAILED);
-            logger.error("doSagaCompensation failed: Cause ", notExistException);
-        }
+        Diploma diploma = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Diploma.class);
+        this.delete(diploma);
     }
 
 
