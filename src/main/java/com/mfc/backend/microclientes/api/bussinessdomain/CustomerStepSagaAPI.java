@@ -7,12 +7,14 @@ import com.mfc.infra.event.Event;
 import com.mfc.infra.utils.ConstantMessages;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Locale;
 
 @RestController
+@ConditionalOnProperty(name = "arch.eventbroker.active", havingValue = "true", matchIfMissing = false)
 @RequestMapping(value = "customer")
 public class CustomerStepSagaAPI extends BaseRestController {
     @Autowired

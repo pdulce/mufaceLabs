@@ -18,7 +18,6 @@ public class CustomerAPI extends BaseRestController {
     @Autowired
     CustomerCommandAdapter customerCommandService;
 
-
     @Override
     @GetMapping("saludar")
     public String saludar(){

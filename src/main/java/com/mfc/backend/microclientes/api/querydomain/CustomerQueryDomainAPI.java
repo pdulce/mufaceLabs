@@ -14,7 +14,7 @@ import java.util.Map;
 @RequestMapping(value = "customerquery")
 public class CustomerQueryDomainAPI extends BaseRestController {
 
-    @Autowired
+    @Autowired(required=false)
     CustomerQueryServiceConsumerAdapter customerQueryService;
 
 

@@ -6,10 +6,12 @@ import com.mfc.infra.event.Event;
 import com.mfc.infra.output.adapter.CommandStepSagaAdapter;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.utils.ConversionUtils;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Service
+@ConditionalOnProperty(name = "arch.eventbroker.active", havingValue = "true", matchIfMissing = false)
 public class DiplomaCommandStepSagaAdapter extends CommandStepSagaAdapter<Diploma> {
 
     private static final String SAGA_NAME = "sagaBienvenidaCustomer";

@@ -2,7 +2,6 @@ package com.mfc.backend.microclientes.api.eventdomain;
 
 import com.mfc.backend.microclientes.domain.service.command.CustomerCommandAdapter;
 import com.mfc.infra.controller.BaseRestController;
-import com.mfc.infra.input.adapter.EventStoreConsumerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +12,6 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "events")
 public class EventControllerAPI extends BaseRestController {
-
-    @Autowired
-    EventStoreConsumerAdapter eventStoreConsumerAdapter;
 
     @Autowired
     CustomerCommandAdapter customerCommandService;

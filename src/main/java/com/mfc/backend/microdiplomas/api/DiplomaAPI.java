@@ -1,7 +1,7 @@
 package com.mfc.backend.microdiplomas.api;
 
 import com.mfc.backend.microdiplomas.domain.model.Diploma;
-import com.mfc.backend.microdiplomas.domain.service.DiplomaCommandStepSagaAdapter;
+import com.mfc.backend.microdiplomas.domain.service.DiplomaServiceAdapter;
 import com.mfc.infra.controller.BaseRestController;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,33 +14,33 @@ import java.util.List;
 @RequestMapping(value = "diploma")
 public class DiplomaAPI extends BaseRestController {
     @Autowired
-    DiplomaCommandStepSagaAdapter diplomaCommandStepSagaAdapter;
+    DiplomaServiceAdapter diplomaServiceAdapter;
 
 
     @GetMapping(value = "allDiplomas", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Diploma> getAllDiplomas() {
-        return this.diplomaCommandStepSagaAdapter.findAll();
+        return this.diplomaServiceAdapter.findAll();
     }
 
 
     @GetMapping(value = "allDiplomasByCustomerName", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Diploma> getAllDiplomasByCustomerName(@RequestParam String name) {
-        return this.diplomaCommandStepSagaAdapter.findAllByFieldvalue("name", name);
+        return this.diplomaServiceAdapter.findAllByFieldvalue("name", name);
     }
 
     @GetMapping(value = "allDiplomasByCustomerID", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Diploma> getAllDiplomasByCustomerID(@RequestParam Long customerid) {
-        return this.diplomaCommandStepSagaAdapter.findAllByFieldvalue("customerid", customerid);
+        return this.diplomaServiceAdapter.findAllByFieldvalue("customerid", customerid);
     }
 
     @PutMapping(produces=MediaType.APPLICATION_JSON_VALUE)
     public Diploma update(@RequestBody @NotNull Diploma diploma) {
-        return diplomaCommandStepSagaAdapter.update(diploma);
+        return diplomaServiceAdapter.update(diploma);
     }
 
     @DeleteMapping(value = "deleteAll", produces=MediaType.APPLICATION_JSON_VALUE)
     public void deleteAll() {
-        this.diplomaCommandStepSagaAdapter.deleteAll();
+        this.diplomaServiceAdapter.deleteAll();
     }
 
 }

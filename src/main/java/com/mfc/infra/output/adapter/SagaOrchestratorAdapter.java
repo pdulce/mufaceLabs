@@ -11,6 +11,7 @@ import com.mfc.infra.utils.ConversionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
+@ConditionalOnProperty(name = "arch.eventbroker.active", havingValue = "true", matchIfMissing = false)
 public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, EventConsumer {
 
     Logger logger = LoggerFactory.getLogger(SagaOrchestratorPort.class);
