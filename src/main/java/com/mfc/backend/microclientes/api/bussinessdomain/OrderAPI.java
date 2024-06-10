@@ -18,7 +18,7 @@ public class OrderAPI extends BaseRestController {
 
     @PostMapping(value = "create", produces=MediaType.APPLICATION_JSON_VALUE)
     public CustomerOrder create(@PathVariable @NotNull CustomerOrder customerOrder) {
-        return customerOrderCommandService.insert(customerOrder);
+        return this.customerOrderCommandService.insert(customerOrder);
     }
     
 }

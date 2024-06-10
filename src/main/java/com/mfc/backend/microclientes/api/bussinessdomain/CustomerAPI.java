@@ -26,7 +26,7 @@ public class CustomerAPI extends BaseRestController {
 
     @PutMapping(produces=MediaType.APPLICATION_JSON_VALUE)
     public Customer update(@RequestBody @NotNull Customer customer) {
-        return customerCommandService.update(customer);
+        this.return customerCommandService.update(customer);
     }
 
     @DeleteMapping(produces=MediaType.APPLICATION_JSON_VALUE)
