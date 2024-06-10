@@ -15,11 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Locale;
 
 @RestController
-@ConditionalOnProperty(name = "arch.eventbroker.active", havingValue = "true", matchIfMissing = false)
 @RequestMapping(value = "customer")
 public class CustomerStepSagaAPI extends BaseRestController {
     @Autowired
-    //CustomerCommandStepSagaAdapter customerCommandStepSagaAdapter;
     SagaStepPort<Customer> customerCommandStepSagaAdapter;
 
     @PostMapping(produces=MediaType.APPLICATION_JSON_VALUE)

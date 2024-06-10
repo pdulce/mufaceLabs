@@ -7,6 +7,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomerCommandAdapter extends CommandAdapter<Customer> {
 
+    // personalized methods
+
+    public String hello(){
+        this.findAllByFieldvalue("name", "Pepito");
+        //
+        return "hello";
+    }
+
 
 
 
