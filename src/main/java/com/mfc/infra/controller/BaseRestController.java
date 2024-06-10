@@ -1,6 +1,6 @@
 package com.mfc.infra.controller;
 
-import com.mfc.infra.input.adapter.EventStoreConsumerAdapter;
+import com.mfc.infra.input.port.EventStoreInputPort;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.utils.ConstantMessages;
 import jakarta.validation.constraints.NotEmpty;
@@ -18,7 +18,7 @@ public abstract class BaseRestController {
     Logger logger = LoggerFactory.getLogger(BaseRestController.class);
 
     @Autowired(required=false)
-    protected EventStoreConsumerAdapter eventStoreConsumerAdapter;
+    protected EventStoreInputPort eventStoreConsumerAdapter;
     @Autowired(required=false)
     protected SagaOrchestratorPort orchestratorManager;
 

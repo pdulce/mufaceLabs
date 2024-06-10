@@ -2,7 +2,6 @@ package com.mfc.infra.output.adapter;
 
 import com.mfc.infra.event.Event;
 import com.mfc.infra.event.SagaStepInfo;
-import com.mfc.infra.input.port.EventConsumer;
 import com.mfc.infra.input.port.EventStoreInputPort;
 import com.mfc.infra.output.port.CommandEventPublisherPort;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
@@ -20,7 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @ConditionalOnProperty(name = "arch.eventbroker.active", havingValue = "true", matchIfMissing = false)
-public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, EventConsumer {
+public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T> {
 
     Logger logger = LoggerFactory.getLogger(SagaOrchestratorPort.class);
     private static final String GROUP_ID = "saga-orchestrator-group";

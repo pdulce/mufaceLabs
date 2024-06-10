@@ -7,12 +7,9 @@ import com.mfc.infra.event.Event;
 import com.mfc.infra.output.port.SagaStepPort;
 import com.mfc.infra.utils.ConstantMessages;
 import jakarta.validation.constraints.NotNull;
-import org.apache.poi.util.NotImplemented;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.Locale;
 

@@ -2,7 +2,6 @@ package com.mfc.infra.input.adapter;
 
 import com.mfc.infra.configuration.EventBrokerProperties;
 import com.mfc.infra.event.Event;
-import com.mfc.infra.input.port.EventConsumer;
 import com.mfc.infra.input.port.QueryInputPort;
 import com.mfc.infra.utils.ConversionUtils;
 import org.slf4j.Logger;
@@ -17,7 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public abstract class QueryInputConsumerAdapter<T> implements QueryInputPort<T>, EventConsumer {
+public abstract class QueryInputConsumerAdapter<T> implements QueryInputPort<T> {
     Logger logger = LoggerFactory.getLogger(QueryInputConsumerAdapter.class);
 
     @Autowired

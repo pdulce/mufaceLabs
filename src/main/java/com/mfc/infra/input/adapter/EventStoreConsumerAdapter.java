@@ -2,7 +2,6 @@ package com.mfc.infra.input.adapter;
 
 import com.mfc.infra.configuration.EventBrokerProperties;
 import com.mfc.infra.event.Event;
-import com.mfc.infra.input.port.EventConsumer;
 import com.mfc.infra.input.port.EventStoreInputPort;
 import com.mfc.infra.utils.ConversionUtils;
 import org.slf4j.Logger;
@@ -20,7 +19,7 @@ import java.util.Map;
 
 @Service
 @ConditionalOnProperty(name = "arch.eventbroker.active", havingValue = "true", matchIfMissing = false)
-public class EventStoreConsumerAdapter implements EventStoreInputPort, EventConsumer {
+public class EventStoreConsumerAdapter implements EventStoreInputPort {
 
     Logger logger = LoggerFactory.getLogger(EventStoreConsumerAdapter.class);
 
