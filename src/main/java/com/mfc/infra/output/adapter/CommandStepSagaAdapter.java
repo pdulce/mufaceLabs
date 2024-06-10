@@ -39,7 +39,7 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
      ***/
 
     public void processStepEvent(Event<?> event) {
-
+        event.getSagaStepInfo().setStepNumber(getOrderStepInSaga());
         if (event.getSagaStepInfo().isDoCompensateOp()) {
             orderSagaCompensation(event);
             this.commandEventPublisherPort.publish(SagaOrchestratorPort.SAGA_FROM_STEP_TOPIC, event);
@@ -51,9 +51,6 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
         } else {
             event.getSagaStepInfo().setLastStep(isLastStepInSaga());
             orderSagaOperation(event);
-            if (event.getSagaStepInfo().getStateOfOperation() != Event.SAGA_OPE_FAILED) {
-                event.getSagaStepInfo().setStateOfOperation(Event.SAGA_OPE_SUCCESS);
-            }
             this.commandEventPublisherPort.publish(SagaOrchestratorPort.SAGA_FROM_STEP_TOPIC, event);
             logger.info("Se ha informado al orchestrator que la operación de consolidación en el step "
                     + event.getSagaStepInfo().getNextStepNumberToProccess()
@@ -72,10 +69,10 @@ public abstract class CommandStepSagaAdapter<T> extends CommandAdapter<T> implem
             event.getSagaStepInfo().setStateOfOperation(Event.SAGA_OPE_SUCCESS);
         } catch (ConstraintViolationException exc) {
             event.getSagaStepInfo().setStateOfOperation(Event.SAGA_OPE_FAILED);
-            logger.error("doSagaOperation failed: Cause ", exc.getLocalizedMessage());
+            logger.error("doSagaOperation failed: Cause " + exc.getLocalizedMessage());
         } catch (Throwable exc) {
             event.getSagaStepInfo().setStateOfOperation(Event.SAGA_OPE_FAILED);
-            logger.error("doSagaOperation failed: Cause ", exc);
+            logger.error("doSagaOperation failed " + exc.getLocalizedMessage());
         }
     }
 

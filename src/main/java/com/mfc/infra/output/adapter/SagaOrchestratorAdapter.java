@@ -62,18 +62,14 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
         // Aquí tenemos decidir en función del mensaje que mande el step antes invocado, si continuar con la siguiente
         // operación de la SAGA o mandar compensar los steps anteriores
         if (event.getSagaStepInfo().getStateOfOperation() == Event.SAGA_OPE_FAILED
-                && event.getSagaStepInfo().getNextStepNumberToProccess() > 1) {
-            event.getSagaStepInfo().setNextStepNumberToProccess(event.getSagaStepInfo().
-                    getNextStepNumberToProccess() - 1);
+                && event.getSagaStepInfo().getStepNumber() > 1) {
             backToStepToCompensate(event);
         } else {
             // puede ser que sea un mensaje de la finalización de una compensación de una operación de consolidación
             if (event.getSagaStepInfo().isDoCompensateOp()) {
                 // Ordenamos compensar al (step - 1) respecto al que llega como evento en el bus
                 // SIEMPRE que no hayamos llegado al principio de la saga
-                if ((event.getSagaStepInfo().getStateOfOperation() - 1) > 1) {
-                    event.getSagaStepInfo().setNextStepNumberToProccess(event.getSagaStepInfo().
-                            getNextStepNumberToProccess() - 1);
+                if (event.getSagaStepInfo().getStepNumber() > 1) {
                     backToStepToCompensate(event);
                 }
             } else {
@@ -131,14 +127,14 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
     }
 
     private void backToStepToCompensate(Event event) {
-        Event<?> eventoTransaccion = searchPreviousStepTransaction(event.getSagaStepInfo().getSagaName(),
-                event.getSagaStepInfo().getNextStepNumberToProccess(),
+        Event<?> eventoTransaccion = searchStepInTransaction(event.getSagaStepInfo().getSagaName(),
+                event.getSagaStepInfo().getStepNumber() - 1,
                 event.getSagaStepInfo().getTransactionIdentifier());
         if (eventoTransaccion != null) {
             eventoTransaccion.getSagaStepInfo().setDoCompensateOp(true);
             this.commandEventPublisherPort.publish(
                     DO_OPERATION + "-" + eventoTransaccion.getSagaStepInfo().getSagaName() +
-                    "-" + eventoTransaccion.getSagaStepInfo().getStateOfOperation(), eventoTransaccion);
+                    "-" + eventoTransaccion.getSagaStepInfo().getStepNumber(), eventoTransaccion);
             logger.info("Solicitada operación de compensación en step "
                     + event.getSagaStepInfo().getNextStepNumberToProccess()
                     + " para la transacción núm: " + event.getSagaStepInfo().getTransactionIdentifier());
@@ -150,24 +146,25 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T>, Even
         }
     }
 
-    private Event<?> searchPreviousStepTransaction(String sagaName, Integer stepNumber, Long transactionIdentifier) {
-
-        List<Object> objetosTransaccionados = eventStoreConsumerAdapter.
+    private Event<?> searchStepInTransaction(String sagaName, Integer stepNumber, Long transactionIdentifier) {
+        //Map<String, List<Object>> listaAll = this.eventStoreConsumerAdapter.findAll(sagaName);
+        List<Object> objetosTransaccionados = this.eventStoreConsumerAdapter.
                 findById(sagaName, String.valueOf(transactionIdentifier));
+        if (objetosTransaccionados == null || objetosTransaccionados.isEmpty()) {
+            return null;
+        }
         // ordenamos esta lista del step más reciente al primero (stepnumber: 1)
         Collections.sort(objetosTransaccionados, new SagaStepComparator());
         // recorremos la lista y vamos mandando ejecutar las operaciones de compensación de los steps anteriores
         // (se mandan al bus event para que las consuma/atienda el service-consumer de cada step de esta saga)
-        AtomicReference<Event<?>> objetoSearched = null;
+        AtomicReference<Event<?>> objetoSearched = new AtomicReference<>();
         objetosTransaccionados.forEach((data) -> {
-            Event<?> event = (Event<?>) data;
-            if (event.getSagaStepInfo().getStateOfOperation() == stepNumber.intValue()) {
+            Event event = ConversionUtils.convertMapToObject(data, Event.class);
+            if (event.getSagaStepInfo().getStepNumber() == stepNumber.intValue()) {
                 objetoSearched.set(event);
             }
         });
-
         return objetoSearched != null ? objetoSearched.get() : null;
-
     }
 
 

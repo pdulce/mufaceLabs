@@ -8,6 +8,7 @@ import java.io.Serializable;
 public class SagaStepInfo implements Serializable {
     private String sagaName;
     private Long transactionIdentifier;
+    private int stepNumber;
     private int nextStepNumberToProccess;
     private int stateOfOperation;
     private int stateOfCompensation;
