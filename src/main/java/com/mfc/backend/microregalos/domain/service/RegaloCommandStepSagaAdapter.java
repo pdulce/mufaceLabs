@@ -59,8 +59,8 @@ public class RegaloCommandStepSagaAdapter extends CommandStepSagaAdapter<Regalo>
 
     private static Regalo getRegalo(DiplomaWrapper diploma) {
         Regalo regalo = new Regalo();
-        regalo.setTexto_tarjeta("¡¡Disfrute de su tarjeta reagalo, " + diploma.getName() + "!!");
-        regalo.setCustomerid(diploma.getId());
+        regalo.setTexto_tarjeta("¡¡Disfrute de su tarjeta regalo, " + diploma.getName() + "!!");
+        regalo.setCustomerid(diploma.getIdcustomer());
         if (diploma.getTitulo() != null) {
             regalo.setColor_caja(diploma.getTitulo().contentEquals("Juan") ? "Blanco-azul" : "Verde");
         }
