@@ -5,7 +5,7 @@ import com.mfc.infra.output.adapter.CommandAdapter;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RegaloCommandAdapter extends CommandAdapter<Regalo> {
+public class RegaloCommandAdapter extends CommandAdapter<Regalo, Long> {
 
 
 }

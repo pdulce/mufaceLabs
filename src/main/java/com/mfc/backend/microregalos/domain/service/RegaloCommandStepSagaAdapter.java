@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 
 @Service
 @ConditionalOnProperty(name = "arch.eventbroker.active", havingValue = "true", matchIfMissing = false)
-public class RegaloCommandStepSagaAdapter extends CommandStepSagaAdapter<Regalo> {
+public class RegaloCommandStepSagaAdapter extends CommandStepSagaAdapter<Regalo, Long> {
 
     private static final String SAGA_NAME = "sagaBienvenidaCustomer";
     private static final int SAGA_STEP_NUMBER = 3;

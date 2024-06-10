@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Transactional
-public class CommandAdapter<T> implements CommandPort<T> {
+public class CommandAdapter<T, ID> implements CommandPort<T, ID> {
     Logger logger = LoggerFactory.getLogger(CommandAdapter.class);
     @Autowired
     EventBrokerProperties eventBrokerProperties;
@@ -127,9 +127,9 @@ public class CommandAdapter<T> implements CommandPort<T> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public T findById(Long id) {
-        if (this.repository.findById(id).isPresent()) {
-           return this.repository.findById(id).get();
+    public T findById(ID id) {
+        if (this.repository.findById(Long.valueOf(id.toString())).isPresent()) {
+           return this.repository.findById(Long.valueOf(id.toString())).get();
         }
         NotExistException e = new NotExistException();
         e.setMsgError("id: " + id);

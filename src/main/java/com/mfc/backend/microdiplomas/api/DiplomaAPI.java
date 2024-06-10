@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping(value = "diploma")
 public class DiplomaAPI extends BaseRestController {
     @Autowired
-    CommandPort<Diploma> diplomaServiceAdapter;
+    CommandPort<Diploma, Long> diplomaServiceAdapter;
 
 
     @GetMapping(value = "allDiplomas", produces=MediaType.APPLICATION_JSON_VALUE)

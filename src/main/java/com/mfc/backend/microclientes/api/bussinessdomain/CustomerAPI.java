@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerAPI extends BaseRestController {
 
     @Autowired
-    CommandPort<Customer> customerCommandService;
+    CommandPort<Customer, Long> customerCommandService;
 
     @Override
     @GetMapping("saludar")

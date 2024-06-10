@@ -5,7 +5,7 @@ import com.mfc.infra.output.adapter.CommandAdapter;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CustomerCommandAdapter extends CommandAdapter<Customer> {
+public class CustomerCommandAdapter extends CommandAdapter<Customer, Long> {
 
     // personalized methods
 

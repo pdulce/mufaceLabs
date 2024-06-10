@@ -3,7 +3,7 @@ package com.mfc.infra.output.port;
 import java.util.List;
 
 
-public interface CommandPort<T> {
+public interface CommandPort<T, ID> {
 
     T insert(T entity);
 
@@ -14,7 +14,7 @@ public interface CommandPort<T> {
     void deleteAllList(List<T> entities);
     void deleteAll();
 
-    T findById(Long id);
+    T findById(ID id);
 
     List<T> findAll();
 

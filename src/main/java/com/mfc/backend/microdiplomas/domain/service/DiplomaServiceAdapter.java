@@ -5,6 +5,6 @@ import com.mfc.infra.output.adapter.CommandAdapter;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DiplomaServiceAdapter extends CommandAdapter<Diploma> {
+public class DiplomaServiceAdapter extends CommandAdapter<Diploma, Long> {
 
 }

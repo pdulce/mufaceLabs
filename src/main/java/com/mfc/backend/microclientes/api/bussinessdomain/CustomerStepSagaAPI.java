@@ -20,7 +20,7 @@ import java.util.Locale;
 @RequestMapping(value = "customer")
 public class CustomerStepSagaAPI extends BaseRestController {
     @Autowired(required=false)
-    SagaStepPort<Customer> customerCommandStepSagaAdapter;
+    SagaStepPort<Customer, Long> customerCommandStepSagaAdapter;
 
     @PostMapping(produces=MediaType.APPLICATION_JSON_VALUE)
     public String create(@RequestBody @NotNull Customer customer) {

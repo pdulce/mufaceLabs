@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping(value = "regalo")
 public class RegaloAPI extends BaseRestController {
     @Autowired
-    CommandPort<Regalo> regaloCommandAdapter;
+    CommandPort<Regalo, Long> regaloCommandAdapter;
 
 
     @GetMapping(value = "allRegalos", produces=MediaType.APPLICATION_JSON_VALUE)

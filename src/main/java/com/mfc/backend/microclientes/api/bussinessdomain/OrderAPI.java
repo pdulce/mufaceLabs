@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class OrderAPI extends BaseRestController {
 
     @Autowired
-    CommandPort<CustomerOrder> customerOrderCommandService;
+    CommandPort<CustomerOrder, Long> customerOrderCommandService;
 
     @PostMapping(value = "create", produces=MediaType.APPLICATION_JSON_VALUE)
     public CustomerOrder create(@PathVariable @NotNull CustomerOrder customerOrder) {
