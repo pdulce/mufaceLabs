@@ -33,6 +33,12 @@ public class GlobalExceptionAdvice {
     @Autowired
     private MessageSource messageSource;
 
+
+    @ExceptionHandler(IndexOutOfBoundsException.class)
+    public ResponseEntity<String> handleResourceNotFoundException(IndexOutOfBoundsException ex,
+                                                                  WebRequest request, Locale locale) {
+        return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleResourceNotFoundException(IllegalArgumentException ex,
                                                                   WebRequest request, Locale locale) {

@@ -125,7 +125,7 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T> {
      */
 
     private static String[] getMessageAndArgs(boolean lastFinished, boolean failedSaga, Event event) {
-        String[] msgAndArgs = new String[2];
+        String[] msgAndArgs = new String[3];
         msgAndArgs[0] = ConstantMessages.DISTRIBUTED_FIN_STATE_OK;
         msgAndArgs[1] = String.valueOf(event.getSagaStepInfo().getTransactionIdentifier());
         boolean running = !lastFinished && !failedSaga;
@@ -149,6 +149,9 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T> {
 
     private void continueNextStep(Event<?> event) {
         // Iniciar Saga
+        if (event.getSagaStepInfo().getNextStepNumberToProccess() == 3) {
+            int a = 0;
+        }
         this.commandEventPublisher.publish(DO_OPERATION + "-"
                 + event.getSagaStepInfo().getSagaName() + "-" + event.getSagaStepInfo().getNextStepNumberToProccess(),
                 event);

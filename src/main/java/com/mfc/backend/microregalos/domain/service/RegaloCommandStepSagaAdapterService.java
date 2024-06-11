@@ -17,11 +17,12 @@ import java.math.BigDecimal;
 
 @Service
 @ConditionalOnProperty(name = "arch.eventbroker.active", havingValue = "true", matchIfMissing = false)
-public abstract class RegaloCommandStepSagaAdapterService extends CommandServiceStepSagaAdapter<Regalo, Long> {
+public class RegaloCommandStepSagaAdapterService extends CommandServiceStepSagaAdapter<Regalo, Long> {
 
     private static final String SAGA_NAME = "sagaBienvenidaCustomer";
     private static final int SAGA_STEP_NUMBER = 3;
-    private static final String TOPIC_FOR_ME = SagaOrchestratorPort.DO_OPERATION + "-" + SAGA_NAME + "-" + SAGA_STEP_NUMBER;
+    private static final String TOPIC_FOR_ME = SagaOrchestratorPort.DO_OPERATION + "-" + SAGA_NAME + "-"
+            + SAGA_STEP_NUMBER;
     private static final String GROUP_ID = "saga-step-group-regaloconsumer-service-step-3";
 
     protected RegaloCommandRepository repository;
