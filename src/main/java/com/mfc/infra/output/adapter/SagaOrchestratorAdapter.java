@@ -149,9 +149,6 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T> {
 
     private void continueNextStep(Event<?> event) {
         // Iniciar Saga
-        if (event.getSagaStepInfo().getNextStepNumberToProccess() == 3) {
-            int a = 0;
-        }
         this.commandEventPublisher.publish(DO_OPERATION + "-"
                 + event.getSagaStepInfo().getSagaName() + "-" + event.getSagaStepInfo().getNextStepNumberToProccess(),
                 event);
