@@ -61,7 +61,7 @@ public abstract class BaseRestController {
 
     public String getSagaEstadoFinalizacion(@RequestParam @NotEmpty String saga,
                                             @RequestParam @NotEmpty String transaccionId) {
-        logger.info("vemos si la saga finalizó la saga " + saga + " en su transacción number: " + transaccionId);
+        logger.info("...Comprobamos si finalizó la transacción number: " + transaccionId + " de la saga " + saga);
         String[] messageKeyAndArgs = this.orchestratorManager.getLastStateOfTansactionInSaga(saga, transaccionId);
         Object[] args = new Object[messageKeyAndArgs.length - 1];
         for (int i = 1; i < messageKeyAndArgs.length; i++) {
