@@ -4,6 +4,7 @@ public final class ConstantMessages {
 
     // Greeting
     public static final String GREETING = "greeting";
+    public static final String LOGOUT = "logout";
 
     public static final String NOT_EMPTY_LET = "not_empty_msg";
     public static final String MIN_VALUE_REQUIRED = "min_value_required_msg";

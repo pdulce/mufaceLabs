@@ -52,6 +52,12 @@ public abstract class BaseRestController {
                 getLocale(CASTELLANO)) : message;
     }
 
+    public String logout() {
+        String message = messageSource.getMessage(ConstantMessages.LOGOUT, null, getLocale(CASTELLANO));
+        return message == null ? messageSource.getMessage(ConstantMessages.ERROR_NOT_FOUND, null,
+                getLocale(CASTELLANO)) : message;
+    }
+
 
     public String getSagaEstadoFinalizacion(@RequestParam @NotEmpty String saga,
                                             @RequestParam @NotEmpty String transaccionId) {

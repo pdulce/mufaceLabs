@@ -9,6 +9,7 @@ import com.mfc.infra.controller.BaseRestController;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,6 +21,7 @@ public class CustomerAPI extends BaseRestController {
 
     @Override
     @GetMapping("saludar")
+    @PreAuthorize("hasRole('muface')")
     public String saludar(){
         return super.saludar();
     }
