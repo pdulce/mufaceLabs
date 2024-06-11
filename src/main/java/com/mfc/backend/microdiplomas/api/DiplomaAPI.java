@@ -42,4 +42,12 @@ public class DiplomaAPI extends BaseRestController {
         this.diplomaServiceAdapter.deleteAll();
     }
 
+    /*** **/
+
+    @GetMapping(value = "getDiplomasDeLaRegionProvenza", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<Diploma> getDiplomasDeLaRegionProvenza() {
+        return this.diplomaServiceAdapter.getDiplomasDeLaRegionProvenza();
+    }
+
+
 }
