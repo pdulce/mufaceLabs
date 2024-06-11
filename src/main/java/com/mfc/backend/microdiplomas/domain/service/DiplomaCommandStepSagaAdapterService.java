@@ -2,11 +2,13 @@ package com.mfc.backend.microdiplomas.domain.service;
 
 import com.mfc.backend.microdiplomas.domain.model.CustomerWrapper;
 import com.mfc.backend.microdiplomas.domain.model.Diploma;
+import com.mfc.backend.microdiplomas.domain.repository.DiplomaCommandRepository;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.output.adapter.CommandServiceStepSagaAdapter;
 import com.mfc.infra.output.port.GenericRepositoryPort;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.utils.ConversionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -17,8 +19,20 @@ public class DiplomaCommandStepSagaAdapterService extends CommandServiceStepSaga
 
     private static final String SAGA_NAME = "sagaBienvenidaCustomer";
     private static final int SAGA_STEP_NUMBER = 2;
-    private static final String TOPIC_FOR_ME = SagaOrchestratorPort.DO_OPERATION + "-" + SAGA_NAME + "-" + SAGA_STEP_NUMBER;
+    private static final String TOPIC_FOR_ME = SagaOrchestratorPort.DO_OPERATION + "-" + SAGA_NAME + "-"
+            + SAGA_STEP_NUMBER;
     private static final String GROUP_ID = "saga-step-group-diplomaconsumer-service-step-2";
+
+    protected DiplomaCommandRepository repository;
+
+    @Autowired
+    public DiplomaCommandStepSagaAdapterService(DiplomaCommandRepository dplomaCommandRepository) {
+        this.repository = dplomaCommandRepository;
+    }
+
+    protected GenericRepositoryPort<Diploma, Long> getRepository() {
+        return this.repository;
+    }
 
     @KafkaListener(topics = TOPIC_FOR_ME , groupId = GROUP_ID)
     public void listen(Event<?> event) {
@@ -84,8 +98,4 @@ public class DiplomaCommandStepSagaAdapterService extends CommandServiceStepSaga
         return customer;
     }
 
-    @Override
-    protected GenericRepositoryPort<Diploma, Long> getRepository() {
-        return this.repository;
-    }
 }

@@ -2,10 +2,13 @@ package com.mfc.backend.microregalos.domain.service;
 
 import com.mfc.backend.microregalos.domain.model.DiplomaWrapper;
 import com.mfc.backend.microregalos.domain.model.Regalo;
+import com.mfc.backend.microregalos.domain.repository.RegaloCommandRepository;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.output.adapter.CommandServiceStepSagaAdapter;
+import com.mfc.infra.output.port.GenericRepositoryPort;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.utils.ConversionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,16 @@ public abstract class RegaloCommandStepSagaAdapterService extends CommandService
     private static final String TOPIC_FOR_ME = SagaOrchestratorPort.DO_OPERATION + "-" + SAGA_NAME + "-" + SAGA_STEP_NUMBER;
     private static final String GROUP_ID = "saga-step-group-regaloconsumer-service-step-3";
 
+    protected RegaloCommandRepository repository;
+
+    @Autowired
+    public RegaloCommandStepSagaAdapterService(RegaloCommandRepository regaloCommandRepository) {
+        this.repository = regaloCommandRepository;
+    }
+
+    protected GenericRepositoryPort<Regalo, Long> getRepository() {
+        return this.repository;
+    }
 
     @KafkaListener(topics = TOPIC_FOR_ME , groupId = GROUP_ID)
     public void listen(Event<?> event) {
