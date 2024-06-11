@@ -71,10 +71,14 @@ public abstract class CommandServiceStepSagaAdapter<T, ID> extends CommandServic
             event.getSagaStepInfo().setStateOfOperation(Event.SAGA_OPE_SUCCESS);
         } catch (ConstraintViolationException exc) {
             event.getSagaStepInfo().setStateOfOperation(Event.SAGA_OPE_FAILED);
-            logger.error("doSagaOperation failed: Cause " + exc.getLocalizedMessage());
+            String msg = "doSagaOperation failed: Cause " + exc.getLocalizedMessage();
+            event.getSagaStepInfo().setErrorMsgOperation(msg);
+            logger.error(msg);
         } catch (Throwable exc) {
             event.getSagaStepInfo().setStateOfOperation(Event.SAGA_OPE_FAILED);
-            logger.error("doSagaOperation failed " + exc.getLocalizedMessage());
+            String msg = "doSagaOperation failed: Cause " + exc.getLocalizedMessage();
+            event.getSagaStepInfo().setErrorMsgOperation(msg);
+            logger.error(msg);
         } finally {
             event.getInnerEvent().setNewData(newdata);
         }
@@ -86,9 +90,11 @@ public abstract class CommandServiceStepSagaAdapter<T, ID> extends CommandServic
         try {
             newdata = this.doSagaCompensation(event);
             event.getSagaStepInfo().setStateOfCompensation(Event.SAGA_OPE_SUCCESS);
-        } catch (Throwable notExistException) {
+        } catch (Throwable exc) {
             event.getSagaStepInfo().setStateOfCompensation(Event.SAGA_OPE_FAILED);
-            logger.error("doSagaCompensation failed: Cause ", notExistException);
+            String msg = "doSagaOperation failed: Cause " + exc.getLocalizedMessage();
+            event.getSagaStepInfo().setErrorMsgCompensation(msg);
+            logger.error(msg);
         } finally {
             event.getInnerEvent().setNewData(newdata);
         }

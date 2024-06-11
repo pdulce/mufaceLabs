@@ -92,10 +92,14 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T> {
         }
     }
 
-    public String getLastStateOfTansactionInSaga(String saganame, String transaccId) {
+    public String[] getLastStateOfTansactionInSaga(String saganame, String transaccId) {
+        String[] msgAndArgs = new String[3];
         List<Object> objetos = this.eventStoreConsumer.findById(saganame, transaccId);
         if (objetos == null || objetos.isEmpty()) {
-            return ConstantMessages.ERROR_NOT_FOUND;
+            msgAndArgs[0] = ConstantMessages.ERROR_NOT_FOUND;
+            msgAndArgs[1] = "núm. transaction: " + transaccId + " in saga: " + saganame;
+            msgAndArgs[2] = "";
+            return msgAndArgs;
         }
         boolean failedSaga = false;
         boolean lastFinished = false;
@@ -108,26 +112,39 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T> {
                 lastFinished = true;
             }
         }
-        return getString(lastFinished, failedSaga, event);
+        return getMessageAndArgs(lastFinished, failedSaga, event);
     }
 
     /*** METODOS PRIVADOS ***/
 
-    private static String getString(boolean lastFinished, boolean failedSaga, Event event) {
-        String msgKey = ConstantMessages.DISTRIBUTED_FIN_STATE_OK;
+     /*
+    transacc_distruted_initiated=Transaction of saga {0} initiated with number {1}
+    saga_fin_ok=Saga with transaction number {0} finished sucessfully
+    saga_fin_ko=Saga with transaction number {0} finished with error; transaction not commited. Cause: {1}
+    saga_fin_running=Saga with transaction number {0} is already running
+     */
+
+    private static String[] getMessageAndArgs(boolean lastFinished, boolean failedSaga, Event event) {
+        String[] msgAndArgs = new String[2];
+        msgAndArgs[0] = ConstantMessages.DISTRIBUTED_FIN_STATE_OK;
+        msgAndArgs[1] = String.valueOf(event.getSagaStepInfo().getTransactionIdentifier());
         boolean running = !lastFinished && !failedSaga;
         if (running) {
             // revisamos si se trata de un caso de transacción compensada
             if (event != null && event.getSagaStepInfo().isDoCompensateOp() &&
                     event.getSagaStepInfo().getStateOfOperation() == Event.SAGA_OPE_SUCCESS) {
-                msgKey = ConstantMessages.DISTRIBUTED_FIN_STATE_KO;
+                msgAndArgs[0] = ConstantMessages.DISTRIBUTED_FIN_STATE_KO;
             } else {
-                msgKey = ConstantMessages.DISTRIBUTED_RUNNING;
+                msgAndArgs[0] = ConstantMessages.DISTRIBUTED_RUNNING;
             }
         } else if (failedSaga) {
-            msgKey = ConstantMessages.DISTRIBUTED_FIN_STATE_KO;
+            msgAndArgs[0] = ConstantMessages.DISTRIBUTED_FIN_STATE_KO;
         }
-        return msgKey;
+        msgAndArgs[2] = event.getSagaStepInfo().getErrorMsgOperation() == null ?
+                (event.getSagaStepInfo().getErrorMsgCompensation() == null ? "" :
+                        event.getSagaStepInfo().getErrorMsgCompensation()) :
+                event.getSagaStepInfo().getErrorMsgOperation();
+        return msgAndArgs;
     }
 
     private void continueNextStep(Event<?> event) {

@@ -52,15 +52,16 @@ public abstract class BaseRestController {
                 getLocale(CASTELLANO)) : message;
     }
 
+
     public String getSagaEstadoFinalizacion(@RequestParam @NotEmpty String saga,
                                             @RequestParam @NotEmpty String transaccionId) {
         logger.info("vemos si la saga finalizó la saga " + saga + " en su transacción number: " + transaccionId);
-        String messageKey = this.orchestratorManager.getLastStateOfTansactionInSaga(saga, transaccionId);
-        Object[] args = null;
-        if (messageKey.contentEquals(ConstantMessages.ERROR_NOT_FOUND)) {
-            args = new Object[]{"núm. transaction: " + transaccionId + " in saga: " + saga};
+        String[] messageKeyAndArgs = this.orchestratorManager.getLastStateOfTansactionInSaga(saga, transaccionId);
+        Object[] args = new Object[messageKeyAndArgs.length - 1];
+        for (int i = 1; i < messageKeyAndArgs.length; i++) {
+            args[i-1] = messageKeyAndArgs[i];
         }
-        return messageSource.getMessage(messageKey, args, getLocale(CASTELLANO));
+        return messageSource.getMessage(messageKeyAndArgs[0], args, getLocale(CASTELLANO));
     }
 
 }

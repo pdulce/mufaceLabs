@@ -14,6 +14,8 @@ public class SagaStepInfo implements Serializable {
     private int stateOfCompensation;
     private boolean doCompensateOp;
     private boolean lastStep;
+    private String errorMsgOperation;
+    private String errorMsgCompensation;
 
     private SagaStepInfo(){}
 
