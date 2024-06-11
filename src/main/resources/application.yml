@@ -6,7 +6,7 @@ arch:
     password:
       encoded: ewzqlzdstujochya
   eventbroker:
-    active: true
+    active: false
 
 spring:
   # command domain: 192.168.1.163

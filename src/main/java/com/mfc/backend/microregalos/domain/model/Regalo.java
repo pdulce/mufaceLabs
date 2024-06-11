@@ -1,6 +1,8 @@
 package com.mfc.backend.microregalos.domain.model;
 
+import com.mfc.infra.utils.ConstantMessages;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -23,6 +25,7 @@ public class Regalo {
     private String texto_tarjeta;
 
     @Column
+    @Min(value = 20,  message = "{" + ConstantMessages.MIN_VALUE_REQUIRED + "}")
     private BigDecimal valor_bono_regalo;
 
 

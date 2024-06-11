@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
-//@Service
-//@ConditionalOnProperty(name = "arch.eventbroker.active", havingValue = "true", matchIfMissing = false)
+@Service
+@ConditionalOnProperty(name = "arch.eventbroker.active", havingValue = "true", matchIfMissing = false)
 public abstract class RegaloCommandStepSagaAdapterService extends CommandServiceStepSagaAdapter<Regalo, Long> {
 
     private static final String SAGA_NAME = "sagaBienvenidaCustomer";

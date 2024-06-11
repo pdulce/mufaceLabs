@@ -4,15 +4,16 @@ import com.mfc.backend.microdiplomas.domain.model.CustomerWrapper;
 import com.mfc.backend.microdiplomas.domain.model.Diploma;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.output.adapter.CommandServiceStepSagaAdapter;
+import com.mfc.infra.output.port.GenericRepositoryPort;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.utils.ConversionUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-//@Service
-//@ConditionalOnProperty(name = "arch.eventbroker.active", havingValue = "true", matchIfMissing = false)
-public abstract class DiplomaCommandStepSagaAdapterService extends CommandServiceStepSagaAdapter<Diploma, Long> {
+@Service
+@ConditionalOnProperty(name = "arch.eventbroker.active", havingValue = "true", matchIfMissing = false)
+public class DiplomaCommandStepSagaAdapterService extends CommandServiceStepSagaAdapter<Diploma, Long> {
 
     private static final String SAGA_NAME = "sagaBienvenidaCustomer";
     private static final int SAGA_STEP_NUMBER = 2;
@@ -83,4 +84,8 @@ public abstract class DiplomaCommandStepSagaAdapterService extends CommandServic
         return customer;
     }
 
+    @Override
+    protected GenericRepositoryPort<Diploma, Long> getRepository() {
+        return this.repository;
+    }
 }
