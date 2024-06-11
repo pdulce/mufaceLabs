@@ -4,6 +4,8 @@ import com.mfc.backend.microclientes.domain.model.command.Customer;
 import com.mfc.infra.output.port.GenericRepositoryPort;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Esta clase la crearemos solo cuando necesite la capa de negocio de la aplicación nuevas operaciones
  * no disponibles desde la arquitectura, por ejemplo, consultas HQL persionalizas con JOINS etc,
@@ -13,5 +15,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CustomerCommandRepositoryPort extends GenericRepositoryPort<Customer, Long> {
 
+    // HQL
+
+    // metodos personalizados usando notación intrínseca de JPA
+    public List<Customer> findAllByCountryContains(String regexCountry);
 
 }

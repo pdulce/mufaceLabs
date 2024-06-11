@@ -5,4 +5,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface CustomerDocumentRepository extends MongoRepository<CustomerDocument, String> {
 
+    //implementar HQL
+
+
 }

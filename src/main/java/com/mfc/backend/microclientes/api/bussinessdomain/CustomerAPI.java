@@ -4,6 +4,7 @@ package com.mfc.backend.microclientes.api.bussinessdomain;
 import java.util.List;
 
 import com.mfc.backend.microclientes.domain.model.command.Customer;
+import com.mfc.backend.microclientes.domain.service.command.CustomerCommandServicePort;
 import com.mfc.infra.controller.BaseRestController;
 import com.mfc.infra.output.port.CommandServicePort;
 import jakarta.validation.constraints.NotNull;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerAPI extends BaseRestController {
 
     @Autowired
-    CommandServicePort<Customer, Long> customerCommandService;
+    CustomerCommandServicePort customerCommandService;
 
     @Override
     @GetMapping("saludar")
@@ -54,15 +55,18 @@ public class CustomerAPI extends BaseRestController {
         return this.customerCommandService.findAllByFieldvalue("name", name);
     }
 
-    @GetMapping(value = "allCustomersByCountry", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Customer> getAllCustomersByCountry(@RequestParam String country) {
-        return this.customerCommandService.findAllByFieldvalue("country", country);
-    }
-
     @GetMapping(value = "get", produces=MediaType.APPLICATION_JSON_VALUE)
     public Customer get(@RequestParam Long customerId) {
         return this.customerCommandService.findById(customerId);
     }
+
+
+    /** Invocación a un método personalizado */
+    @GetMapping(value = "allCustomersByCountry", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<Customer> getAllCustomersByCountry(@RequestParam String country) {
+        return this.customerCommandService.dameListaCustomersDePaises(country);
+    }
+
 
 
 }

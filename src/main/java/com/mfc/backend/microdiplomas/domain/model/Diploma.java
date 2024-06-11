@@ -1,6 +1,7 @@
 package com.mfc.backend.microdiplomas.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Entity

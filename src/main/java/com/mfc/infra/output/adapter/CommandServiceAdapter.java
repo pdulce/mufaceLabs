@@ -13,13 +13,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 
 @Transactional
-public class CommandServiceAdapter<T, ID> implements CommandServicePort<T, ID> {
+public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort<T, ID> {
     Logger logger = LoggerFactory.getLogger(CommandServiceAdapter.class);
     @Autowired
     EventBrokerProperties eventBrokerProperties;
@@ -27,8 +28,7 @@ public class CommandServiceAdapter<T, ID> implements CommandServicePort<T, ID> {
     @Autowired(required = false)
     CommandEventPublisherPort commandEventPublisherPort;
 
-    @Autowired
-    protected GenericRepositoryPort<T, ID> repository;
+    protected abstract GenericRepositoryPort<T, ID> getRepository();
 
     public final String getDocumentEntityClassname() {
         Class<T> entityClass = (Class<T>) ((ParameterizedType) getClass()
@@ -40,7 +40,7 @@ public class CommandServiceAdapter<T, ID> implements CommandServicePort<T, ID> {
     @SuppressWarnings("unchecked")
     @Override
     public T insert(T entity) {
-        T saved = this.repository.save(entity);
+        T saved = this.getRepository().save(entity);
         if (saved != null && eventBrokerProperties.isActive()) {
             /*** Mando el evento al bus para que los recojan los dos consumers:
              *  - consumer responsable del dominio de eventos que persiste en MongoDB (patrón Event-Sourcing)
@@ -59,13 +59,13 @@ public class CommandServiceAdapter<T, ID> implements CommandServicePort<T, ID> {
     @Override
     public T update(T entity) {
         ID id = (ID) ConversionUtils.convertToMap(entity).get("id");
-        if (!this.repository.findById(id).isPresent()) {
+        if (!this.getRepository().findById(id).isPresent()) {
             NotExistException e = new NotExistException();
             e.setMsgError("entity with id: " + String.valueOf(id) + " not found");
             RuntimeException exc = new RuntimeException(e);
             throw exc;
         }
-        T updated =  this.repository.save(entity);
+        T updated =  this.getRepository().save(entity);
         if (updated != null && eventBrokerProperties.isActive()) {
             Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
                     ConversionUtils.convertToMap(entity).get("id").toString(),
@@ -79,13 +79,13 @@ public class CommandServiceAdapter<T, ID> implements CommandServicePort<T, ID> {
     @Override
     public void delete(T entity) {
         ID id = (ID) ConversionUtils.convertToMap(entity).get("id");
-        if (!this.repository.findById(id).isPresent()) {
+        if (!this.getRepository().findById(id).isPresent()) {
             NotExistException e = new NotExistException();
             e.setMsgError("entity with id: " + String.valueOf(id) + " not found");
             RuntimeException exc = new RuntimeException(e);
             throw exc;
         }
-        this.repository.delete(entity);
+        this.getRepository().delete(entity);
         if (eventBrokerProperties.isActive()) {
             Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
                     ConversionUtils.convertToMap(entity).get("id").toString(),
@@ -117,7 +117,7 @@ public class CommandServiceAdapter<T, ID> implements CommandServicePort<T, ID> {
                     ConversionUtils.convertToMap(record).get("id").toString(),
                     Event.EVENT_TYPE_DELETE, record));
         });
-        this.repository.deleteAll();
+        this.getRepository().deleteAll();
         if (eventBrokerProperties.isActive()) {
             events.forEach((event) -> {
                 commandEventPublisherPort.publish(Event.EVENT_TOPIC, event);
@@ -128,8 +128,8 @@ public class CommandServiceAdapter<T, ID> implements CommandServicePort<T, ID> {
     @SuppressWarnings("unchecked")
     @Override
     public T findById(ID id) {
-        if (this.repository.findById(id).isPresent()) {
-           return this.repository.findById(id).get();
+        if (this.getRepository().findById(id).isPresent()) {
+           return this.getRepository().findById(id).get();
         }
         NotExistException e = new NotExistException();
         e.setMsgError("id: " + id);
@@ -140,7 +140,7 @@ public class CommandServiceAdapter<T, ID> implements CommandServicePort<T, ID> {
     @SuppressWarnings("unchecked")
     @Override
     public List<T> findAll() {
-        return this.repository.findAll().stream().toList();
+        return this.getRepository().findAll().stream().toList();
     }
 
     /** método generíco para buscar dentro de cualquier campo de un entidad T **/
@@ -157,7 +157,7 @@ public class CommandServiceAdapter<T, ID> implements CommandServicePort<T, ID> {
             Field field = entityClass.getDeclaredField(fieldName);
             field.setAccessible(true);
             field.set(instance, fieldValue);
-            return this.repository.findAll(Example.of(instance));
+            return this.getRepository().findAll(Example.of(instance));
         } catch (Throwable exc) {
             return null;
         }

@@ -14,7 +14,7 @@ import java.util.Locale;
 
 @RestController
 @RequestMapping(value = "customer")
-public class CustomerStepSagaAPI extends BaseRestController {
+public class CustomerIniciadorSagaAPI extends BaseRestController {
     @Autowired(required=false)
     SagaStepPort<Customer, Long> customerCommandStepSagaAdapter;
 

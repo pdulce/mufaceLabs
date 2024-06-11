@@ -10,9 +10,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-@Service
-@ConditionalOnProperty(name = "arch.eventbroker.active", havingValue = "true", matchIfMissing = false)
-public class DiplomaCommandStepSagaAdapterService extends CommandServiceStepSagaAdapter<Diploma, Long> {
+//@Service
+//@ConditionalOnProperty(name = "arch.eventbroker.active", havingValue = "true", matchIfMissing = false)
+public abstract class DiplomaCommandStepSagaAdapterService extends CommandServiceStepSagaAdapter<Diploma, Long> {
 
     private static final String SAGA_NAME = "sagaBienvenidaCustomer";
     private static final int SAGA_STEP_NUMBER = 2;
