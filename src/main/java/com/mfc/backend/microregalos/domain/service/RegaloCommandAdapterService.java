@@ -8,7 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RegaloCommandAdapterService extends CommandServiceAdapter<Regalo, Long> {
+public class RegaloCommandAdapterService extends CommandServiceAdapter<Regalo, Long>
+        implements RegaloCommandServicePort {
 
     protected RegaloCommandRepository repository;
 

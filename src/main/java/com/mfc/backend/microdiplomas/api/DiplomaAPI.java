@@ -1,8 +1,8 @@
 package com.mfc.backend.microdiplomas.api;
 
 import com.mfc.backend.microdiplomas.domain.model.Diploma;
+import com.mfc.backend.microdiplomas.domain.service.DiplomaServicePort;
 import com.mfc.infra.controller.BaseRestController;
-import com.mfc.infra.output.port.CommandServicePort;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -14,8 +14,7 @@ import java.util.List;
 @RequestMapping(value = "diploma")
 public class DiplomaAPI extends BaseRestController {
     @Autowired
-    CommandServicePort<Diploma, Long> diplomaServiceAdapter;
-
+    DiplomaServicePort diplomaServiceAdapter;
 
     @GetMapping(value = "allDiplomas", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Diploma> getAllDiplomas() {

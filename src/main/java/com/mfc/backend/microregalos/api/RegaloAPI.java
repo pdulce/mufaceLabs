@@ -1,8 +1,8 @@
 package com.mfc.backend.microregalos.api;
 
 import com.mfc.backend.microregalos.domain.model.Regalo;
+import com.mfc.backend.microregalos.domain.service.RegaloCommandServicePort;
 import com.mfc.infra.controller.BaseRestController;
-import com.mfc.infra.output.port.CommandServicePort;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping(value = "regalo")
 public class RegaloAPI extends BaseRestController {
     @Autowired
-    CommandServicePort<Regalo, Long> regaloCommandAdapter;
+    RegaloCommandServicePort regaloCommandAdapter;
 
 
     @GetMapping(value = "allRegalos", produces=MediaType.APPLICATION_JSON_VALUE)

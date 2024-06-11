@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DiplomaServiceAdapter extends CommandServiceAdapter<Diploma, Long> {
+public class DiplomaServiceAdapter extends CommandServiceAdapter<Diploma, Long> implements DiplomaServicePort {
 
     protected DiplomaCommandRepository repository;
 
