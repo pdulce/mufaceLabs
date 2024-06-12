@@ -16,7 +16,7 @@ import java.util.Locale;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "regalo")
+@RequestMapping(value = "auditorias")
 public class AuditoriasControllerAPI {
 
     Logger logger = LoggerFactory.getLogger(AuditoriasControllerAPI.class);
@@ -30,18 +30,18 @@ public class AuditoriasControllerAPI {
 
     /** ENDPOINTS QUE DAN ACCESO A LA INFORMACIÓN DE CUALQUIER AUDITORIA DE CUALQUIER APLICACION **/
 
-    @GetMapping(value = "transacciones-simples/{applicationId}", produces= MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "{applicationId}", produces= MediaType.APPLICATION_JSON_VALUE)
     public List<Map<String, List<Object>>> getAllFromEventStoreCustomers(@PathVariable @NotEmpty String applicationId) {
         return this.eventStoreConsumerAdapter.findAllByApp(applicationId);
     }
 
-    @GetMapping(value = "transacciones-simples/{applicationId}/{almacen}", produces= MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "{applicationId}/{almacen}", produces= MediaType.APPLICATION_JSON_VALUE)
     public Map<String, List<Object>> getAllFromEventStoreCustomers(@PathVariable @NotEmpty String applicationId,
                                                                    @PathVariable @NotEmpty String almacen) {
         return this.eventStoreConsumerAdapter.findAllByAppAndStore(applicationId, almacen);
     }
 
-    @GetMapping(value = "transacciones-simples/{applicationId}/{almacen}/{idAgregado}",
+    @GetMapping(value = "{applicationId}/{almacen}/{idAgregado}",
             produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Object> getAllEventsFromIdFromRedis(@PathVariable @NotEmpty String applicationId,
                                                     @PathVariable @NotEmpty String almacen,

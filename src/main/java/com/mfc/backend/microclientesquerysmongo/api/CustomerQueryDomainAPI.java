@@ -16,21 +16,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "customerquery")
+@RequestMapping(value = "customersquery")
 public class CustomerQueryDomainAPI extends BaseRestController {
     @Autowired
     QueriesOptimizedUseCase queriesOptimizedUseCase;
 
     /*** CONSULTAS CONTRA EL DOMINIO DE QUERIES ***/
 
-    @GetMapping(value = "getFromQueryStoreMongoById", produces=MediaType.APPLICATION_JSON_VALUE)
-    public CustomerDocumentDTO getFromQueryStoreMongoById(@RequestParam String customerId) {
+    @GetMapping(value = "get", produces=MediaType.APPLICATION_JSON_VALUE)
+    public CustomerDocumentDTO get(@RequestParam String customerId) {
         CustomerDocument customerDocument = this.queriesOptimizedUseCase.ejecutar(customerId);
         return new CustomerDocumentDTO(customerDocument);
     }
 
-    @GetMapping(value = "getAllFromQueryStoreMongo", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<CustomerDocumentDTO> getAllFromQueryStoreMongo() {
+    @GetMapping(value = "getAll", produces=MediaType.APPLICATION_JSON_VALUE)
+    public List<CustomerDocumentDTO> getAll() {
         List<CustomerDocumentDTO> lista = new ArrayList<>();
         this.queriesOptimizedUseCase.ejecutar().forEach((customerDocument -> {
             lista.add(new CustomerDocumentDTO(customerDocument));

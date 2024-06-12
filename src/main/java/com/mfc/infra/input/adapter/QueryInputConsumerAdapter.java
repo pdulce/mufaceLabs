@@ -7,6 +7,7 @@ import com.mfc.infra.utils.ConversionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.lang.reflect.ParameterizedType;
@@ -18,11 +19,18 @@ public abstract class QueryInputConsumerAdapter<T> implements QueryInputPort<T> 
     Logger logger = LoggerFactory.getLogger(QueryInputConsumerAdapter.class);
 
     @Autowired
+    private MongoMappingContext mongoMappingContext;
+    @Autowired
     ConfigProperties configProperties;
     @Autowired
     MongoRepository<T, String> repository;
 
     public abstract void listen(Event<?> eventArch);
+
+    public String getCollectionName(Class<?> documentClass) {
+        return mongoMappingContext.getPersistentEntity(documentClass) == null ? "unknown" :
+                mongoMappingContext.getPersistentEntity(documentClass).getCollection();
+    }
 
     public void procesarEvento(Event<?> event) {
         if (!configProperties.isEventBrokerActive()) {
@@ -32,18 +40,20 @@ public abstract class QueryInputConsumerAdapter<T> implements QueryInputPort<T> 
         Class<T> entityClass = (Class<T>) ((ParameterizedType) getClass()
                 .getGenericSuperclass())
                 .getActualTypeArguments()[0];
-        if (event.getContextInfo() == null || event.getContextInfo().getAlmacen() == null
-                || !entityClass.getSimpleName().equals(event.getContextInfo().getAlmacen())) {
-            //dejo pasar este mensaje porque no es para este consumidor
-            return;
-        }
 
-        if (event.getInnerEvent().getTypeOfEvent().contentEquals(Event.EVENT_TYPE_CREATE)
-                || event.getInnerEvent().getTypeOfEvent().contentEquals(Event.EVENT_TYPE_UPDATE)) {
-            saveReg((LinkedHashMap) event.getInnerEvent().getData(), entityClass);
-        } else if (event.getInnerEvent().getTypeOfEvent().contentEquals(Event.EVENT_TYPE_DELETE)) {
-            this.deleteReg(event.getId());
-        }
+        String collectionName = getCollectionName(entityClass);
+
+        if (event.getContextInfo() != null
+                && configProperties.getApplicationId().contentEquals(event.getContextInfo().getApplicationId())
+                && event.getContextInfo().getAlmacen() != null
+                && collectionName.equals(event.getContextInfo().getAlmacen())) {
+            if (event.getInnerEvent().getTypeOfEvent().contentEquals(Event.EVENT_TYPE_CREATE)
+                    || event.getInnerEvent().getTypeOfEvent().contentEquals(Event.EVENT_TYPE_UPDATE)) {
+                saveReg((LinkedHashMap) event.getInnerEvent().getData(), entityClass);
+            } else if (event.getInnerEvent().getTypeOfEvent().contentEquals(Event.EVENT_TYPE_DELETE)) {
+                this.deleteReg(event.getId());
+            }
+        } // else::  //dejo pasar este mensaje porque no es para este consumidor
     }
 
     @Override

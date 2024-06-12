@@ -33,7 +33,7 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
         Class<T> entityClass = (Class<T>) ((ParameterizedType) getClass()
                 .getGenericSuperclass())
                 .getActualTypeArguments()[0];
-        return entityClass.getSimpleName();
+        return entityClass.getSimpleName().toLowerCase();
     }
 
     @SuppressWarnings("unchecked")

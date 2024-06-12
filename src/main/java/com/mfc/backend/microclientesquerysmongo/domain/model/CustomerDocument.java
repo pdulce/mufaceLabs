@@ -8,7 +8,7 @@ import java.util.List;
 
 
 @Data
-@Document(collection = "customers")
+@Document(collection = "customer")
 public class CustomerDocument {
 
     @Id
