@@ -39,8 +39,9 @@ public class SecurityConfig {
     }
 
     private static final AntPathRequestMatcher[] WHITELIST = {
+            AntPathRequestMatcher.antMatcher("/auditorias/**"),
             AntPathRequestMatcher.antMatcher("/customer/**"),
-            AntPathRequestMatcher.antMatcher("/customerquery/**"),
+            AntPathRequestMatcher.antMatcher("/customersquery/**"),
             AntPathRequestMatcher.antMatcher("/diploma/**"),
             AntPathRequestMatcher.antMatcher("/regalo/**"),
             AntPathRequestMatcher.antMatcher("/events/**"),
