@@ -25,7 +25,7 @@ public abstract class QueryInputConsumerAdapter<T> implements QueryInputPort<T> 
     public abstract void listen(Event<?> eventArch);
 
     public void procesarEvento(Event<?> event) {
-        if (!applicationDefinedProperties.isActive()) {
+        if (!applicationDefinedProperties.isEventbrokerActive()) {
             logger.error("Debe tener activa la configuración de uso de mensajería en la arquitectura");
             return;
         }

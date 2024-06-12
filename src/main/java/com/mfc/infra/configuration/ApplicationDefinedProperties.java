@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class ApplicationDefinedProperties {
 
     @Value("${arch.eventbroker.active}")
-    private boolean active;
+    private boolean eventbrokerActive;
 
     @Value("${arch.application-id}")
     private String applicationId;

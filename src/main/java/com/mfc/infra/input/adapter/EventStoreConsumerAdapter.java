@@ -36,7 +36,7 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
     }
 
     public void procesarEvento(Event<?> eventArch) {
-        if (!applicationDefinedProperties.isActive()) {
+        if (!applicationDefinedProperties.isEventbrokerActive()) {
             logger.error("Debe tener activa la configuración de uso de mensajería en la arquitectura");
             return;
         }
