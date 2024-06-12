@@ -1,6 +1,6 @@
 package com.mfc.infra.input.adapter;
 
-import com.mfc.infra.configuration.ApplicationDefinedProperties;
+import com.mfc.infra.configuration.ConfigProperties;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.input.port.EventStoreInputPort;
 import com.mfc.infra.utils.ConversionUtils;
@@ -24,7 +24,7 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
     Logger logger = LoggerFactory.getLogger(EventStoreConsumerAdapter.class);
 
     @Autowired
-    ApplicationDefinedProperties applicationDefinedProperties;
+    ConfigProperties configProperties;
     protected static final String GROUP_ID = "event-adapter";
 
     @Autowired
@@ -36,7 +36,7 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
     }
 
     public void procesarEvento(Event<?> eventArch) {
-        if (!applicationDefinedProperties.isEventbrokerActive()) {
+        if (!configProperties.isEventBrokerActive()) {
             logger.error("Debe tener activa la configuración de uso de mensajería en la arquitectura");
             return;
         }

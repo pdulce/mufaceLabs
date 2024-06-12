@@ -3,11 +3,10 @@ server:
 
 arch:
   application-id: application-Id-sample
+  event-broker-active: true
   mail:
     password:
       encoded: ewzqlzdstujochya
-  eventbroker:
-    active: true
 
 spring:
 

@@ -1,6 +1,6 @@
 package com.mfc.infra.output.adapter;
 
-import com.mfc.infra.configuration.ApplicationDefinedProperties;
+import com.mfc.infra.configuration.ConfigProperties;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.exceptions.NotExistException;
 import com.mfc.infra.output.port.CommandEventPublisherPort;
@@ -22,7 +22,7 @@ import java.util.List;
 public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort<T, ID> {
     Logger logger = LoggerFactory.getLogger(CommandServiceAdapter.class);
     @Autowired
-    ApplicationDefinedProperties applicationDefinedProperties;
+    ConfigProperties configProperties;
 
     @Autowired(required = false)
     CommandEventPublisherPort commandEventPublisherPort;
@@ -41,13 +41,13 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
     @Transactional
     public T crear(T entity) {
         T saved = this.getRepository().save(entity);
-        if (saved != null && applicationDefinedProperties.isEventbrokerActive()) {
+        if (saved != null && configProperties.isEventBrokerActive()) {
             /*** Mando el evento al bus para que los recojan los dos consumers:
              *  - consumer responsable del dominio de eventos que persiste en MongoDB (patrón Event-Sourcing)
              *  - consumer responsable del dominio de consultas que persiste en Redis (patrón CQRS)
              */
             Event eventArch = new Event(getDocumentEntityClassname(), "author",
-                    applicationDefinedProperties.getApplicationId(),
+                    configProperties.getApplicationId(),
                     ConversionUtils.convertToMap(saved).get("id").toString(),
                     Event.EVENT_TYPE_CREATE, saved);
             commandEventPublisherPort.publish(Event.EVENT_TOPIC, eventArch);
@@ -68,9 +68,9 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
             throw exc;
         }
         T updated =  this.getRepository().save(entity);
-        if (updated != null && applicationDefinedProperties.isEventbrokerActive()) {
+        if (updated != null && configProperties.isEventBrokerActive()) {
             Event eventArch = new Event(getDocumentEntityClassname(), "author",
-                    applicationDefinedProperties.getApplicationId(),
+                    configProperties.getApplicationId(),
                     ConversionUtils.convertToMap(entity).get("id").toString(),
                     Event.EVENT_TYPE_UPDATE, updated);
             commandEventPublisherPort.publish(Event.EVENT_TOPIC, eventArch);
@@ -90,9 +90,9 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
             throw exc;
         }
         this.getRepository().delete(entity);
-        if (applicationDefinedProperties.isEventbrokerActive()) {
+        if (configProperties.isEventBrokerActive()) {
             Event eventArch = new Event(getDocumentEntityClassname(), "author",
-                    applicationDefinedProperties.getApplicationId(),
+                    configProperties.getApplicationId(),
                     ConversionUtils.convertToMap(entity).get("id").toString(),
                     Event.EVENT_TYPE_DELETE, entity);
             commandEventPublisherPort.publish(Event.EVENT_TOPIC, eventArch);
@@ -105,9 +105,9 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
     public void borrar(List<T> entities) {
         entities.forEach((record) -> {
             this.borrar(record);
-            if (applicationDefinedProperties.isEventbrokerActive()) {
+            if (configProperties.isEventBrokerActive()) {
                 Event eventArch = new Event(getDocumentEntityClassname(), "author",
-                        applicationDefinedProperties.getApplicationId(),
+                        configProperties.getApplicationId(),
                         ConversionUtils.convertToMap(record).get("id").toString(),
                         Event.EVENT_TYPE_DELETE, record);
                 commandEventPublisherPort.publish(Event.EVENT_TOPIC, eventArch);
@@ -122,12 +122,12 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
         List<Event> events = new ArrayList<>();
         buscar().forEach((record) -> {
             events.add(new Event(getDocumentEntityClassname(), "author",
-                    applicationDefinedProperties.getApplicationId(),
+                    configProperties.getApplicationId(),
                     ConversionUtils.convertToMap(record).get("id").toString(),
                     Event.EVENT_TYPE_DELETE, record));
         });
         this.getRepository().deleteAll();
-        if (applicationDefinedProperties.isEventbrokerActive()) {
+        if (configProperties.isEventBrokerActive()) {
             events.forEach((event) -> {
                 commandEventPublisherPort.publish(Event.EVENT_TOPIC, event);
             });
