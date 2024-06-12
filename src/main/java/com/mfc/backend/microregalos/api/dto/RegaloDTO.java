@@ -22,6 +22,7 @@ public class RegaloDTO {
 
     public RegaloDTO(Regalo regalo) {
         this.id = regalo.getId();
+        this.customerid = regalo.getCustomerid();
         this.color_caja = regalo.getColor_caja();
         this.texto_tarjeta = regalo.getTexto_tarjeta();
         this.valor_bono_regalo = regalo.getValor_bono_regalo();

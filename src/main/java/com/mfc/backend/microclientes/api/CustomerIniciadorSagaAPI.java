@@ -19,10 +19,4 @@ public class CustomerIniciadorSagaAPI extends BaseRestController {
         return creacionCustomerUseCase.ejecutar(this.orchestratorManager, customerDTO, this.messageSource);
     }
 
-    @GetMapping(value = "getTransactionFinalState")
-    public String getSagaEstadoFinalizacion(@RequestParam String saga, @RequestParam String transaccionId) {
-        return super.getSagaEstadoFinalizacion("application-Id", saga, transaccionId);
-    }
-
-
 }

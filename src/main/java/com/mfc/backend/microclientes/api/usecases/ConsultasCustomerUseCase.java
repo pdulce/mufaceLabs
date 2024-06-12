@@ -16,32 +16,19 @@ public class ConsultasCustomerUseCase {
     CustomerCommandAdapterService customerCommandAdapterService;
 
     public List<CustomerDTO> ejecutar(){
-        List<CustomerDTO> customers = new ArrayList<>();
-        this.customerCommandAdapterService.buscar().forEach((customer -> {
-            customers.add(new CustomerDTO(customer));
-        }));
-        return customers;
+        return this.customerCommandAdapterService.consultarTodosLosClientes();
     }
 
-    public CustomerDTO ejecutar(Long id){
-
-        return new CustomerDTO(this.customerCommandAdapterService.buscarPorId(id));
+    public CustomerDTO consultarPorIdCliente(Long id){
+        return this.customerCommandAdapterService.consultarPorIdCliente(id);
     }
 
     public List<CustomerDTO> ejecutar(String name){
-        List<CustomerDTO> customers = new ArrayList<>();
-        this.customerCommandAdapterService.buscarPorCampoValor("name", name).forEach((customer -> {
-            customers.add(new CustomerDTO(customer));
-        }));
-        return customers;
+        return this.customerCommandAdapterService.buscarPorNombreCliente(name);
     }
 
-    public List<CustomerDTO> dameListaCustomersDePaises(String prefixpais){
-        List<CustomerDTO> customers = new ArrayList<>();
-        this.customerCommandAdapterService.dameListaCustomersDePaises(prefixpais).forEach((customer -> {
-            customers.add(new CustomerDTO(customer));
-        }));
-        return customers;
+    public List<CustomerDTO> dameListaCustomersDePaises(String prefixpais) {
+        return this.customerCommandAdapterService.dameListaCustomersDePaises(prefixpais);
     }
 
 
