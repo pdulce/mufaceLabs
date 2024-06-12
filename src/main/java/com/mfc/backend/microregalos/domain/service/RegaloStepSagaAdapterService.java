@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 
 @Service
 @ConditionalOnProperty(name = "arch.eventbroker.active", havingValue = "true", matchIfMissing = false)
-public class RegaloCommandStepSagaAdapterService extends CommandServiceStepSagaAdapter<Regalo, Long> {
+public class RegaloStepSagaAdapterService extends CommandServiceStepSagaAdapter<Regalo, Long> {
 
     private static final String SAGA_NAME = "sagaBienvenidaCustomer";
     private static final int SAGA_STEP_NUMBER = 3;
@@ -28,7 +28,7 @@ public class RegaloCommandStepSagaAdapterService extends CommandServiceStepSagaA
     protected RegaloCommandRepository repository;
 
     @Autowired
-    public RegaloCommandStepSagaAdapterService(RegaloCommandRepository regaloCommandRepository) {
+    public RegaloStepSagaAdapterService(RegaloCommandRepository regaloCommandRepository) {
         this.repository = regaloCommandRepository;
     }
 

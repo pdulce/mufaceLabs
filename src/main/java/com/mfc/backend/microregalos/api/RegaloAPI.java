@@ -1,8 +1,10 @@
 package com.mfc.backend.microregalos.api;
 
 import com.mfc.backend.microregalos.api.dto.RegaloDTO;
+import com.mfc.backend.microregalos.api.usecases.ActualizarRegaloUseCase;
+import com.mfc.backend.microregalos.api.usecases.BorrarTodosLosRegalosUseCase;
+import com.mfc.backend.microregalos.api.usecases.ConsultasRegalosUseCase;
 import com.mfc.backend.microregalos.domain.model.Regalo;
-import com.mfc.backend.microregalos.domain.service.RegaloCommandServicePort;
 import com.mfc.infra.controller.BaseRestController;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +18,17 @@ import java.util.List;
 @RequestMapping(value = "regalo")
 public class RegaloAPI extends BaseRestController {
     @Autowired
-    RegaloCommandServicePort regaloCommandAdapter;
+    ActualizarRegaloUseCase actualizarRegaloUseCase;
+    @Autowired
+    BorrarTodosLosRegalosUseCase borrarTodosLosRegalosUseCase;
+    @Autowired
+    ConsultasRegalosUseCase consultasRegalosUseCase;
 
 
     @GetMapping(value = "allRegalos", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<RegaloDTO> getAllRegalos() {
         List<RegaloDTO> regalos = new ArrayList<>();
-        this.regaloCommandAdapter.findAll().forEach((regalo -> {
+        this.consultasRegalosUseCase.ejecutar().forEach((regalo -> {
             regalos.add(new RegaloDTO(regalo));
         }));
         return regalos;
@@ -32,7 +38,7 @@ public class RegaloAPI extends BaseRestController {
     @GetMapping(value = "allRegalosByCustomerId", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<RegaloDTO> getAllRegalosByCustomerId(@RequestParam Long customerid) {
         List<RegaloDTO> regalos = new ArrayList<>();
-        this.regaloCommandAdapter.findAllByFieldvalue("customerid", customerid).forEach((regalo -> {
+        this.consultasRegalosUseCase.ejecutar(customerid).forEach((regalo -> {
             regalos.add(new RegaloDTO(regalo));
         }));
         return regalos;
@@ -41,12 +47,12 @@ public class RegaloAPI extends BaseRestController {
     @PutMapping(produces=MediaType.APPLICATION_JSON_VALUE)
     public RegaloDTO update(@RequestBody @NotNull RegaloDTO regaloDTO) {
         Regalo regalo = new Regalo(regaloDTO);
-        return new RegaloDTO(this.regaloCommandAdapter.update(regalo));
+        return new RegaloDTO(this.actualizarRegaloUseCase.ejecutar(regalo));
     }
 
     @DeleteMapping(value = "deleteAll", produces=MediaType.APPLICATION_JSON_VALUE)
     public void deleteAll() {
-        this.regaloCommandAdapter.deleteAll();
+        this.borrarTodosLosRegalosUseCase.ejecutar();
     }
 
 }

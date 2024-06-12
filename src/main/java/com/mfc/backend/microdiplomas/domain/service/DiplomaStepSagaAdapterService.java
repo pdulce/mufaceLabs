@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @ConditionalOnProperty(name = "arch.eventbroker.active", havingValue = "true", matchIfMissing = false)
-public class DiplomaCommandStepSagaAdapterService extends CommandServiceStepSagaAdapter<Diploma, Long> {
+public class DiplomaStepSagaAdapterService extends CommandServiceStepSagaAdapter<Diploma, Long> {
 
     private static final String SAGA_NAME = "sagaBienvenidaCustomer";
     private static final int SAGA_STEP_NUMBER = 2;
@@ -26,7 +26,7 @@ public class DiplomaCommandStepSagaAdapterService extends CommandServiceStepSaga
     protected DiplomaCommandRepository repository;
 
     @Autowired
-    public DiplomaCommandStepSagaAdapterService(DiplomaCommandRepository dplomaCommandRepository) {
+    public DiplomaStepSagaAdapterService(DiplomaCommandRepository dplomaCommandRepository) {
         this.repository = dplomaCommandRepository;
     }
 
