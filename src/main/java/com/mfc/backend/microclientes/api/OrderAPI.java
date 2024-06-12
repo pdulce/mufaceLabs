@@ -19,10 +19,7 @@ public class OrderAPI extends BaseRestController {
 
     @PostMapping(value = "create", produces=MediaType.APPLICATION_JSON_VALUE)
     public CustomerOrderDTO create(@PathVariable @NotNull CustomerOrderDTO customerOrderDTO) {
-        CustomerOrder customerOrder = new CustomerOrder(customerOrderDTO);
-        CustomerOrderDTO customerOrderDtoCreated =
-                new CustomerOrderDTO(this.crearPedidoUseCase.ejecutar(customerOrder));
-        return customerOrderDtoCreated;
+        return this.crearPedidoUseCase.ejecutar(customerOrderDTO);
     }
     
 }
