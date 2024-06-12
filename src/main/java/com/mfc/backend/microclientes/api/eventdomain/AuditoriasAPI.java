@@ -10,7 +10,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "events")
-public class EventControllerAPI extends BaseRestController {
+public class AuditoriasAPI extends BaseRestController {
 
 
     /*** CONSULTAS CONTRA EL DOMINIO DE EVENTOS ***/

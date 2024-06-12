@@ -1,8 +1,10 @@
 package com.mfc.backend.microdiplomas.api;
 
 import com.mfc.backend.microdiplomas.api.dto.DiplomaDTO;
+import com.mfc.backend.microdiplomas.api.usecases.ActualizarDiplomaUseCase;
+import com.mfc.backend.microdiplomas.api.usecases.BorrarTodosLosDiplomasUseCase;
+import com.mfc.backend.microdiplomas.api.usecases.ConsultasDiplomasUseCase;
 import com.mfc.backend.microdiplomas.domain.model.Diploma;
-import com.mfc.backend.microdiplomas.domain.service.DiplomaServicePort;
 import com.mfc.infra.controller.BaseRestController;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +18,16 @@ import java.util.List;
 @RequestMapping(value = "diploma")
 public class DiplomaAPI extends BaseRestController {
     @Autowired
-    DiplomaServicePort diplomaServiceAdapter;
+    ConsultasDiplomasUseCase consultasDiplomasUseCase;
+    @Autowired
+    BorrarTodosLosDiplomasUseCase borrarTodosLosDiplomasUseCase;
+    @Autowired
+    ActualizarDiplomaUseCase actualizarDiplomaUseCase;
 
     @GetMapping(value = "allDiplomas", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<DiplomaDTO> getAllDiplomas() {
         List<DiplomaDTO> diplomas = new ArrayList<>();
-        this.diplomaServiceAdapter.findAll().forEach((diploma -> {
+        this.consultasDiplomasUseCase.ejecutar().forEach((diploma -> {
             diplomas.add(new DiplomaDTO(diploma));
         }));
         return diplomas;
@@ -31,7 +37,7 @@ public class DiplomaAPI extends BaseRestController {
     @GetMapping(value = "allDiplomasByCustomerName", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<DiplomaDTO> getAllDiplomasByCustomerName(@RequestParam String name) {
         List<DiplomaDTO> diplomas = new ArrayList<>();
-        this.diplomaServiceAdapter.findAllByFieldvalue("name", name).forEach((diploma -> {
+        this.consultasDiplomasUseCase.ejecutar(name).forEach((diploma -> {
             diplomas.add(new DiplomaDTO(diploma));
         }));
         return diplomas;
@@ -40,7 +46,7 @@ public class DiplomaAPI extends BaseRestController {
     @GetMapping(value = "allDiplomasByCustomerID", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<DiplomaDTO> getAllDiplomasByCustomerID(@RequestParam Long customerid) {
         List<DiplomaDTO> diplomas = new ArrayList<>();
-        this.diplomaServiceAdapter.findAllByFieldvalue("customerid", customerid).forEach((diploma -> {
+        this.consultasDiplomasUseCase.ejecutar(customerid).forEach((diploma -> {
             diplomas.add(new DiplomaDTO(diploma));
         }));
         return diplomas;
@@ -49,12 +55,12 @@ public class DiplomaAPI extends BaseRestController {
     @PutMapping(produces=MediaType.APPLICATION_JSON_VALUE)
     public DiplomaDTO update(@RequestBody @NotNull DiplomaDTO diplomaDTO) {
         Diploma diploma = new Diploma(diplomaDTO);
-        return new DiplomaDTO(diplomaServiceAdapter.update(diploma));
+        return new DiplomaDTO(this.actualizarDiplomaUseCase.ejecutar(diploma));
     }
 
     @DeleteMapping(value = "deleteAll", produces=MediaType.APPLICATION_JSON_VALUE)
     public void deleteAll() {
-        this.diplomaServiceAdapter.deleteAll();
+        this.borrarTodosLosDiplomasUseCase.ejecutar();
     }
 
     /*** **/
@@ -62,7 +68,7 @@ public class DiplomaAPI extends BaseRestController {
     @GetMapping(value = "getDiplomasDeLaRegionProvenza", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<DiplomaDTO> getDiplomasDeLaRegionProvenza() {
         List<DiplomaDTO> diplomas = new ArrayList<>();
-        this.diplomaServiceAdapter.getDiplomasDeLaRegionProvenza().forEach((diploma -> {
+        this.consultasDiplomasUseCase.getDiplomasDeLaRegionProvenza().forEach((diploma -> {
             diplomas.add(new DiplomaDTO(diploma));
         }));
         return diplomas;

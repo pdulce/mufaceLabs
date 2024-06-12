@@ -15,8 +15,17 @@ public class ConsultasDiplomasUseCase {
         return diplomaCommandServicePort.findAllByFieldvalue("idcustomer", customerId);
     }
 
+    public List<Diploma> ejecutar(String name) {
+        return diplomaCommandServicePort.findAllByFieldvalue("name", name);
+    }
+
     public List<Diploma> ejecutar() {
         return diplomaCommandServicePort.findAll();
     }
+
+    public List<Diploma> getDiplomasDeLaRegionProvenza() {
+        return diplomaCommandServicePort.getDiplomasDeLaRegionProvenza();
+    }
+
 
 }

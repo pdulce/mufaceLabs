@@ -39,6 +39,7 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
 
     @SuppressWarnings("unchecked")
     @Override
+    @Transactional
     public T insert(T entity) {
         T saved = this.getRepository().save(entity);
         if (saved != null && eventBrokerProperties.isActive()) {
@@ -57,6 +58,7 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
 
     @SuppressWarnings("unchecked")
     @Override
+    @Transactional
     public T update(T entity) {
         ID id = (ID) ConversionUtils.convertToMap(entity).get("id");
         if (!this.getRepository().findById(id).isPresent()) {
@@ -77,6 +79,7 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
 
     @SuppressWarnings("unchecked")
     @Override
+    @Transactional
     public void delete(T entity) {
         ID id = (ID) ConversionUtils.convertToMap(entity).get("id");
         if (!this.getRepository().findById(id).isPresent()) {
@@ -96,6 +99,7 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
 
     @SuppressWarnings("unchecked")
     @Override
+    @Transactional
     public void deleteAllList(List<T> entities) {
         entities.forEach((record) -> {
             this.delete(record);
@@ -110,6 +114,7 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
 
     @SuppressWarnings("unchecked")
     @Override
+    @Transactional
     public void deleteAll() {
         List<Event> events = new ArrayList<>();
         findAll().forEach((record) -> {

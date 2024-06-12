@@ -1,13 +1,15 @@
-package com.mfc.backend.microclientes.api.bussinessdomain;
+package com.mfc.backend.microclientes.api;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.mfc.backend.microclientes.api.dto.CustomerDTO;
+import com.mfc.backend.microclientes.api.usecases.BorrarCustomerUseCase;
+import com.mfc.backend.microclientes.api.usecases.ConsultasCustomerUseCase;
 import com.mfc.backend.microclientes.domain.model.command.Customer;
-import com.mfc.backend.microclientes.domain.service.command.CustomerCommandServicePort;
 import com.mfc.infra.controller.BaseRestController;
+import com.mfc.backend.microclientes.api.usecases.ActualizarCustomerUseCase;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -19,7 +21,13 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerAPI extends BaseRestController {
 
     @Autowired
-    CustomerCommandServicePort customerCommandService;
+    ActualizarCustomerUseCase actualizarCustomerUseCase;
+
+    @Autowired
+    BorrarCustomerUseCase borrarCustomerUseCase;
+
+    @Autowired
+    ConsultasCustomerUseCase consultasCustomerUseCase;
 
     @Override
     @GetMapping("saludar")
@@ -31,30 +39,28 @@ public class CustomerAPI extends BaseRestController {
     @PutMapping(produces=MediaType.APPLICATION_JSON_VALUE)
     public CustomerDTO update(@RequestBody @NotNull CustomerDTO customerDTO) {
         Customer customer = new Customer(customerDTO);
-        this.customerCommandService.update(customer);
-        CustomerDTO customerDTOUpdated = new CustomerDTO(customer);
-        return customerDTOUpdated;
+        return new CustomerDTO(actualizarCustomerUseCase.ejecutar(customer));
     }
 
     @DeleteMapping(produces=MediaType.APPLICATION_JSON_VALUE)
     public void deleteById(@RequestParam Long id) {
         if (id != null) {
-            Customer customer = this.customerCommandService.findById(id);
-            this.customerCommandService.delete(customer);
+            Customer customer = this.consultasCustomerUseCase.ejecutar(id);
+            this.borrarCustomerUseCase.ejecutar(customer);
         } else {
-            this.customerCommandService.deleteAll();
+            this.borrarCustomerUseCase.ejecutar();
         }
     }
 
     @DeleteMapping(value = "deleteAll")
     public void deleteAll() {
-        this.customerCommandService.deleteAll();
+        this.borrarCustomerUseCase.ejecutar();
     }
 
     @GetMapping(value = "allCustomers", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<CustomerDTO> getAllCustomers() {
         List<CustomerDTO> customers = new ArrayList<>();
-        this.customerCommandService.findAll().forEach((customer -> {
+        this.consultasCustomerUseCase.ejecutar().forEach((customer -> {
             customers.add(new CustomerDTO(customer));
         }));
         return customers;
@@ -63,7 +69,7 @@ public class CustomerAPI extends BaseRestController {
     @GetMapping(value = "allCustomersByName", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<CustomerDTO> getAllCustomersByName(@RequestParam String name) {
         List<CustomerDTO> customers = new ArrayList<>();
-        this.customerCommandService.findAllByFieldvalue("name", name).forEach((customer -> {
+        this.consultasCustomerUseCase.ejecutar(name).forEach((customer -> {
             customers.add(new CustomerDTO(customer));
         }));
         return customers;
@@ -71,7 +77,7 @@ public class CustomerAPI extends BaseRestController {
 
     @GetMapping(value = "get", produces=MediaType.APPLICATION_JSON_VALUE)
     public CustomerDTO get(@RequestParam Long customerId) {
-        Customer customer = this.customerCommandService.findById(customerId);
+        Customer customer = this.consultasCustomerUseCase.ejecutar(customerId);
         return new CustomerDTO(customer);
     }
 
@@ -80,7 +86,7 @@ public class CustomerAPI extends BaseRestController {
     @GetMapping(value = "allCustomersByCountry", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<CustomerDTO> getAllCustomersByCountry(@RequestParam String country) {
         List<CustomerDTO> customers = new ArrayList<>();
-        this.customerCommandService.dameListaCustomersDePaises(country).forEach((customer -> {
+        this.consultasCustomerUseCase.dameListaCustomersDePaises(country).forEach((customer -> {
             customers.add(new CustomerDTO(customer));
         }));
         return customers;
