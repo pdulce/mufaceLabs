@@ -63,20 +63,20 @@ public abstract class BaseRestController {
 
     /** ENDPOINTS QUE DAN ACCESO A LA INFORMACIÓN DE CUALQUIER AUDITORIA DE CUALQUIER APLICACION **/
 
-    @GetMapping(value = "auditorias/{applicationId}", produces= MediaType.APPLICATION_JSON_VALUE)
+    //@GetMapping(value = "auditorias/{applicationId}", produces= MediaType.APPLICATION_JSON_VALUE)
     public Map<String, List<Object>> getAllFromEventStoreCustomers(@PathVariable @NotEmpty String applicationId) {
         //return this.eventStoreConsumerAdapter.findAllByApp(applicationId);
         throw new NotImplementedException("eventStoreConsumerAdapter.findAllByApp not implemented yet");
     }
 
-    @GetMapping(value = "auditorias/{applicationId}/{almacen}", produces= MediaType.APPLICATION_JSON_VALUE)
+    //@GetMapping(value = "auditorias/{applicationId}/{almacen}", produces= MediaType.APPLICATION_JSON_VALUE)
     public Map<String, List<Object>> getAllFromEventStoreCustomers(@PathVariable @NotEmpty String applicationId,
                                                                    @PathVariable @NotEmpty String almacen) {
         // almacen: Customer.class.getSimpleName()
         return this.eventStoreConsumerAdapter.findAllByAppAndStore(applicationId, almacen);
     }
 
-    @GetMapping(value = "auditorias/{applicationId}/{almacen}/{idAgregado}", produces=MediaType.APPLICATION_JSON_VALUE)
+    //@GetMapping(value = "auditorias/{applicationId}/{almacen}/{idAgregado}", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Object> getAllEventsFromIdFromRedis(@PathVariable @NotEmpty String applicationId,
                                                     @PathVariable @NotEmpty String almacen,
                                                     @PathVariable @NotEmpty String idAgregado) {
@@ -85,21 +85,21 @@ public abstract class BaseRestController {
 
     /** ENDPOINTS QUE DAN ACCESO A LA INFORMACIÓN DE CUALQUIER TRANSACCION EN CUALQUIER APLICACION **/
 
-    @GetMapping(value = "transacciones-distribuidas/{applicationId}", produces=MediaType.APPLICATION_JSON_VALUE)
+    //@GetMapping(value = "transacciones-distribuidas/{applicationId}", produces=MediaType.APPLICATION_JSON_VALUE)
     public Map<String, List<Object>> getAllTransactionsOfApplication(@PathVariable @NotEmpty String applicationId,
                                                               @PathVariable @NotEmpty String saga) {
         //return this.eventStoreConsumerAdapter.findAllByApp(applicationId);
         throw new NotImplementedException("eventStoreConsumerAdapter.findAllByApp not implemented yet");
     }
 
-    @GetMapping(value = "transacciones-distribuidas/{applicationId}/{saga}", produces=MediaType.APPLICATION_JSON_VALUE)
+    //@GetMapping(value = "transacciones-distribuidas/{applicationId}/{saga}", produces=MediaType.APPLICATION_JSON_VALUE)
     public Map<String, List<Object>> getAllTransactionsOfSagaInApp(@PathVariable @NotEmpty String applicationId,
                                                               @PathVariable @NotEmpty String saga) {
         return this.eventStoreConsumerAdapter.findAllByAppAndStore(applicationId, saga);
     }
 
-    @GetMapping(value = "transacciones-distribuidas/{applicationId}/{saga}/{transactionId}",
-            produces=MediaType.APPLICATION_JSON_VALUE)
+    //@GetMapping(value = "transacciones-distribuidas/{applicationId}/{saga}/{transactionId}",
+    //        produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Object> getAllStepsInSagaTransactionId(@PathVariable @NotEmpty String applicationId,
                                                        @PathVariable @NotEmpty String saga,
                                                        @PathVariable @NotEmpty String transactionId) {

@@ -29,7 +29,7 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
 
     protected abstract GenericRepositoryPort<T, ID> getRepository();
 
-    public final String getDocumentEntityClassname() {
+    public String getDocumentEntityClassname() {
         Class<T> entityClass = (Class<T>) ((ParameterizedType) getClass()
                 .getGenericSuperclass())
                 .getActualTypeArguments()[0];
