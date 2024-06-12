@@ -14,7 +14,7 @@ public class ActualizarDiplomaUseCase {
 
     public DiplomaDTO ejecutar(DiplomaDTO diplomaDTO) {
         Diploma diploma = new Diploma(diplomaDTO);
-        diploma = diplomaCommandServicePort.update(diploma);
+        diploma = diplomaCommandServicePort.actualizar(diploma);
         return new DiplomaDTO(diploma);
     }
 

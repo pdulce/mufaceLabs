@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
@@ -40,7 +39,7 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
     @SuppressWarnings("unchecked")
     @Override
     @Transactional
-    public T insert(T entity) {
+    public T crear(T entity) {
         T saved = this.getRepository().save(entity);
         if (saved != null && eventBrokerProperties.isActive()) {
             /*** Mando el evento al bus para que los recojan los dos consumers:
@@ -59,7 +58,7 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
     @SuppressWarnings("unchecked")
     @Override
     @Transactional
-    public T update(T entity) {
+    public T actualizar(T entity) {
         ID id = (ID) ConversionUtils.convertToMap(entity).get("id");
         if (!this.getRepository().findById(id).isPresent()) {
             NotExistException e = new NotExistException();
@@ -80,7 +79,7 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
     @SuppressWarnings("unchecked")
     @Override
     @Transactional
-    public void delete(T entity) {
+    public void borrar(T entity) {
         ID id = (ID) ConversionUtils.convertToMap(entity).get("id");
         if (!this.getRepository().findById(id).isPresent()) {
             NotExistException e = new NotExistException();
@@ -100,9 +99,9 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
     @SuppressWarnings("unchecked")
     @Override
     @Transactional
-    public void deleteAllList(List<T> entities) {
+    public void borrar(List<T> entities) {
         entities.forEach((record) -> {
-            this.delete(record);
+            this.borrar(record);
             if (eventBrokerProperties.isActive()) {
                 Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
                         ConversionUtils.convertToMap(record).get("id").toString(),
@@ -115,9 +114,9 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
     @SuppressWarnings("unchecked")
     @Override
     @Transactional
-    public void deleteAll() {
+    public void borrar() {
         List<Event> events = new ArrayList<>();
-        findAll().forEach((record) -> {
+        buscar().forEach((record) -> {
             events.add(new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
                     ConversionUtils.convertToMap(record).get("id").toString(),
                     Event.EVENT_TYPE_DELETE, record));
@@ -132,7 +131,7 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
 
     @SuppressWarnings("unchecked")
     @Override
-    public T findById(ID id) {
+    public T buscarPorId(ID id) {
         if (this.getRepository().findById(id).isPresent()) {
            return this.getRepository().findById(id).get();
         }
@@ -144,14 +143,14 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<T> findAll() {
+    public List<T> buscar() {
         return this.getRepository().findAll().stream().toList();
     }
 
     /** método generíco para buscar dentro de cualquier campo de un entidad T **/
 
     @SuppressWarnings("unchecked")
-    public List<T> findAllByFieldvalue(String fieldName, Object fieldValue) {
+    public List<T> buscarPorCampoValor(String fieldName, Object fieldValue) {
 
         try {
             Class<T> entityClass = (Class<T>) ((ParameterizedType) getClass()

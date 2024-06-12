@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -27,21 +26,13 @@ public class RegaloAPI extends BaseRestController {
 
     @GetMapping(value = "allRegalos", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<RegaloDTO> getAllRegalos() {
-        List<RegaloDTO> regalos = new ArrayList<>();
-        this.consultasRegalosUseCase.ejecutar().forEach((regalo -> {
-            regalos.add(new RegaloDTO(regalo));
-        }));
-        return regalos;
+        return this.consultasRegalosUseCase.ejecutar();
     }
 
 
     @GetMapping(value = "allRegalosByCustomerId", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<RegaloDTO> getAllRegalosByCustomerId(@RequestParam Long customerid) {
-        List<RegaloDTO> regalos = new ArrayList<>();
-        this.consultasRegalosUseCase.ejecutar(customerid).forEach((regalo -> {
-            regalos.add(new RegaloDTO(regalo));
-        }));
-        return regalos;
+        return this.consultasRegalosUseCase.ejecutar(customerid);
     }
 
     @PutMapping(produces=MediaType.APPLICATION_JSON_VALUE)

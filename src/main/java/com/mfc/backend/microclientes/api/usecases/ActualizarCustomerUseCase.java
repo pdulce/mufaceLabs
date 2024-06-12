@@ -1,5 +1,6 @@
 package com.mfc.backend.microclientes.api.usecases;
 
+import com.mfc.backend.microclientes.api.dto.CustomerDTO;
 import com.mfc.backend.microclientes.domain.model.Customer;
 import com.mfc.backend.microclientes.domain.service.CustomerCommandAdapterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,10 @@ public class ActualizarCustomerUseCase {
     @Autowired
     CustomerCommandAdapterService customerCommandAdapterService;
 
-    public Customer ejecutar(Customer customer) {
-        return this.customerCommandAdapterService.update(customer);
+    public CustomerDTO ejecutar(CustomerDTO customerDTO) {
+        Customer customer = new Customer(customerDTO);
+        customer = this.customerCommandAdapterService.actualizar(customer);
+        return new CustomerDTO(customer);
     }
 
 }

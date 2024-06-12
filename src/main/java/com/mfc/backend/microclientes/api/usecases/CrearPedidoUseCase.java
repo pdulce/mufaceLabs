@@ -13,7 +13,7 @@ public class CrearPedidoUseCase {
 
 
     public CustomerOrder ejecutar(CustomerOrder customerOrder) {
-        return this.customerCommandAdapterService.insert(customerOrder);
+        return this.customerCommandAdapterService.crear(customerOrder);
     }
 
 

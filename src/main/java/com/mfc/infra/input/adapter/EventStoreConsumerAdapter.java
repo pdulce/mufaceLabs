@@ -40,10 +40,11 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
             logger.error("Debe tener activa la configuración de uso de mensajería en la arquitectura");
             return;
         }
-        this.saveEvent(eventArch.getContextInfo().getAlmacen(), eventArch.getId(), eventArch);
+        this.saveEvent(eventArch.getContextInfo().getApplicationId(), eventArch.getContextInfo().getAlmacen(),
+                eventArch.getId(), eventArch);
     }
 
-    public void saveEvent(String almacen, String id, Event<?> eventArch) {
+    public void saveEvent(String applicationId, String almacen, String id, Event<?> eventArch) {
         HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
         if (hashOps.entries(almacen).get(id) == null) {
             List<Object> agregados = new ArrayList<>();
@@ -54,7 +55,7 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
         hashOps.put(almacen, id, listaDelAgregado);
     }
 
-    public void update(String almacen, String id, String idObjectSearched, Event<?> eventArch) {
+    public void update(String applicationId, String almacen, String id, String idObjectSearched, Event<?> eventArch) {
         HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
         if (hashOps.entries(almacen).get(id) == null) {
             List<Object> agregados = new ArrayList<>();
@@ -75,12 +76,17 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
         hashOps.put(almacen, id, listaDelAgregado);
     }
 
-    public List<Object> findById(String almacen, String id) {
+    public List<Object> findAllByAppAndStoreAndAggregatedId(String applicationId, String almacen, String id) {
         HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
         return hashOps.entries(almacen).get(id);
     }
 
-    public Map<String, List<Object>> findAll(String almacen) {
+    public Map<String, List<Object>> findAllByApp(String almacen) {
+        HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
+        return hashOps.entries(almacen);
+    }
+
+    public Map<String, List<Object>> findAllByAppAndStore(String applicationId, String almacen) {
         HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
         return hashOps.entries(almacen);
     }

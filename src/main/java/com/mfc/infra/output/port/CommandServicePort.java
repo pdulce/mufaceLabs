@@ -5,20 +5,20 @@ import java.util.List;
 
 public interface CommandServicePort<T, ID> {
 
-    T insert(T entity);
+    T crear(T entity);
 
-    T update(T entity);
+    T actualizar(T entity);
 
-    void delete(T entity);
+    void borrar(T entity);
 
-    void deleteAllList(List<T> entities);
-    void deleteAll();
+    void borrar(List<T> entities);
+    void borrar();
 
-    T findById(ID id);
+    T buscarPorId(ID id);
 
-    List<T> findAll();
+    List<T> buscar();
 
-    List<T> findAllByFieldvalue(String fieldName, Object fieldValue);
+    List<T> buscarPorCampoValor(String fieldName, Object fieldValue);
 
     String getDocumentEntityClassname();
 

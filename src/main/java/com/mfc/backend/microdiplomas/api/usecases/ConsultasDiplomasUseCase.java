@@ -16,7 +16,7 @@ public class ConsultasDiplomasUseCase {
 
     public List<DiplomaDTO> ejecutar(Long customerId) {
         List<DiplomaDTO> diplomas = new ArrayList<>();
-        this.diplomaCommandServicePort.findAllByFieldvalue("idcustomer", customerId).forEach((diploma -> {
+        this.diplomaCommandServicePort.buscarPorCampoValor("idcustomer", customerId).forEach((diploma -> {
             diplomas.add(new DiplomaDTO(diploma));
         }));
         return diplomas;
@@ -24,7 +24,7 @@ public class ConsultasDiplomasUseCase {
 
     public List<DiplomaDTO> ejecutar(String name) {
         List<DiplomaDTO> diplomas = new ArrayList<>();
-        this.diplomaCommandServicePort.findAllByFieldvalue("name", name).forEach((diploma -> {
+        this.diplomaCommandServicePort.buscarPorCampoValor("name", name).forEach((diploma -> {
             diplomas.add(new DiplomaDTO(diploma));
         }));
         return diplomas;
@@ -32,7 +32,7 @@ public class ConsultasDiplomasUseCase {
 
     public List<DiplomaDTO> ejecutar() {
         List<DiplomaDTO> diplomas = new ArrayList<>();
-        this.diplomaCommandServicePort.findAll().forEach((diploma -> {
+        this.diplomaCommandServicePort.buscar().forEach((diploma -> {
             diplomas.add(new DiplomaDTO(diploma));
         }));
         return diplomas;

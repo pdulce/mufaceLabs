@@ -45,7 +45,7 @@ public class CustomerAPI extends BaseRestController {
     @DeleteMapping(produces=MediaType.APPLICATION_JSON_VALUE)
     public void deleteById(@RequestParam Long id) {
         if (id != null) {
-            Customer customer = this.consultasCustomerUseCase.ejecutar(id);
+            CustomerDTO customer = this.consultasCustomerUseCase.ejecutar(id);
             this.borrarCustomerUseCase.ejecutar(customer);
         } else {
             this.borrarCustomerUseCase.ejecutar();

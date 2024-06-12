@@ -14,15 +14,15 @@ public class ConsultasCustomerUseCase {
     CustomerCommandAdapterService customerCommandAdapterService;
 
     public List<Customer> ejecutar(){
-        return this.customerCommandAdapterService.findAll();
+        return this.customerCommandAdapterService.buscar();
     }
 
     public Customer ejecutar(Long id){
-        return this.customerCommandAdapterService.findById(id);
+        return this.customerCommandAdapterService.buscarPorId(id);
     }
 
     public List<Customer> ejecutar(String name){
-        return this.customerCommandAdapterService.findAllByFieldvalue("name", name);
+        return this.customerCommandAdapterService.buscarPorCampoValor("name", name);
     }
 
     public List<Customer> dameListaCustomersDePaises(String prefixpais){

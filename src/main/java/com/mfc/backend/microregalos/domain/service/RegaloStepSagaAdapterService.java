@@ -67,13 +67,13 @@ public class RegaloStepSagaAdapterService extends CommandServiceStepSagaAdapter<
     public Object doSagaOperation(Event event) {
         DiplomaWrapper customer = (DiplomaWrapper) getWrapper(event);
         Regalo regalo = (Regalo) getNewData(customer);
-        return this.insert(regalo);
+        return this.crear(regalo);
     }
 
     @Override
     public Object doSagaCompensation(Event event) {
         Regalo regalo = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Regalo.class);
-        this.delete(regalo);
+        this.borrar(regalo);
         return regalo;
     }
 

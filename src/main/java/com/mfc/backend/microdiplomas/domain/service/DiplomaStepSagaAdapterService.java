@@ -72,13 +72,13 @@ public class DiplomaStepSagaAdapterService extends CommandServiceStepSagaAdapter
             throw new Throwable ("Error de negocio: " +
                     "exception por país FORBIDDEN en SAGA step 2 para probar la arquitectura");
         }
-        return this.insert(diploma);
+        return this.crear(diploma);
     }
 
     @Override
     public Object doSagaCompensation(Event event) {
         Diploma diploma = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Diploma.class);
-        this.delete(diploma);
+        this.borrar(diploma);
         return diploma;
     }
 

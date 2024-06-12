@@ -11,7 +11,7 @@ public class BorrarTodosLosRegalosUseCase {
     RegaloServicePort regaloServicePort;
 
     public void ejecutar() {
-        regaloServicePort.deleteAll();
+        regaloServicePort.borrar();
     }
 
 }

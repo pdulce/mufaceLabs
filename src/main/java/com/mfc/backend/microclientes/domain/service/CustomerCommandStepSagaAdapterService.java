@@ -73,13 +73,13 @@ public class CustomerCommandStepSagaAdapterService extends CommandServiceStepSag
     @Override
     public Object doSagaOperation(Event event) {
         Customer customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Customer.class);
-        return this.insert(customer);
+        return this.crear(customer);
     }
 
     @Override
     public Object doSagaCompensation(Event event) {
         Customer customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Customer.class);
-        this.delete(customer);
+        this.borrar(customer);
         return customer;
     }
 
