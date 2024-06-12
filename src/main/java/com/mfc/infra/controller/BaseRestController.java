@@ -4,6 +4,7 @@ import com.mfc.infra.input.port.EventStoreInputPort;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.utils.ConstantMessages;
 import jakarta.validation.constraints.NotEmpty;
+import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +65,8 @@ public abstract class BaseRestController {
 
     @GetMapping(value = "auditorias/{applicationId}", produces= MediaType.APPLICATION_JSON_VALUE)
     public Map<String, List<Object>> getAllFromEventStoreCustomers(@PathVariable @NotEmpty String applicationId) {
-        return this.eventStoreConsumerAdapter.findAllByApp(applicationId);
+        //return this.eventStoreConsumerAdapter.findAllByApp(applicationId);
+        throw new NotImplementedException("eventStoreConsumerAdapter.findAllByApp not implemented yet");
     }
 
     @GetMapping(value = "auditorias/{applicationId}/{almacen}", produces= MediaType.APPLICATION_JSON_VALUE)
@@ -86,7 +88,8 @@ public abstract class BaseRestController {
     @GetMapping(value = "transacciones-distribuidas/{applicationId}", produces=MediaType.APPLICATION_JSON_VALUE)
     public Map<String, List<Object>> getAllTransactionsOfApplication(@PathVariable @NotEmpty String applicationId,
                                                               @PathVariable @NotEmpty String saga) {
-        return this.eventStoreConsumerAdapter.findAllByApp(applicationId);
+        //return this.eventStoreConsumerAdapter.findAllByApp(applicationId);
+        throw new NotImplementedException("eventStoreConsumerAdapter.findAllByApp not implemented yet");
     }
 
     @GetMapping(value = "transacciones-distribuidas/{applicationId}/{saga}", produces=MediaType.APPLICATION_JSON_VALUE)

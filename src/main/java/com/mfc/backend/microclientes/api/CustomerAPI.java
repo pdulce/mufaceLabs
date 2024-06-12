@@ -7,7 +7,6 @@ import java.util.List;
 import com.mfc.backend.microclientes.api.dto.CustomerDTO;
 import com.mfc.backend.microclientes.api.usecases.BorrarCustomerUseCase;
 import com.mfc.backend.microclientes.api.usecases.ConsultasCustomerUseCase;
-import com.mfc.backend.microclientes.domain.model.Customer;
 import com.mfc.infra.controller.BaseRestController;
 import com.mfc.backend.microclientes.api.usecases.ActualizarCustomerUseCase;
 import jakarta.validation.constraints.NotNull;
@@ -38,8 +37,7 @@ public class CustomerAPI extends BaseRestController {
 
     @PutMapping(produces=MediaType.APPLICATION_JSON_VALUE)
     public CustomerDTO update(@RequestBody @NotNull CustomerDTO customerDTO) {
-        Customer customer = new Customer(customerDTO);
-        return new CustomerDTO(actualizarCustomerUseCase.ejecutar(customer));
+        return actualizarCustomerUseCase.ejecutar(customerDTO);
     }
 
     @DeleteMapping(produces=MediaType.APPLICATION_JSON_VALUE)
@@ -59,39 +57,23 @@ public class CustomerAPI extends BaseRestController {
 
     @GetMapping(value = "allCustomers", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<CustomerDTO> getAllCustomers() {
-        List<CustomerDTO> customers = new ArrayList<>();
-        this.consultasCustomerUseCase.ejecutar().forEach((customer -> {
-            customers.add(new CustomerDTO(customer));
-        }));
-        return customers;
+        return this.consultasCustomerUseCase.ejecutar();
     }
 
     @GetMapping(value = "allCustomersByName", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<CustomerDTO> getAllCustomersByName(@RequestParam String name) {
-        List<CustomerDTO> customers = new ArrayList<>();
-        this.consultasCustomerUseCase.ejecutar(name).forEach((customer -> {
-            customers.add(new CustomerDTO(customer));
-        }));
-        return customers;
+        return this.consultasCustomerUseCase.ejecutar(name);
     }
 
     @GetMapping(value = "get", produces=MediaType.APPLICATION_JSON_VALUE)
     public CustomerDTO get(@RequestParam Long customerId) {
-        Customer customer = this.consultasCustomerUseCase.ejecutar(customerId);
-        return new CustomerDTO(customer);
+        return this.consultasCustomerUseCase.ejecutar(customerId);
     }
-
 
     /** Invocación a un método personalizado */
     @GetMapping(value = "allCustomersByCountry", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<CustomerDTO> getAllCustomersByCountry(@RequestParam String country) {
-        List<CustomerDTO> customers = new ArrayList<>();
-        this.consultasCustomerUseCase.dameListaCustomersDePaises(country).forEach((customer -> {
-            customers.add(new CustomerDTO(customer));
-        }));
-        return customers;
+        return this.consultasCustomerUseCase.dameListaCustomersDePaises(country);
     }
-
-
 
 }

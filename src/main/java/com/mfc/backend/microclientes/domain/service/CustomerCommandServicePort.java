@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface CustomerCommandServicePort extends CommandServicePort<Customer, Long> {
 
-    public List<Customer> dameListaCustomersDePaises (String paisPrefix);
+    List<Customer> dameListaCustomersDePaises (String paisPrefix);
 
 }

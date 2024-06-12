@@ -15,6 +15,6 @@ public interface EventStoreInputPort {
 
     Map<String, List<Object>> findAllByAppAndStore(String applicationid, String almacen);
 
-    Map<String, List<Object>> findAllByApp(String applicationid);
+    //Map<String, List<Object>> findAllByApp(String applicationid);
 
 }

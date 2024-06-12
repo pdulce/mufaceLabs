@@ -21,6 +21,9 @@ public class ConversionUtils {
 
     private ConversionUtils() {}
 
+    public static final String getKeyAlmacen(String applicationId, String almacen) {
+        return applicationId + "-" + almacen;
+    }
     public static String formatTimestampToSpanish(Timestamp timestamp) {
         // Convertir Timestamp a LocalDateTime
         LocalDateTime localDateTime = timestamp.toLocalDateTime();

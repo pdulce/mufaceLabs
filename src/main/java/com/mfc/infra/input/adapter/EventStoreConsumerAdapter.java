@@ -44,24 +44,24 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
                 eventArch.getId(), eventArch);
     }
 
-    public void saveEvent(String applicationId, String almacen, String id, Event<?> eventArch) {
+    public void saveEvent(String applicationId, String store, String id, Event<?> eventArch) {
         HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
-        if (hashOps.entries(almacen).get(id) == null) {
+        if (hashOps.entries(ConversionUtils.getKeyAlmacen(applicationId,store)).get(id) == null) {
             List<Object> agregados = new ArrayList<>();
-            hashOps.put(almacen, id, agregados);
+            hashOps.put(ConversionUtils.getKeyAlmacen(applicationId,store), id, agregados);
         }
-        List<Object> listaDelAgregado = hashOps.entries(almacen).get(id);
+        List<Object> listaDelAgregado = hashOps.entries(ConversionUtils.getKeyAlmacen(applicationId,store)).get(id);
         listaDelAgregado.add(eventArch);
-        hashOps.put(almacen, id, listaDelAgregado);
+        hashOps.put(ConversionUtils.getKeyAlmacen(applicationId,store), id, listaDelAgregado);
     }
 
-    public void update(String applicationId, String almacen, String id, String idObjectSearched, Event<?> eventArch) {
+    public void update(String applicationId, String store, String id, String idObjectSearched, Event<?> eventArch) {
         HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
-        if (hashOps.entries(almacen).get(id) == null) {
+        if (hashOps.entries(ConversionUtils.getKeyAlmacen(applicationId, store)).get(id) == null) {
             List<Object> agregados = new ArrayList<>();
-            hashOps.put(almacen, id, agregados);
+            hashOps.put(ConversionUtils.getKeyAlmacen(applicationId, store), id, agregados);
         }
-        List<Object> listaDelAgregado = hashOps.entries(almacen).get(id);
+        List<Object> listaDelAgregado = hashOps.entries(ConversionUtils.getKeyAlmacen(applicationId,store)).get(id);
         boolean found = false;
         int i = 0;
         while (!found && i < listaDelAgregado.size()) {
@@ -73,22 +73,18 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
             }
         }
         listaDelAgregado.add(eventArch);
-        hashOps.put(almacen, id, listaDelAgregado);
+        hashOps.put(ConversionUtils.getKeyAlmacen(applicationId,ConversionUtils.getKeyAlmacen(applicationId,store)),
+                id, listaDelAgregado);
     }
 
-    public List<Object> findAllByAppAndStoreAndAggregatedId(String applicationId, String almacen, String id) {
+    public List<Object> findAllByAppAndStoreAndAggregatedId(String applicationId, String store, String id) {
         HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
-        return hashOps.entries(almacen).get(id);
+        return hashOps.entries(ConversionUtils.getKeyAlmacen(applicationId,store)).get(id);
     }
 
-    public Map<String, List<Object>> findAllByApp(String almacen) {
+    public Map<String, List<Object>> findAllByAppAndStore(String applicationId, String store) {
         HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
-        return hashOps.entries(almacen);
-    }
-
-    public Map<String, List<Object>> findAllByAppAndStore(String applicationId, String almacen) {
-        HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
-        return hashOps.entries(almacen);
+        return hashOps.entries(ConversionUtils.getKeyAlmacen(applicationId,store));
     }
 
 
