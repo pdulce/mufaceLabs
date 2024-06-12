@@ -9,8 +9,9 @@ public interface QueryInputPort<T> {
     void deleteReg(String id);
     void saveReg(LinkedHashMap deserialized, Class<T> entityClass);
 
-    Map<String, Object> findById(String id);
-    List<Map<String, Object>> findAll();
+    T findById(String id);
+
+    List<T> findAll();
 
 
 

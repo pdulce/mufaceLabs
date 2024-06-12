@@ -12,9 +12,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.lang.reflect.ParameterizedType;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public abstract class QueryInputConsumerAdapter<T> implements QueryInputPort<T> {
     Logger logger = LoggerFactory.getLogger(QueryInputConsumerAdapter.class);
@@ -60,15 +58,14 @@ public abstract class QueryInputConsumerAdapter<T> implements QueryInputPort<T> 
     }
 
     @Override
-    public Map<String, Object> findById(String id) {
-        Optional<T> order = this.repository.findById(id);
-        return order.map(ConversionUtils::objectToMap).orElse(null);
+    public T findById(String id) {
+        Optional<T> searched = this.repository.findById(id);
+        return searched.isPresent() ? searched.get() : null;
     }
 
     @Override
-    public List<Map<String, Object>> findAll() {
-        List<T> orders = this.repository.findAll();
-        return orders.stream().map(ConversionUtils::objectToMap).collect(Collectors.toList());
+    public List<T> findAll() {
+        return this.repository.findAll();
     }
 
 }
