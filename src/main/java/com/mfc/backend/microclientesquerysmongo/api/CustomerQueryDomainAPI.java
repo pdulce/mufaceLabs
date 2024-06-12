@@ -18,10 +18,8 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "customerquery")
 public class CustomerQueryDomainAPI extends BaseRestController {
-
-    @Autowired(required=false)
+    @Autowired
     QueriesOptimizedUseCase queriesOptimizedUseCase;
-
 
     /*** CONSULTAS CONTRA EL DOMINIO DE QUERIES ***/
 

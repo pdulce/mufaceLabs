@@ -8,7 +8,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Service
-@ConditionalOnProperty(name = "arch.eventbroker.active", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(name = "arch.event-broker-active", havingValue = "true", matchIfMissing = false)
 public class CustomerQueryServiceConsumerAdapter extends QueryInputConsumerAdapter<CustomerDocument> {
 
     private static final String GROUP_ID = "cqrs-query-adapter-2";

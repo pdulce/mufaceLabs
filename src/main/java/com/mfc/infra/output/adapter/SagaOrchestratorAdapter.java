@@ -18,7 +18,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
-@ConditionalOnProperty(name = "arch.eventbroker.active", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(name = "arch.event-broker-active", havingValue = "true", matchIfMissing = false)
 public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T> {
 
     Logger logger = LoggerFactory.getLogger(SagaOrchestratorPort.class);

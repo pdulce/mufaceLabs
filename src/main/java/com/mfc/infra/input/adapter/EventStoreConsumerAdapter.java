@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@ConditionalOnProperty(name = "arch.eventbroker.active", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(name = "arch.event-broker-active", havingValue = "true", matchIfMissing = false)
 public class EventStoreConsumerAdapter implements EventStoreInputPort {
 
     Logger logger = LoggerFactory.getLogger(EventStoreConsumerAdapter.class);

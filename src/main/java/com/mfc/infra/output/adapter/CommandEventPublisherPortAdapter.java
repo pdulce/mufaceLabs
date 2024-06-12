@@ -10,7 +10,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-@ConditionalOnProperty(name = "arch.eventbroker.active", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(name = "arch.event-broker-active", havingValue = "true", matchIfMissing = false)
 public class CommandEventPublisherPortAdapter implements CommandEventPublisherPort {
 
     Logger logger = LoggerFactory.getLogger(CommandEventPublisherPortAdapter.class);

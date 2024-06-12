@@ -14,7 +14,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Service
-@ConditionalOnProperty(name = "arch.eventbroker.active", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(name = "arch.event-broker-active", havingValue = "true", matchIfMissing = false)
 public class DiplomaStepSagaAdapterService extends CommandServiceStepSagaAdapter<Diploma, Long> {
 
     private static final String SAGA_NAME = "sagaBienvenidaCustomer";
