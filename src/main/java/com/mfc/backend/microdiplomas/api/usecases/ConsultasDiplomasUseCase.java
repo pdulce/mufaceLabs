@@ -1,10 +1,11 @@
 package com.mfc.backend.microdiplomas.api.usecases;
 
-import com.mfc.backend.microdiplomas.domain.model.Diploma;
+import com.mfc.backend.microdiplomas.api.dto.DiplomaDTO;
 import com.mfc.backend.microdiplomas.domain.service.DiplomaServicePort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -13,20 +14,36 @@ public class ConsultasDiplomasUseCase {
     @Autowired
     DiplomaServicePort diplomaCommandServicePort;
 
-    public List<Diploma> ejecutar(Long customerId) {
-        return diplomaCommandServicePort.findAllByFieldvalue("idcustomer", customerId);
+    public List<DiplomaDTO> ejecutar(Long customerId) {
+        List<DiplomaDTO> diplomas = new ArrayList<>();
+        this.diplomaCommandServicePort.findAllByFieldvalue("idcustomer", customerId).forEach((diploma -> {
+            diplomas.add(new DiplomaDTO(diploma));
+        }));
+        return diplomas;
     }
 
-    public List<Diploma> ejecutar(String name) {
-        return diplomaCommandServicePort.findAllByFieldvalue("name", name);
+    public List<DiplomaDTO> ejecutar(String name) {
+        List<DiplomaDTO> diplomas = new ArrayList<>();
+        this.diplomaCommandServicePort.findAllByFieldvalue("name", name).forEach((diploma -> {
+            diplomas.add(new DiplomaDTO(diploma));
+        }));
+        return diplomas;
     }
 
-    public List<Diploma> ejecutar() {
-        return diplomaCommandServicePort.findAll();
+    public List<DiplomaDTO> ejecutar() {
+        List<DiplomaDTO> diplomas = new ArrayList<>();
+        this.diplomaCommandServicePort.findAll().forEach((diploma -> {
+            diplomas.add(new DiplomaDTO(diploma));
+        }));
+        return diplomas;
     }
 
-    public List<Diploma> getDiplomasDeLaRegionProvenza() {
-        return diplomaCommandServicePort.getDiplomasDeLaRegionProvenza();
+    public List<DiplomaDTO> getDiplomasDeLaRegionProvenza() {
+        List<DiplomaDTO> diplomas = new ArrayList<>();
+        this.diplomaCommandServicePort.getDiplomasDeLaRegionProvenza().forEach((diploma -> {
+            diplomas.add(new DiplomaDTO(diploma));
+        }));
+        return diplomas;
     }
 
 
