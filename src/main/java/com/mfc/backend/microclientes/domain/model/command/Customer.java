@@ -1,5 +1,6 @@
 package com.mfc.backend.microclientes.domain.model.command;
 
+import com.mfc.backend.microclientes.api.dto.CustomerDTO;
 import com.mfc.infra.utils.ConstantMessages;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -26,5 +27,15 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<CustomerOrder> customerOrders;
+
+    public Customer() {
+
+    }
+    public Customer(CustomerDTO customer) {
+        this.id = customer.getId();
+        this.name = customer.getName();
+        this.customerOrders = customer.getCustomerOrders();
+        this.country = customer.getCountry();
+    }
 
 }

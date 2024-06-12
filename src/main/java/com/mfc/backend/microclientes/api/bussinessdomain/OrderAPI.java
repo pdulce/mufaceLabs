@@ -1,5 +1,6 @@
 package com.mfc.backend.microclientes.api.bussinessdomain;
 
+import com.mfc.backend.microclientes.api.dto.CustomerOrderDTO;
 import com.mfc.backend.microclientes.domain.model.command.CustomerOrder;
 import com.mfc.infra.controller.BaseRestController;
 import com.mfc.infra.output.port.CommandServicePort;
@@ -17,8 +18,11 @@ public class OrderAPI extends BaseRestController {
     CommandServicePort<CustomerOrder, Long> customerOrderCommandService;
 
     @PostMapping(value = "create", produces=MediaType.APPLICATION_JSON_VALUE)
-    public CustomerOrder create(@PathVariable @NotNull CustomerOrder customerOrder) {
-        return this.customerOrderCommandService.insert(customerOrder);
+    public CustomerOrderDTO create(@PathVariable @NotNull CustomerOrderDTO customerOrderDTO) {
+        CustomerOrder customerOrder = new CustomerOrder(customerOrderDTO);
+        CustomerOrderDTO customerOrderDtoCreated =
+                new CustomerOrderDTO(this.customerOrderCommandService.insert(customerOrder));
+        return customerOrderDtoCreated;
     }
     
 }

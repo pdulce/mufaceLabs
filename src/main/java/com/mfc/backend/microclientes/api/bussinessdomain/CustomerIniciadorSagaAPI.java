@@ -1,5 +1,6 @@
 package com.mfc.backend.microclientes.api.bussinessdomain;
 
+import com.mfc.backend.microclientes.api.dto.CustomerDTO;
 import com.mfc.backend.microclientes.domain.model.command.Customer;
 import com.mfc.infra.controller.BaseRestController;
 import com.mfc.infra.event.Event;
@@ -19,10 +20,11 @@ public class CustomerIniciadorSagaAPI extends BaseRestController {
     SagaStepPort<Customer, Long> customerCommandStepSagaAdapter;
 
     @PostMapping(produces=MediaType.APPLICATION_JSON_VALUE)
-    public String create(@RequestBody @NotNull Customer customer) {
+    public String create(@RequestBody @NotNull CustomerDTO customerDTO) {
         if (this.orchestratorManager == null || this.customerCommandStepSagaAdapter == null) {
             throw new RuntimeException("Saga no puede iniciarse: arch.eventbroker.active está a false");
         }
+        Customer customer = new Customer(customerDTO);
         Locale locale = "es" != null ? new Locale("es") : Locale.getDefault();
         Event event = this.orchestratorManager.startSaga(customerCommandStepSagaAdapter.getSagaName(),
                 customerCommandStepSagaAdapter.getTypeOrOperation(), customer);

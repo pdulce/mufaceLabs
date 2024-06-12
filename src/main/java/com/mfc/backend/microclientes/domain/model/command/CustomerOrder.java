@@ -2,6 +2,7 @@ package com.mfc.backend.microclientes.domain.model.command;
 
 import java.math.BigDecimal;
 
+import com.mfc.backend.microclientes.api.dto.CustomerOrderDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -19,5 +20,13 @@ public class CustomerOrder {
 
     @Column
     private BigDecimal total;
+
+    public CustomerOrder() {}
+
+    public CustomerOrder(CustomerOrderDTO customerOrderDTO) {
+        this.id = customerOrderDTO.getId();
+        this.customer = customerOrderDTO.getCustomer();
+        this.total = customerOrderDTO.getTotal();
+    }
 
 }

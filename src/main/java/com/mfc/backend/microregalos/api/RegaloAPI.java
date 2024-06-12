@@ -1,5 +1,6 @@
 package com.mfc.backend.microregalos.api;
 
+import com.mfc.backend.microregalos.api.dto.RegaloDTO;
 import com.mfc.backend.microregalos.domain.model.Regalo;
 import com.mfc.backend.microregalos.domain.service.RegaloCommandServicePort;
 import com.mfc.infra.controller.BaseRestController;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -18,19 +20,28 @@ public class RegaloAPI extends BaseRestController {
 
 
     @GetMapping(value = "allRegalos", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Regalo> getAllRegalos() {
-        return this.regaloCommandAdapter.findAll();
+    public List<RegaloDTO> getAllRegalos() {
+        List<RegaloDTO> regalos = new ArrayList<>();
+        this.regaloCommandAdapter.findAll().forEach((regalo -> {
+            regalos.add(new RegaloDTO(regalo));
+        }));
+        return regalos;
     }
 
 
     @GetMapping(value = "allRegalosByCustomerId", produces=MediaType.APPLICATION_JSON_VALUE)
-    public List<Regalo> getAllRegalosByCustomerId(@RequestParam Long customerid) {
-        return this.regaloCommandAdapter.findAllByFieldvalue("customerid", customerid);
+    public List<RegaloDTO> getAllRegalosByCustomerId(@RequestParam Long customerid) {
+        List<RegaloDTO> regalos = new ArrayList<>();
+        this.regaloCommandAdapter.findAllByFieldvalue("customerid", customerid).forEach((regalo -> {
+            regalos.add(new RegaloDTO(regalo));
+        }));
+        return regalos;
     }
 
     @PutMapping(produces=MediaType.APPLICATION_JSON_VALUE)
-    public Regalo update(@RequestBody @NotNull Regalo regalo) {
-        return this.regaloCommandAdapter.update(regalo);
+    public RegaloDTO update(@RequestBody @NotNull RegaloDTO regaloDTO) {
+        Regalo regalo = new Regalo(regaloDTO);
+        return new RegaloDTO(this.regaloCommandAdapter.update(regalo));
     }
 
     @DeleteMapping(value = "deleteAll", produces=MediaType.APPLICATION_JSON_VALUE)
