@@ -1,5 +1,6 @@
 package com.mfc.backend.microclientes.domain.service;
 
+import com.mfc.backend.microclientes.api.dto.CustomerOrderDTO;
 import com.mfc.backend.microclientes.domain.model.CustomerOrder;
 import com.mfc.backend.microclientes.domain.repository.CustomerOrderCommandRepositoryPort;
 import com.mfc.infra.output.adapter.CommandServiceAdapter;
@@ -8,16 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CustomerOrderCommandAdapterService extends CommandServiceAdapter<CustomerOrder, Long> {
-
-    protected CustomerOrderCommandRepositoryPort repository;
+public class CustomerOrderCommandAdapterService extends CommandServiceAdapter<CustomerOrder, Long>
+        implements CustomerOrderServicePort{
 
     @Autowired
-    public CustomerOrderCommandAdapterService(CustomerOrderCommandRepositoryPort customerOrderCommandRepositoryPortP) {
-        this.repository = customerOrderCommandRepositoryPortP;
-    }
+    CustomerOrderCommandRepositoryPort repository;
+
     protected GenericRepositoryPort<CustomerOrder, Long> getRepository() {
         return this.repository;
+    }
+
+    @Override
+    public CustomerOrderDTO crearPedido(CustomerOrderDTO customerOrderDTO) {
+        return new CustomerOrderDTO(this.crear(new CustomerOrder(customerOrderDTO)));
     }
 
 }

@@ -15,12 +15,8 @@ import java.util.List;
 public class CustomerCommandAdapterService extends CommandServiceAdapter<Customer, Long>
         implements CustomerCommandServicePort {
 
-    protected CustomerCommandRepositoryPort repository;
-
     @Autowired
-    public CustomerCommandAdapterService(CustomerCommandRepositoryPort customerCommandRepositoryPortP) {
-        this.repository = customerCommandRepositoryPortP;
-    }
+    CustomerCommandRepositoryPort repository;
 
     protected GenericRepositoryPort<Customer, Long> getRepository() {
         return this.repository;

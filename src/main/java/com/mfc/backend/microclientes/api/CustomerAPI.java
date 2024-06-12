@@ -1,7 +1,6 @@
 package com.mfc.backend.microclientes.api;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.mfc.backend.microclientes.api.dto.CustomerDTO;

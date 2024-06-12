@@ -13,24 +13,24 @@ import org.springframework.stereotype.Service;
 import java.util.Locale;
 
 @Service
-public class CreacionCustomerUseCase {
+public class CreacionCustomerIniciadorSagaUseCase {
 
     @Autowired(required = false)
     CustomerCommandStepSagaAdapterService customerCommandStepSagaAdapter;
 
-    public String ejecutar(SagaOrchestratorPort orchestratorManager, CustomerDTO customerDTO,
+    public String ejecutar(String applicationId, SagaOrchestratorPort orchestratorManager, CustomerDTO customerDTO,
                            MessageSource messageSource) {
         if (orchestratorManager == null || this.customerCommandStepSagaAdapter == null) {
             throw new RuntimeException("Saga no puede iniciarse: arch.eventbroker.active está a false");
         }
         Customer customer = new Customer(customerDTO);
         Locale locale = "es" != null ? new Locale("es") : Locale.getDefault();
-        Event event = orchestratorManager.startSaga("customerAppId",
+        Event event = orchestratorManager.startSaga(applicationId,
                 customerCommandStepSagaAdapter.getSagaName(),
                 customerCommandStepSagaAdapter.getTypeOrOperation(), customer);
         String message = messageSource.getMessage(ConstantMessages.DISTRIBUTED_INITIADED,
                 new Object[]{event == null ? "" : event.getSagaStepInfo().getSagaName(),
-                        String.valueOf(event == null ? "" : event.getSagaStepInfo().getTransactionIdentifier())}, locale);
+                    String.valueOf(event == null ? "" : event.getSagaStepInfo().getTransactionIdentifier())}, locale);
         return event != null ? message : null;
     }
 

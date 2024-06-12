@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CustomerCommandServicePort extends CommandServicePort<Customer, Long> {
 
-    List<Customer> dameListaCustomersDePaises (String paisPrefix);
+    List<CustomerDTO> dameListaCustomersDePaises (String paisPrefix);
 
     CustomerDTO actualizarCliente(CustomerDTO customerDTO);
 
@@ -21,7 +21,5 @@ public interface CustomerCommandServicePort extends CommandServicePort<Customer,
     CustomerDTO consultarPorIdCliente(Long id);
 
     List<CustomerDTO> buscarPorNombreCliente(String name);
-
-    List<CustomerDTO> dameListaCustomersDePaises(String prefixpais);
 
 }

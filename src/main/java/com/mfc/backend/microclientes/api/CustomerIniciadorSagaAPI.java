@@ -1,7 +1,7 @@
 package com.mfc.backend.microclientes.api;
 
 import com.mfc.backend.microclientes.api.dto.CustomerDTO;
-import com.mfc.backend.microclientes.api.usecases.CreacionCustomerUseCase;
+import com.mfc.backend.microclientes.api.usecases.CreacionCustomerIniciadorSagaUseCase;
 import com.mfc.infra.controller.BaseRestController;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "customer")
 public class CustomerIniciadorSagaAPI extends BaseRestController {
     @Autowired(required=false)
-    CreacionCustomerUseCase creacionCustomerUseCase;
+    CreacionCustomerIniciadorSagaUseCase creacionCustomerIniciadorSagaUseCase;
 
     @PostMapping(produces=MediaType.APPLICATION_JSON_VALUE)
     public String create(@RequestBody @NotNull CustomerDTO customerDTO) {
-        return creacionCustomerUseCase.ejecutar(this.orchestratorManager, customerDTO, this.messageSource);
+        return this.creacionCustomerIniciadorSagaUseCase.ejecutar("application-Id",
+                this.orchestratorManager, customerDTO, this.messageSource);
     }
 
 }
