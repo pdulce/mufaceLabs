@@ -20,9 +20,8 @@ public class CustomerIniciadorSagaAPI extends BaseRestController {
     }
 
     @GetMapping(value = "getTransactionFinalState")
-    @Override
     public String getSagaEstadoFinalizacion(@RequestParam String saga, @RequestParam String transaccionId) {
-        return super.getSagaEstadoFinalizacion(saga, transaccionId);
+        return super.getSagaEstadoFinalizacion("application-Id", saga, transaccionId);
     }
 
 
