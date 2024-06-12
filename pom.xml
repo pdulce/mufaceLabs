@@ -260,9 +260,9 @@
         <configuration>
           <source>17</source>
           <target>17</target>
-          <compilerArgs>
+          <!--compilerArgs>
             <arg>-Xlint:unchecked</arg>
-          </compilerArgs>
+          </compilerArgs>-->
         </configuration>
       </plugin>
 

@@ -38,7 +38,7 @@ public abstract class CommandServiceStepSagaAdapter<T, ID> extends CommandServic
      ***/
 
     public void processStepEvent(Event event) {
-        if (!eventBrokerProperties.isActive()) {
+        if (!applicationDefinedProperties.isActive()) {
             logger.error("Debe tener activa la configuración de uso de mensajería en la arquitectura");
             return;
         }

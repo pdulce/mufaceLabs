@@ -2,6 +2,7 @@ server:
   port: 8086
 
 arch:
+  application-id: application-Id-sample
   mail:
     password:
       encoded: ewzqlzdstujochya

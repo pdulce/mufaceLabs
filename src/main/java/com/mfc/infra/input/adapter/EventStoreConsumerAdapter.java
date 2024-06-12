@@ -1,6 +1,6 @@
 package com.mfc.infra.input.adapter;
 
-import com.mfc.infra.configuration.EventBrokerProperties;
+import com.mfc.infra.configuration.ApplicationDefinedProperties;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.input.port.EventStoreInputPort;
 import com.mfc.infra.utils.ConversionUtils;
@@ -24,7 +24,7 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
     Logger logger = LoggerFactory.getLogger(EventStoreConsumerAdapter.class);
 
     @Autowired
-    EventBrokerProperties eventBrokerProperties;
+    ApplicationDefinedProperties applicationDefinedProperties;
     protected static final String GROUP_ID = "event-adapter";
 
     @Autowired
@@ -36,7 +36,7 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
     }
 
     public void procesarEvento(Event<?> eventArch) {
-        if (!eventBrokerProperties.isActive()) {
+        if (!applicationDefinedProperties.isActive()) {
             logger.error("Debe tener activa la configuración de uso de mensajería en la arquitectura");
             return;
         }
@@ -86,6 +86,15 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
         HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
         return hashOps.entries(ConversionUtils.getKeyAlmacen(applicationId,store));
     }
+
+    public List<Map<String, List<Object>>> findAllByApp(String applicationId) {
+        HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
+
+        return null;
+        //return hashOps.entries(ConversionUtils.getKeyAlmacen(applicationId,store));
+    }
+
+
 
 
 }

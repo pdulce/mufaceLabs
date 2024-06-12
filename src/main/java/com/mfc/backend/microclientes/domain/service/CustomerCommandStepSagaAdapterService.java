@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class CustomerCommandStepSagaAdapterService extends CommandServiceStepSagaAdapter<Customer, Long> {
     private static final String SAGA_NAME = "sagaBienvenidaCustomer";
     private static final int SAGA_STEP_NUMBER = 1;
-    private static final String APP_ID = "application-Id";
+    private static final String APP_ID = "application-Id-sample";
     private static final String TOPIC_FOR_ME = SagaOrchestratorPort.DO_OPERATION + APP_ID + "-" + SAGA_NAME + "-"
             + SAGA_STEP_NUMBER;
     private static final String GROUP_ID = "saga-step-group-customerconsumer-service-step-1";

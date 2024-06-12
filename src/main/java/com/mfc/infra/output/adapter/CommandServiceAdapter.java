@@ -1,6 +1,6 @@
 package com.mfc.infra.output.adapter;
 
-import com.mfc.infra.configuration.EventBrokerProperties;
+import com.mfc.infra.configuration.ApplicationDefinedProperties;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.exceptions.NotExistException;
 import com.mfc.infra.output.port.CommandEventPublisherPort;
@@ -22,7 +22,7 @@ import java.util.List;
 public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort<T, ID> {
     Logger logger = LoggerFactory.getLogger(CommandServiceAdapter.class);
     @Autowired
-    EventBrokerProperties eventBrokerProperties;
+    ApplicationDefinedProperties applicationDefinedProperties;
 
     @Autowired(required = false)
     CommandEventPublisherPort commandEventPublisherPort;
@@ -41,12 +41,13 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
     @Transactional
     public T crear(T entity) {
         T saved = this.getRepository().save(entity);
-        if (saved != null && eventBrokerProperties.isActive()) {
+        if (saved != null && applicationDefinedProperties.isActive()) {
             /*** Mando el evento al bus para que los recojan los dos consumers:
              *  - consumer responsable del dominio de eventos que persiste en MongoDB (patrón Event-Sourcing)
              *  - consumer responsable del dominio de consultas que persiste en Redis (patrón CQRS)
              */
-            Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
+            Event eventArch = new Event(getDocumentEntityClassname(), "author",
+                    applicationDefinedProperties.getApplicationId(),
                     ConversionUtils.convertToMap(saved).get("id").toString(),
                     Event.EVENT_TYPE_CREATE, saved);
             commandEventPublisherPort.publish(Event.EVENT_TOPIC, eventArch);
@@ -67,8 +68,9 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
             throw exc;
         }
         T updated =  this.getRepository().save(entity);
-        if (updated != null && eventBrokerProperties.isActive()) {
-            Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
+        if (updated != null && applicationDefinedProperties.isActive()) {
+            Event eventArch = new Event(getDocumentEntityClassname(), "author",
+                    applicationDefinedProperties.getApplicationId(),
                     ConversionUtils.convertToMap(entity).get("id").toString(),
                     Event.EVENT_TYPE_UPDATE, updated);
             commandEventPublisherPort.publish(Event.EVENT_TOPIC, eventArch);
@@ -88,8 +90,9 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
             throw exc;
         }
         this.getRepository().delete(entity);
-        if (eventBrokerProperties.isActive()) {
-            Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
+        if (applicationDefinedProperties.isActive()) {
+            Event eventArch = new Event(getDocumentEntityClassname(), "author",
+                    applicationDefinedProperties.getApplicationId(),
                     ConversionUtils.convertToMap(entity).get("id").toString(),
                     Event.EVENT_TYPE_DELETE, entity);
             commandEventPublisherPort.publish(Event.EVENT_TOPIC, eventArch);
@@ -102,8 +105,9 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
     public void borrar(List<T> entities) {
         entities.forEach((record) -> {
             this.borrar(record);
-            if (eventBrokerProperties.isActive()) {
-                Event eventArch = new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
+            if (applicationDefinedProperties.isActive()) {
+                Event eventArch = new Event(getDocumentEntityClassname(), "author",
+                        applicationDefinedProperties.getApplicationId(),
                         ConversionUtils.convertToMap(record).get("id").toString(),
                         Event.EVENT_TYPE_DELETE, record);
                 commandEventPublisherPort.publish(Event.EVENT_TOPIC, eventArch);
@@ -117,12 +121,13 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
     public void borrar() {
         List<Event> events = new ArrayList<>();
         buscar().forEach((record) -> {
-            events.add(new Event(getDocumentEntityClassname(), "author", "application-Id-2929",
+            events.add(new Event(getDocumentEntityClassname(), "author",
+                    applicationDefinedProperties.getApplicationId(),
                     ConversionUtils.convertToMap(record).get("id").toString(),
                     Event.EVENT_TYPE_DELETE, record));
         });
         this.getRepository().deleteAll();
-        if (eventBrokerProperties.isActive()) {
+        if (applicationDefinedProperties.isActive()) {
             events.forEach((event) -> {
                 commandEventPublisherPort.publish(Event.EVENT_TOPIC, event);
             });
@@ -135,6 +140,7 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
         if (this.getRepository().findById(id).isPresent()) {
            return this.getRepository().findById(id).get();
         }
+        logger.info("buscarPorId no localizó el id: " + id);
         NotExistException e = new NotExistException();
         e.setMsgError("id: " + id);
         RuntimeException exc = new RuntimeException(e);
@@ -162,8 +168,12 @@ public abstract class CommandServiceAdapter<T, ID> implements CommandServicePort
             field.setAccessible(true);
             field.set(instance, fieldValue);
             return this.getRepository().findAll(Example.of(instance));
-        } catch (Throwable exc) {
-            return null;
+        } catch (Throwable exc1) {
+            logger.error("Error in buscarPorCampoValor method: ", exc1.getCause());
+            NotExistException e = new NotExistException();
+            e.setMsgError("fieldName: " + fieldName + " not exists for this Entity class");
+            RuntimeException exc = new RuntimeException(e);
+            throw exc;
         }
     }
 

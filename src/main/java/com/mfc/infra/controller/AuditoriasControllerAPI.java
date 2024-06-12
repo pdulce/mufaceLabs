@@ -31,15 +31,13 @@ public class AuditoriasControllerAPI {
     /** ENDPOINTS QUE DAN ACCESO A LA INFORMACIÓN DE CUALQUIER AUDITORIA DE CUALQUIER APLICACION **/
 
     @GetMapping(value = "transacciones-simples/{applicationId}", produces= MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, List<Object>> getAllFromEventStoreCustomers(@PathVariable @NotEmpty String applicationId) {
-        //return this.eventStoreConsumerAdapter.findAllByApp(applicationId);
-        throw new NotImplementedException("eventStoreConsumerAdapter.findAllByApp not implemented yet");
+    public List<Map<String, List<Object>>> getAllFromEventStoreCustomers(@PathVariable @NotEmpty String applicationId) {
+        return this.eventStoreConsumerAdapter.findAllByApp(applicationId);
     }
 
     @GetMapping(value = "transacciones-simples/{applicationId}/{almacen}", produces= MediaType.APPLICATION_JSON_VALUE)
     public Map<String, List<Object>> getAllFromEventStoreCustomers(@PathVariable @NotEmpty String applicationId,
                                                                    @PathVariable @NotEmpty String almacen) {
-        // almacen: Customer.class.getSimpleName()
         return this.eventStoreConsumerAdapter.findAllByAppAndStore(applicationId, almacen);
     }
 
@@ -54,10 +52,9 @@ public class AuditoriasControllerAPI {
     /** ENDPOINTS QUE DAN ACCESO A LA INFORMACIÓN DE CUALQUIER TRANSACCION EN CUALQUIER APLICACION **/
 
     @GetMapping(value = "transacciones-distribuidas/{applicationId}", produces=MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, List<Object>> getAllTransactionsOfApplication(@PathVariable @NotEmpty String applicationId,
+    public List<Map<String, List<Object>>> getAllTransactionsOfApplication(@PathVariable @NotEmpty String applicationId,
                                                                      @PathVariable @NotEmpty String saga) {
-        //return this.eventStoreConsumerAdapter.findAllByApp(applicationId);
-        throw new NotImplementedException("eventStoreConsumerAdapter.findAllByApp not implemented yet");
+        return this.eventStoreConsumerAdapter.findAllByApp(applicationId);
     }
 
     @GetMapping(value = "transacciones-distribuidas/{applicationId}/{saga}", produces=MediaType.APPLICATION_JSON_VALUE)

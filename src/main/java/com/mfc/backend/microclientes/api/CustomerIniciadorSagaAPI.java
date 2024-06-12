@@ -16,7 +16,7 @@ public class CustomerIniciadorSagaAPI extends BaseRestController {
 
     @PostMapping(produces=MediaType.APPLICATION_JSON_VALUE)
     public String create(@RequestBody @NotNull CustomerDTO customerDTO) {
-        return this.creacionCustomerIniciadorSagaUseCase.ejecutar("application-Id",
+        return this.creacionCustomerIniciadorSagaUseCase.ejecutar("application-Id-sample",
                 this.orchestratorManager, customerDTO, this.messageSource);
     }
 
