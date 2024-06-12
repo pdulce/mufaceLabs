@@ -37,8 +37,7 @@ public class RegaloAPI extends BaseRestController {
 
     @PutMapping(produces=MediaType.APPLICATION_JSON_VALUE)
     public RegaloDTO update(@RequestBody @NotNull RegaloDTO regaloDTO) {
-        Regalo regalo = new Regalo(regaloDTO);
-        return new RegaloDTO(this.actualizarRegaloUseCase.ejecutar(regalo));
+        return this.actualizarRegaloUseCase.ejecutar(regaloDTO);
     }
 
     @DeleteMapping(value = "deleteAll", produces=MediaType.APPLICATION_JSON_VALUE)
