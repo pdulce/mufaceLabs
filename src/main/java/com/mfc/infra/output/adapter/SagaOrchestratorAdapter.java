@@ -37,12 +37,11 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T> {
      * @param data
      * @return
      */
-    public Event startSaga(String sagaName, String operation, T data) {
+    public Event startSaga(String applicationId, String sagaName, String operation, T data) {
 
         Long transactionIdentifier = Math.abs(UUID.randomUUID().getMostSignificantBits());
 
-        Event<?> dataEvent = new Event(sagaName, "author", "applicationId-999", "step-1",
-                operation, data);
+        Event<?> dataEvent = new Event(sagaName, "author", applicationId, "step-1", operation, data);
 
         // Al iniciar la Saga el orquestador asigna un id único a la transacc. distribuida
 
@@ -50,8 +49,8 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T> {
         dataEvent.setSagaStepInfo(sagaInfo);
 
         // Iniciar Saga
-        this.commandEventPublisher.publish(DO_OPERATION + "-" + dataEvent.getSagaStepInfo().getSagaName() +
-                "-1", dataEvent);
+        this.commandEventPublisher.publish(DO_OPERATION + applicationId
+                + "-" + dataEvent.getSagaStepInfo().getSagaName() + "-1", dataEvent);
 
         logger.info("Saga iniciada con número de transacción: " + transactionIdentifier);
 
@@ -71,7 +70,8 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T> {
             }
         } else {
             // ingresamos el evento de esta step-transaction en el agregado de esta transacción
-            this.eventStoreConsumer.saveEvent(event.getSagaStepInfo().getSagaName(),
+            this.eventStoreConsumer.saveEvent(event.getContextInfo().getApplicationId(),
+                    event.getSagaStepInfo().getSagaName(),
                     String.valueOf(event.getSagaStepInfo().getTransactionIdentifier()), event);
 
             if (event.getSagaStepInfo().getStateOfOperation() == Event.SAGA_OPE_FAILED) {
@@ -92,9 +92,10 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T> {
         }
     }
 
-    public String[] getLastStateOfTansactionInSaga(String saganame, String transaccId) {
+    public String[] getLastStateOfTansactionInSaga(String applicationId, String saganame, String transaccId) {
         String[] msgAndArgs = new String[3];
-        List<Object> objetos = this.eventStoreConsumer.findById(saganame, transaccId);
+        List<Object> objetos = this.eventStoreConsumer.findAllByAppAndStoreAndAggregatedId(applicationId,
+                saganame, transaccId);
         if (objetos == null || objetos.isEmpty()) {
             msgAndArgs[0] = ConstantMessages.ERROR_NOT_FOUND;
             msgAndArgs[1] = "núm. transaction: " + transaccId + " in saga: " + saganame;
@@ -149,7 +150,7 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T> {
 
     private void continueNextStep(Event<?> event) {
         // Iniciar Saga
-        this.commandEventPublisher.publish(DO_OPERATION + "-"
+        this.commandEventPublisher.publish(DO_OPERATION + event.getContextInfo().getApplicationId() + "-"
                 + event.getSagaStepInfo().getSagaName() + "-" + event.getSagaStepInfo().getNextStepNumberToProccess(),
                 event);
 
@@ -158,24 +159,26 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T> {
     }
 
     private void actualizarEventoConCompensacion(Event event) {
-        Event eventoTransaccion = searchStepInTransaction(event.getSagaStepInfo().getSagaName(),
+        Event eventoTransaccion = searchStepInTransaction(event.getContextInfo().getApplicationId(),
+                event.getSagaStepInfo().getSagaName(),
                 event.getSagaStepInfo().getStepNumber(), event.getSagaStepInfo().getTransactionIdentifier());
         if (eventoTransaccion != null) {
             eventoTransaccion.setSagaStepInfo(event.getSagaStepInfo());
-            this.eventStoreConsumer.update(event.getSagaStepInfo().getSagaName(),
+            this.eventStoreConsumer.update(event.getContextInfo().getApplicationId(),
+                    event.getSagaStepInfo().getSagaName(),
                     String.valueOf(event.getSagaStepInfo().getTransactionIdentifier()),
                     Event.STEP_ID_PREFIX + event.getSagaStepInfo().getStepNumber(), event);
         }
     }
 
     private void backToStepToCompensate(Event event) {
-        Event eventoTransaccion = searchStepInTransaction(event.getSagaStepInfo().getSagaName(),
-                event.getSagaStepInfo().getStepNumber() - 1,
+        Event eventoTransaccion = searchStepInTransaction(event.getContextInfo().getApplicationId(),
+                event.getSagaStepInfo().getSagaName(), event.getSagaStepInfo().getStepNumber() - 1,
                 event.getSagaStepInfo().getTransactionIdentifier());
         if (eventoTransaccion != null) {
             eventoTransaccion.getSagaStepInfo().setDoCompensateOp(true);
-            this.commandEventPublisher.publish(
-                    DO_OPERATION + "-" + eventoTransaccion.getSagaStepInfo().getSagaName() +
+            this.commandEventPublisher.publish(DO_OPERATION + event.getContextInfo().getApplicationId()
+                    + "-" + eventoTransaccion.getSagaStepInfo().getSagaName() +
                     "-" + eventoTransaccion.getSagaStepInfo().getStepNumber(), eventoTransaccion);
             logger.info("Solicitada operación de compensación en step "
                     + eventoTransaccion.getSagaStepInfo().getStepNumber()
@@ -188,9 +191,10 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T> {
         }
     }
 
-    private Event searchStepInTransaction(String sagaName, Integer stepNumber, Long transactionIdentifier) {
+    private Event searchStepInTransaction(String applicationId, String sagaName, Integer stepNumber,
+                                          Long transactionIdentifier) {
         List<Object> objetosTransaccionados = this.eventStoreConsumer.
-                findById(sagaName, String.valueOf(transactionIdentifier));
+                findAllByAppAndStoreAndAggregatedId(applicationId, sagaName, String.valueOf(transactionIdentifier));
         if (objetosTransaccionados == null || objetosTransaccionados.isEmpty()) {
             return null;
         }

@@ -1,7 +1,7 @@
-package com.mfc.backend.microclientes.domain.service.command;
+package com.mfc.backend.microclientes.domain.service;
 
-import com.mfc.backend.microclientes.domain.model.command.Customer;
-import com.mfc.backend.microclientes.domain.repository.command.CustomerCommandRepositoryPort;
+import com.mfc.backend.microclientes.domain.model.Customer;
+import com.mfc.backend.microclientes.domain.repository.CustomerCommandRepositoryPort;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.output.adapter.CommandServiceStepSagaAdapter;
 import com.mfc.infra.output.port.GenericRepositoryPort;
@@ -18,7 +18,9 @@ public class CustomerCommandStepSagaAdapterService extends CommandServiceStepSag
 
     private static final String SAGA_NAME = "sagaBienvenidaCustomer";
     private static final int SAGA_STEP_NUMBER = 1;
-    private static final String TOPIC_FOR_ME = SagaOrchestratorPort.DO_OPERATION + "-" + SAGA_NAME + "-"
+
+    private static final String APP_ID = "application-Id";
+    private static final String TOPIC_FOR_ME = SagaOrchestratorPort.DO_OPERATION + APP_ID + "-" + SAGA_NAME + "-"
             + SAGA_STEP_NUMBER;
     private static final String GROUP_ID = "saga-step-group-customerconsumer-service-step-1";
 

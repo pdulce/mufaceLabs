@@ -1,6 +1,6 @@
-package com.mfc.backend.microclientes.domain.repository.command;
+package com.mfc.backend.microclientes.domain.repository;
 
-import com.mfc.backend.microclientes.domain.model.command.Customer;
+import com.mfc.backend.microclientes.domain.model.Customer;
 import com.mfc.infra.output.port.GenericRepositoryPort;
 import org.springframework.stereotype.Repository;
 

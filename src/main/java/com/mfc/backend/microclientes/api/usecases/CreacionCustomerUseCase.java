@@ -1,8 +1,8 @@
 package com.mfc.backend.microclientes.api.usecases;
 
 import com.mfc.backend.microclientes.api.dto.CustomerDTO;
-import com.mfc.backend.microclientes.domain.model.command.Customer;
-import com.mfc.backend.microclientes.domain.service.command.CustomerCommandStepSagaAdapterService;
+import com.mfc.backend.microclientes.domain.model.Customer;
+import com.mfc.backend.microclientes.domain.service.CustomerCommandStepSagaAdapterService;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.utils.ConstantMessages;
@@ -25,7 +25,8 @@ public class CreacionCustomerUseCase {
         }
         Customer customer = new Customer(customerDTO);
         Locale locale = "es" != null ? new Locale("es") : Locale.getDefault();
-        Event event = orchestratorManager.startSaga(customerCommandStepSagaAdapter.getSagaName(),
+        Event event = orchestratorManager.startSaga("customerAppId",
+                customerCommandStepSagaAdapter.getSagaName(),
                 customerCommandStepSagaAdapter.getTypeOrOperation(), customer);
         String message = messageSource.getMessage(ConstantMessages.DISTRIBUTED_INITIADED,
                 new Object[]{event == null ? "" : event.getSagaStepInfo().getSagaName(),

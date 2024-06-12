@@ -7,7 +7,7 @@ import java.util.List;
 import com.mfc.backend.microclientes.api.dto.CustomerDTO;
 import com.mfc.backend.microclientes.api.usecases.BorrarCustomerUseCase;
 import com.mfc.backend.microclientes.api.usecases.ConsultasCustomerUseCase;
-import com.mfc.backend.microclientes.domain.model.command.Customer;
+import com.mfc.backend.microclientes.domain.model.Customer;
 import com.mfc.infra.controller.BaseRestController;
 import com.mfc.backend.microclientes.api.usecases.ActualizarCustomerUseCase;
 import jakarta.validation.constraints.NotNull;

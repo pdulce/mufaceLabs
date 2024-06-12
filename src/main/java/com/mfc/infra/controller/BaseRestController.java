@@ -1,6 +1,5 @@
 package com.mfc.infra.controller;
 
-import com.mfc.backend.microclientes.domain.model.command.Customer;
 import com.mfc.infra.input.port.EventStoreInputPort;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.utils.ConstantMessages;
@@ -61,33 +60,39 @@ public abstract class BaseRestController {
     }
 
 
-    /** ENDPOINTS QUE DAN ACCESO A LA INFORMACIÓN DE CUALQUIER TRANSACCION EN CUALQUIER APLICACION **/
+    /** ENDPOINTS QUE DAN ACCESO A LA INFORMACIÓN DE CUALQUIER AUDITORIA DE CUALQUIER APLICACION **/
+
+    @GetMapping(value = "auditorias/{applicationId}", produces= MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, List<Object>> getAllFromEventStoreCustomers(@PathVariable @NotEmpty String applicationId) {
+        return this.eventStoreConsumerAdapter.findAllByApp(applicationId);
+    }
+
     @GetMapping(value = "auditorias/{applicationId}/{almacen}", produces= MediaType.APPLICATION_JSON_VALUE)
     public Map<String, List<Object>> getAllFromEventStoreCustomers(@PathVariable @NotEmpty String applicationId,
                                                                    @PathVariable @NotEmpty String almacen) {
         // almacen: Customer.class.getSimpleName()
-        return this.eventStoreConsumerAdapter.findAll(applicationId, almacen);
+        return this.eventStoreConsumerAdapter.findAllByAppAndStore(applicationId, almacen);
     }
 
     @GetMapping(value = "auditorias/{applicationId}/{almacen}/{idAgregado}", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Object> getAllEventsFromIdFromRedis(@PathVariable @NotEmpty String applicationId,
                                                     @PathVariable @NotEmpty String almacen,
                                                     @PathVariable @NotEmpty String idAgregado) {
-        return this.eventStoreConsumerAdapter.findById(applicationId, almacen, idAgregado);
+        return this.eventStoreConsumerAdapter.findAllByAppAndStoreAndAggregatedId(applicationId, almacen, idAgregado);
     }
-
-    @DeleteMapping(value = "deleteAlmacenCustomers", produces=MediaType.APPLICATION_JSON_VALUE)
-    public void deleteAlmacenCustomers() {
-        this.eventStoreConsumerAdapter.deleteAll(Customer.class.getSimpleName());
-    }
-
 
     /** ENDPOINTS QUE DAN ACCESO A LA INFORMACIÓN DE CUALQUIER TRANSACCION EN CUALQUIER APLICACION **/
 
-    @GetMapping(value = "transacciones-distribuidas/{applicationId}/{saga}", produces=MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, List<Object>> getAllTransactionsOfSaga(@PathVariable @NotEmpty String applicationId,
+    @GetMapping(value = "transacciones-distribuidas/{applicationId}", produces=MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, List<Object>> getAllTransactionsOfApplication(@PathVariable @NotEmpty String applicationId,
                                                               @PathVariable @NotEmpty String saga) {
-        return this.eventStoreConsumerAdapter.findAll(saga);
+        return this.eventStoreConsumerAdapter.findAllByApp(applicationId);
+    }
+
+    @GetMapping(value = "transacciones-distribuidas/{applicationId}/{saga}", produces=MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, List<Object>> getAllTransactionsOfSagaInApp(@PathVariable @NotEmpty String applicationId,
+                                                              @PathVariable @NotEmpty String saga) {
+        return this.eventStoreConsumerAdapter.findAllByAppAndStore(applicationId, saga);
     }
 
     @GetMapping(value = "transacciones-distribuidas/{applicationId}/{saga}/{transactionId}",
@@ -95,7 +100,7 @@ public abstract class BaseRestController {
     public List<Object> getAllStepsInSagaTransactionId(@PathVariable @NotEmpty String applicationId,
                                                        @PathVariable @NotEmpty String saga,
                                                        @PathVariable @NotEmpty String transactionId) {
-        return this.eventStoreConsumerAdapter.findById(saga, transactionId);
+        return this.eventStoreConsumerAdapter.findAllByAppAndStoreAndAggregatedId(applicationId, saga, transactionId);
     }
 
     public String getSagaEstadoFinalizacion(String applicationId, String saga, String transaccionId) {

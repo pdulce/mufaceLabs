@@ -1,6 +1,6 @@
-package com.mfc.backend.microclientes.domain.service.command;
+package com.mfc.backend.microclientes.domain.service;
 
-import com.mfc.backend.microclientes.domain.model.command.Customer;
+import com.mfc.backend.microclientes.domain.model.Customer;
 import com.mfc.infra.output.port.CommandServicePort;
 
 import java.util.List;

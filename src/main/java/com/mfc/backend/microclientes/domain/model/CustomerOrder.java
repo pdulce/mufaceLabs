@@ -1,8 +1,9 @@
-package com.mfc.backend.microclientes.domain.model.command;
+package com.mfc.backend.microclientes.domain.model;
 
 import java.math.BigDecimal;
 
 import com.mfc.backend.microclientes.api.dto.CustomerOrderDTO;
+import com.mfc.backend.microclientes.domain.model.Customer;
 import jakarta.persistence.*;
 import lombok.Data;
 

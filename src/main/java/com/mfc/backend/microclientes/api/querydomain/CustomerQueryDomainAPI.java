@@ -1,7 +1,6 @@
 package com.mfc.backend.microclientes.api.querydomain;
 
 
-import com.mfc.backend.microclientes.api.usecases.QueriesOptimizedUseCase;
 import com.mfc.backend.microclientes.domain.model.query.CustomerDocument;
 import com.mfc.infra.controller.BaseRestController;
 import org.springframework.beans.factory.annotation.Autowired;

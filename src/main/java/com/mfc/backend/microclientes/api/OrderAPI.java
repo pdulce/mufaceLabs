@@ -2,7 +2,7 @@ package com.mfc.backend.microclientes.api;
 
 import com.mfc.backend.microclientes.api.dto.CustomerOrderDTO;
 import com.mfc.backend.microclientes.api.usecases.CrearPedidoUseCase;
-import com.mfc.backend.microclientes.domain.model.command.CustomerOrder;
+import com.mfc.backend.microclientes.domain.model.CustomerOrder;
 import com.mfc.infra.controller.BaseRestController;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;

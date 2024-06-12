@@ -1,7 +1,7 @@
-package com.mfc.backend.microclientes.domain.repository.command;
+package com.mfc.backend.microclientes.domain.repository;
 
 
-import com.mfc.backend.microclientes.domain.model.command.CustomerOrder;
+import com.mfc.backend.microclientes.domain.model.CustomerOrder;
 import com.mfc.infra.output.port.GenericRepositoryPort;
 import org.springframework.stereotype.Repository;
 

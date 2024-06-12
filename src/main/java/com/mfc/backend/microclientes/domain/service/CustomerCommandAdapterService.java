@@ -1,7 +1,7 @@
-package com.mfc.backend.microclientes.domain.service.command;
+package com.mfc.backend.microclientes.domain.service;
 
-import com.mfc.backend.microclientes.domain.model.command.Customer;
-import com.mfc.backend.microclientes.domain.repository.command.CustomerCommandRepositoryPort;
+import com.mfc.backend.microclientes.domain.model.Customer;
+import com.mfc.backend.microclientes.domain.repository.CustomerCommandRepositoryPort;
 import com.mfc.infra.output.adapter.CommandServiceAdapter;
 import com.mfc.infra.output.port.GenericRepositoryPort;
 import org.springframework.beans.factory.annotation.Autowired;

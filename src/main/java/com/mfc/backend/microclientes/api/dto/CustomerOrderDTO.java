@@ -1,7 +1,7 @@
 package com.mfc.backend.microclientes.api.dto;
 
-import com.mfc.backend.microclientes.domain.model.command.Customer;
-import com.mfc.backend.microclientes.domain.model.command.CustomerOrder;
+import com.mfc.backend.microclientes.domain.model.Customer;
+import com.mfc.backend.microclientes.domain.model.CustomerOrder;
 import lombok.Data;
 
 import java.math.BigDecimal;

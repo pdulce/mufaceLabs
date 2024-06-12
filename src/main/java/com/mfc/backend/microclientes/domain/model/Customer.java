@@ -1,4 +1,4 @@
-package com.mfc.backend.microclientes.domain.model.command;
+package com.mfc.backend.microclientes.domain.model;
 
 import com.mfc.backend.microclientes.api.dto.CustomerDTO;
 import com.mfc.infra.utils.ConstantMessages;
