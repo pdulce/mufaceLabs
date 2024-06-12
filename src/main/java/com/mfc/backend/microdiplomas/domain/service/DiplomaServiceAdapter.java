@@ -13,12 +13,9 @@ import java.util.List;
 @Service
 public class DiplomaServiceAdapter extends CommandServiceAdapter<Diploma, Long> implements DiplomaServicePort {
 
-    protected DiplomaCommandRepository repository;
-
     @Autowired
-    public DiplomaServiceAdapter(DiplomaCommandRepository diplomaCommandRepository) {
-        this.repository = diplomaCommandRepository;
-    }
+    private DiplomaCommandRepository repository;
+
     protected GenericRepositoryPort<Diploma, Long> getRepository() {
         return this.repository;
     }
