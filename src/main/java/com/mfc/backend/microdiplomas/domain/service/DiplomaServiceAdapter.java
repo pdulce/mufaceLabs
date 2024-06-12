@@ -1,5 +1,6 @@
 package com.mfc.backend.microdiplomas.domain.service;
 
+import com.mfc.backend.microdiplomas.api.dto.DiplomaDTO;
 import com.mfc.backend.microdiplomas.domain.model.Diploma;
 import com.mfc.backend.microdiplomas.domain.repository.DiplomaCommandRepository;
 import com.mfc.infra.output.adapter.CommandServiceAdapter;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,11 +23,50 @@ public class DiplomaServiceAdapter extends CommandServiceAdapter<Diploma, Long> 
     }
 
     @Override
-    public List<Diploma> getDiplomasDeLaRegionProvenza() {
+    public List<DiplomaDTO> getDiplomasDeLaRegionProvenza() {
+        List<DiplomaDTO> diplomaDTOS = new ArrayList<>();
         Diploma dFilter = new Diploma();
         dFilter.setRegion("Provenza");
         Example<Diploma> example = Example.of(dFilter);
-        return repository.findAll(example);
+        repository.findAll(example).forEach((diploma -> {
+            diplomaDTOS.add(new DiplomaDTO(diploma));
+        }));
+        return diplomaDTOS;
     }
+
+    public List<DiplomaDTO> buscarDiplomasDeCustomer(Long customerId) {
+        List<DiplomaDTO> diplomas = new ArrayList<>();
+        this.buscarPorCampoValor("idcustomer", customerId).forEach((diploma -> {
+            diplomas.add(new DiplomaDTO(diploma));
+        }));
+        return diplomas;
+    }
+
+    public List<DiplomaDTO> buscarDiplomasPorNombreCustomer(String name) {
+        List<DiplomaDTO> diplomas = new ArrayList<>();
+        this.buscarPorCampoValor("name", name).forEach((diploma -> {
+            diplomas.add(new DiplomaDTO(diploma));
+        }));
+        return diplomas;
+    }
+
+    public List<DiplomaDTO> buscarTodosLosDiplomas() {
+        List<DiplomaDTO> diplomas = new ArrayList<>();
+        this.buscar().forEach((diploma -> {
+            diplomas.add(new DiplomaDTO(diploma));
+        }));
+        return diplomas;
+    }
+
+
+    public DiplomaDTO updateDiploma(DiplomaDTO diplomaDTO) {
+        Diploma diploma = new Diploma(diplomaDTO);
+        diploma = this.actualizar(diploma);
+        return new DiplomaDTO(diploma);
+    }
+
+
+
+
 
 }

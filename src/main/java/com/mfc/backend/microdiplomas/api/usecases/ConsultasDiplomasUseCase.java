@@ -5,7 +5,6 @@ import com.mfc.backend.microdiplomas.domain.service.DiplomaServicePort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -15,35 +14,19 @@ public class ConsultasDiplomasUseCase {
     DiplomaServicePort diplomaCommandServicePort;
 
     public List<DiplomaDTO> ejecutar(Long customerId) {
-        List<DiplomaDTO> diplomas = new ArrayList<>();
-        this.diplomaCommandServicePort.buscarPorCampoValor("idcustomer", customerId).forEach((diploma -> {
-            diplomas.add(new DiplomaDTO(diploma));
-        }));
-        return diplomas;
+        return this.diplomaCommandServicePort.buscarDiplomasDeCustomer(customerId);
     }
 
     public List<DiplomaDTO> ejecutar(String name) {
-        List<DiplomaDTO> diplomas = new ArrayList<>();
-        this.diplomaCommandServicePort.buscarPorCampoValor("name", name).forEach((diploma -> {
-            diplomas.add(new DiplomaDTO(diploma));
-        }));
-        return diplomas;
+        return this.diplomaCommandServicePort.buscarDiplomasPorNombreCustomer(name);
     }
 
     public List<DiplomaDTO> ejecutar() {
-        List<DiplomaDTO> diplomas = new ArrayList<>();
-        this.diplomaCommandServicePort.buscar().forEach((diploma -> {
-            diplomas.add(new DiplomaDTO(diploma));
-        }));
-        return diplomas;
+        return this.diplomaCommandServicePort.buscarTodosLosDiplomas();
     }
 
     public List<DiplomaDTO> getDiplomasDeLaRegionProvenza() {
-        List<DiplomaDTO> diplomas = new ArrayList<>();
-        this.diplomaCommandServicePort.getDiplomasDeLaRegionProvenza().forEach((diploma -> {
-            diplomas.add(new DiplomaDTO(diploma));
-        }));
-        return diplomas;
+        return this.diplomaCommandServicePort.getDiplomasDeLaRegionProvenza();
     }
 
 
