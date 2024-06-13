@@ -67,15 +67,15 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
     }
 
     @Override
-    public List<Event<?>> findAllByAppAndStoreAndAggregatedId(String typeStore, String applicationId, String store,
+    public Object findAllByAppAndStoreAndAggregatedId(String typeStore, String applicationId, String store,
                                                               String id) {
         HashOperations<String, String, List<Event<?>>> hashOps = redisTemplate.opsForHash();
         return hashOps.entries(ConversionUtils.getKeyAlmacen(typeStore,applicationId,store)).get(id);
     }
 
     @Override
-    public List<Event<?>> findAllByAppAndStore(String typeStore, String applicationId, String store) {
-        List<Event<?>> allEvents = new ArrayList<>();
+    public List<Object> findAllByAppAndStore(String typeStore, String applicationId, String store) {
+        List<Object> allEvents = new ArrayList<>();
 
         // Obtener todas las claves que empiecen por typeStore
         ScanOptions scanOptions = ScanOptions.scanOptions().match(typeStore + "*").build();
@@ -83,8 +83,8 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
             if (key.startsWith(typeStore + ":" + applicationId + ":" + store)) {
                 Map<Object, Object> entries = redisTemplate.opsForHash().entries(key);
                 for (Map.Entry<Object, Object> entry : entries.entrySet()) {
-                    List<Event<?>> events = (List<Event<?>>) entry.getValue();
-                    allEvents.addAll(events);
+                    Object event = entry.getValue();
+                    allEvents.add(event);
                 }
             }
         }
@@ -92,8 +92,8 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
     }
 
     @Override
-    public List<Event<?>> findAllByApp(String typeStore, String applicationId) {
-        List<Event<?>> allEvents = new ArrayList<>();
+    public List<Object> findAllByApp(String typeStore, String applicationId) {
+        List<Object> allEvents = new ArrayList<>();
 
         // Obtener todas las claves que empiecen por typeStore
         ScanOptions scanOptions = ScanOptions.scanOptions().match(typeStore + "*").build();
@@ -101,8 +101,8 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
             if (key.startsWith(typeStore + ":" + applicationId)) {
                 Map<Object, Object> entries = redisTemplate.opsForHash().entries(key);
                 for (Map.Entry<Object, Object> entry : entries.entrySet()) {
-                    List<Event<?>> events = (List<Event<?>>) entry.getValue();
-                    allEvents.addAll(events);
+                    Object event = entry.getValue();
+                    allEvents.add(event);
                 }
             }
         }
@@ -111,8 +111,8 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
 
 
     @Override
-    public List<Event<?>> findAllStoreType(String typeStore) {
-        List<Event<?>> allEvents = new ArrayList<>();
+    public List<Object> findAllStoreType(String typeStore) {
+        List<Object> allEvents = new ArrayList<>();
 
         // Obtener todas las claves que empiecen por typeStore
         ScanOptions scanOptions = ScanOptions.scanOptions().match(typeStore + "*").build();
@@ -120,8 +120,8 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
             if (key.startsWith(typeStore)) {
                 Map<Object, Object> entries = redisTemplate.opsForHash().entries(key);
                 for (Map.Entry<Object, Object> entry : entries.entrySet()) {
-                    List<Event<?>> events = (List<Event<?>>) entry.getValue();
-                    allEvents.addAll(events);
+                    Object event = entry.getValue();
+                    allEvents.add(event);
                 }
             }
         }
