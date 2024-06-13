@@ -1,6 +1,6 @@
 package com.mfc.backend.microdiplomas.api;
 
-import com.mfc.backend.microdiplomas.api.command.DiplomaCommandService;
+import com.mfc.backend.microdiplomas.api.command.service.DiplomaCommandService;
 import com.mfc.backend.microdiplomas.api.dto.DiplomaDTO;
 import com.mfc.infra.controller.BaseRestController;
 import jakarta.validation.constraints.NotNull;

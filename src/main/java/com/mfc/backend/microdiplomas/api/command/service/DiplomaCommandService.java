@@ -1,5 +1,10 @@
-package com.mfc.backend.microdiplomas.api.command;
+package com.mfc.backend.microdiplomas.api.command.service;
 
+import com.mfc.backend.microdiplomas.api.command.*;
+import com.mfc.backend.microdiplomas.api.command.acciones.ActualizarDiplomaCommand;
+import com.mfc.backend.microdiplomas.api.command.acciones.BorrarDiplomaCommand;
+import com.mfc.backend.microdiplomas.api.command.acciones.BuscarDiplomasDeCliente;
+import com.mfc.backend.microdiplomas.api.command.acciones.BuscarTodosLosDiplomasCommand;
 import com.mfc.backend.microdiplomas.api.dto.DiplomaDTO;
 import com.mfc.backend.microdiplomas.api.usecases.ActualizarDiplomaUseCase;
 import com.mfc.backend.microdiplomas.api.usecases.BorrarTodosLosDiplomasUseCase;

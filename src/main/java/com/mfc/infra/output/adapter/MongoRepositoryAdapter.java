@@ -25,8 +25,6 @@ public abstract class MongoRepositoryAdapter<T> implements MongoRepositoryPort<T
     @Autowired
     MongoRepository<T, String> repository;
 
-    public abstract void listen(Event<?> eventArch);
-
     public String getCollectionName(Class<?> documentClass) {
         return mongoMappingContext.getPersistentEntity(documentClass) == null ? "unknown" :
                 mongoMappingContext.getPersistentEntity(documentClass).getCollection();

@@ -1,4 +1,4 @@
-package com.mfc.backend.microdiplomas.api.command;
+package com.mfc.backend.microdiplomas.api.command.acciones;
 
 import com.mfc.backend.microdiplomas.api.dto.DiplomaDTO;
 import com.mfc.backend.microdiplomas.api.usecases.BorrarTodosLosDiplomasUseCase;

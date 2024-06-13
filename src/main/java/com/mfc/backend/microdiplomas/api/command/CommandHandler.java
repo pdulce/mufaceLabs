@@ -1,5 +1,6 @@
 package com.mfc.backend.microdiplomas.api.command;
 
+import com.mfc.backend.microdiplomas.api.command.acciones.Command;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
