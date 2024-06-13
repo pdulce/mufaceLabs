@@ -22,7 +22,7 @@ public class ConversionUtils {
     private ConversionUtils() {}
 
     public static final String getKeyAlmacen(String typeOfStore, String applicationId, String almacen) {
-        return typeOfStore + "-" + applicationId + "-" + almacen;
+        return typeOfStore + ":" + applicationId + ":" + almacen;
     }
     public static String formatTimestampToSpanish(Timestamp timestamp) {
         // Convertir Timestamp a LocalDateTime
