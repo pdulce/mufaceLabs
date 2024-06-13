@@ -2,11 +2,11 @@ package com.mfc.backend.microdiplomas.domain.service;
 
 import com.mfc.backend.microdiplomas.api.dto.DiplomaDTO;
 import com.mfc.backend.microdiplomas.domain.model.Diploma;
-import com.mfc.infra.output.port.CommandServicePort;
+import com.mfc.infra.output.port.RelationalServicePort;
 
 import java.util.List;
 
-public interface DiplomaServicePort extends CommandServicePort<Diploma, Long> {
+public interface DiplomaServicePort extends RelationalServicePort<Diploma, Long> {
 
     List<DiplomaDTO> getDiplomasDeLaRegionProvenza();
 

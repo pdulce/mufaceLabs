@@ -2,7 +2,7 @@ package com.mfc.backend.microclientes.api.usecases;
 
 import com.mfc.backend.microclientes.api.dto.CustomerDTO;
 import com.mfc.backend.microclientes.domain.model.Customer;
-import com.mfc.backend.microclientes.domain.service.CustomerCommandStepSagaAdapterService;
+import com.mfc.backend.microclientes.domain.service.CustomerRelationalStepSagaAdapterService;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.utils.ConstantMessages;
@@ -16,7 +16,7 @@ import java.util.Locale;
 public class CreacionCustomerIniciadorSagaUseCase {
 
     @Autowired(required = false)
-    CustomerCommandStepSagaAdapterService customerCommandStepSagaAdapter;
+    CustomerRelationalStepSagaAdapterService customerCommandStepSagaAdapter;
 
     public String ejecutar(String applicationId, SagaOrchestratorPort orchestratorManager, CustomerDTO customerDTO,
                            MessageSource messageSource) {

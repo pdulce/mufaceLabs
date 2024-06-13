@@ -4,7 +4,7 @@ import com.mfc.backend.microregalos.domain.model.DiplomaWrapper;
 import com.mfc.backend.microregalos.domain.model.Regalo;
 import com.mfc.backend.microregalos.domain.repository.RegaloCommandRepository;
 import com.mfc.infra.event.Event;
-import com.mfc.infra.output.adapter.CommandServiceStepSagaAdapter;
+import com.mfc.infra.output.adapter.RelationalServiceStepSagaAdapter;
 import com.mfc.infra.output.port.GenericRepositoryPort;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.utils.ConversionUtils;
@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 
 @Service
 @ConditionalOnProperty(name = "arch.event-broker-active", havingValue = "true", matchIfMissing = false)
-public class RegaloStepSagaAdapterService extends CommandServiceStepSagaAdapter<Regalo, Long> {
+public class RegaloStepSagaAdapterService extends RelationalServiceStepSagaAdapter<Regalo, Long> {
 
     private static final String SAGA_NAME = "sagaBienvenidaCustomer";
     private static final int SAGA_STEP_NUMBER = 3;

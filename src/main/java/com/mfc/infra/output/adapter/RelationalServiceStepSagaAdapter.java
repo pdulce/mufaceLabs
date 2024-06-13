@@ -13,10 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 @Transactional
-public abstract class CommandServiceStepSagaAdapter<T, ID> extends CommandServiceAdapter<T, ID>
+public abstract class RelationalServiceStepSagaAdapter<T, ID> extends RelationalServiceAdapter<T, ID>
         implements SagaStepPort<T, ID> {
 
-    protected Logger logger = LoggerFactory.getLogger(CommandServiceStepSagaAdapter.class);
+    protected Logger logger = LoggerFactory.getLogger(RelationalServiceStepSagaAdapter.class);
     @Autowired(required = false)
     protected CommandEventPublisherPort commandEventPublisherPort;
 

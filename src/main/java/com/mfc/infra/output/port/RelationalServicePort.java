@@ -3,7 +3,7 @@ package com.mfc.infra.output.port;
 import java.util.List;
 
 
-public interface CommandServicePort<T, ID> {
+public interface RelationalServicePort<T, ID> {
 
     T crear(T entity);
 

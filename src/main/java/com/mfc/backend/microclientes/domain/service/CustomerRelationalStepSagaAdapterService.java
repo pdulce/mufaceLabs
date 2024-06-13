@@ -3,7 +3,7 @@ package com.mfc.backend.microclientes.domain.service;
 import com.mfc.backend.microclientes.domain.model.Customer;
 import com.mfc.backend.microclientes.domain.repository.CustomerCommandRepositoryPort;
 import com.mfc.infra.event.Event;
-import com.mfc.infra.output.adapter.CommandServiceStepSagaAdapter;
+import com.mfc.infra.output.adapter.RelationalServiceStepSagaAdapter;
 import com.mfc.infra.output.port.GenericRepositoryPort;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.utils.ConversionUtils;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @ConditionalOnProperty(name = "arch.event-broker-active", havingValue = "true", matchIfMissing = false)
-public class CustomerCommandStepSagaAdapterService extends CommandServiceStepSagaAdapter<Customer, Long> {
+public class CustomerRelationalStepSagaAdapterService extends RelationalServiceStepSagaAdapter<Customer, Long> {
     private static final String SAGA_NAME = "sagaBienvenidaCustomer";
     private static final int SAGA_STEP_NUMBER = 1;
     private static final String APP_ID = "application-Id-sample";
@@ -25,7 +25,7 @@ public class CustomerCommandStepSagaAdapterService extends CommandServiceStepSag
     protected CustomerCommandRepositoryPort repository;
 
     @Autowired
-    public CustomerCommandStepSagaAdapterService(CustomerCommandRepositoryPort customerCommandRepositoryPortP) {
+    public CustomerRelationalStepSagaAdapterService(CustomerCommandRepositoryPort customerCommandRepositoryPortP) {
         this.repository = customerCommandRepositoryPortP;
     }
 
