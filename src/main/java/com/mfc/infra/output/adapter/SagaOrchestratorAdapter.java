@@ -94,8 +94,8 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T> {
 
     public String[] getLastStateOfTansactionInSaga(String applicationId, String saganame, String transaccId) {
         String[] msgAndArgs = new String[3];
-        List<Event<?>> objetos = this.eventStoreConsumer.findAllByAppAndStoreAndAggregatedId("transac-distrib",
-                applicationId, saganame, transaccId);
+        List<Object> objetos = (List<Object>) this.eventStoreConsumer.
+                findAggregateByAppAndStoreAndAggregateId("transac-distrib", applicationId, saganame, transaccId);
         if (objetos == null || objetos.isEmpty()) {
             msgAndArgs[0] = ConstantMessages.ERROR_NOT_FOUND;
             msgAndArgs[1] = "núm. transaction: " + transaccId + " in saga: " + saganame;
@@ -193,8 +193,8 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T> {
 
     private Event searchStepInTransaction(String applicationId, String sagaName, Integer stepNumber,
                                           Long transactionIdentifier) {
-        List<Event<?>> objetosTransaccionados = this.eventStoreConsumer.
-                findAllByAppAndStoreAndAggregatedId("transac-distrib",
+        List<Object> objetosTransaccionados = (List<Object>) this.eventStoreConsumer.
+                findAggregateByAppAndStoreAndAggregateId("transac-distrib",
                         applicationId, sagaName, String.valueOf(transactionIdentifier));
         if (objetosTransaccionados == null || objetosTransaccionados.isEmpty()) {
             return null;

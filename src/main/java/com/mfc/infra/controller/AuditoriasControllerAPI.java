@@ -48,8 +48,8 @@ public class AuditoriasControllerAPI {
     public Object getAllEventsFromIdFromRedis(@PathVariable @NotEmpty String applicationId,
                                                     @PathVariable @NotEmpty String almacen,
                                                     @PathVariable @NotEmpty String idAgregado) {
-        return this.eventStoreConsumerAdapter.findAllByAppAndStoreAndAggregatedId(TYPE_OF_STORE_AUDIT, applicationId,
-                almacen, idAgregado);
+        return this.eventStoreConsumerAdapter.findAggregateByAppAndStoreAndAggregateId(TYPE_OF_STORE_AUDIT,
+                applicationId, almacen, idAgregado);
     }
 
     /** ENDPOINTS QUE DAN ACCESO A LA INFORMACIÓN DE CUALQUIER TRANSACCION EN CUALQUIER APLICACION **/
@@ -71,8 +71,8 @@ public class AuditoriasControllerAPI {
     public Object getAllStepsInSagaTransactionId(@PathVariable @NotEmpty String applicationId,
                                                        @PathVariable @NotEmpty String saga,
                                                        @PathVariable @NotEmpty String transactionId) {
-        return this.eventStoreConsumerAdapter.
-                findAllByAppAndStoreAndAggregatedId(TYPE_OF_STORE_TRANSAC_DISTRIB, applicationId, saga, transactionId);
+        return this.eventStoreConsumerAdapter.findAggregateByAppAndStoreAndAggregateId(TYPE_OF_STORE_TRANSAC_DISTRIB,
+                applicationId, saga, transactionId);
     }
 
 

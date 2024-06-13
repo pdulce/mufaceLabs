@@ -67,10 +67,12 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
     }
 
     @Override
-    public Object findAllByAppAndStoreAndAggregatedId(String typeStore, String applicationId, String store,
+    public List<Object> findAggregateByAppAndStoreAndAggregateId(String typeStore, String applicationId, String store,
                                                               String id) {
         HashOperations<String, String, List<Event<?>>> hashOps = redisTemplate.opsForHash();
-        return hashOps.entries(ConversionUtils.getKeyAlmacen(typeStore,applicationId,store)).get(id);
+        hashOps.entries(ConversionUtils.getKeyAlmacen(typeStore,applicationId,store)).get(id);
+        return (List) hashOps.entries(ConversionUtils.getKeyAlmacen(typeStore,applicationId,store)).get(id);
+
     }
 
     @Override

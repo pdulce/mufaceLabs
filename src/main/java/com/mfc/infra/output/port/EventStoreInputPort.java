@@ -11,7 +11,7 @@ public interface EventStoreInputPort {
 
     void update(String type, String applicationId, String almacen, String id, String idEntry, Event<?> eventArch);
 
-    Object findAllByAppAndStoreAndAggregatedId(String type, String applicationid, String almacen, String id);
+    List<Object> findAggregateByAppAndStoreAndAggregateId(String type, String applicationid, String almacen, String id);
 
     List<Object> findAllByAppAndStore(String type, String applicationid, String almacen);
 
