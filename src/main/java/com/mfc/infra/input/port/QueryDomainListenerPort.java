@@ -6,4 +6,7 @@ public interface QueryDomainListenerPort<T> {
 
     void listen(Event<?> eventArch);
 
+    void procesarEvento(Event<?> event);
+
+
 }

@@ -24,11 +24,13 @@ public class CommandEventListenerAdapter implements CommandEventListenerPort {
     @Autowired
     EventStoreInputPort eventStoreInputPort;
 
+    @Override
     @KafkaListener(topics = Event.EVENT_TOPIC, groupId = GROUP_ID)
     public void listen(Event<?> eventArch) {
         procesarEvento(eventArch);
     }
 
+    @Override
     public void procesarEvento(Event<?> eventArch) {
         if (!configProperties.isEventBrokerActive()) {
             logger.error("Debe tener activa la configuración de uso de mensajería en la arquitectura");

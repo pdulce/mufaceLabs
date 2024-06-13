@@ -8,13 +8,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Service
-@ConditionalOnProperty(name = "arch.event-broker-active", havingValue = "true", matchIfMissing = false)
 public class CustomerQueryServiceConsumerAdapter extends MongoRepositoryAdapter<CustomerDocument> {
-
-    private static final String GROUP_ID = "cqrs-query-adapter-2";
-    @KafkaListener(topics = Event.EVENT_TOPIC, groupId = GROUP_ID)
-    public void listen(Event<?> event) {
-        super.procesarEvento(event);
-    }
 
 }

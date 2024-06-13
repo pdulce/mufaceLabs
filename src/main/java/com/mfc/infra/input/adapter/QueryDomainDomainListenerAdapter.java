@@ -23,14 +23,10 @@ public abstract class QueryDomainDomainListenerAdapter<T> implements QueryDomain
     @Autowired
     ConfigProperties configProperties;
 
-
+    @Override
     public abstract void listen(Event<?> eventArch);
 
-    public String getCollectionName(Class<?> documentClass) {
-        return mongoMappingContext.getPersistentEntity(documentClass) == null ? "unknown" :
-                mongoMappingContext.getPersistentEntity(documentClass).getCollection();
-    }
-
+    @Override
     public void procesarEvento(Event<?> event) {
         if (!configProperties.isEventBrokerActive()) {
             logger.error("Debe tener activa la configuración de uso de mensajería en la arquitectura");
@@ -53,6 +49,11 @@ public abstract class QueryDomainDomainListenerAdapter<T> implements QueryDomain
                 this.mongoRepositoryPort.deleteReg(event.getId());
             }
         } // else::  //dejo pasar este mensaje porque no es para este consumidor
+    }
+
+    private String getCollectionName(Class<?> documentClass) {
+        return mongoMappingContext.getPersistentEntity(documentClass) == null ? "unknown" :
+                mongoMappingContext.getPersistentEntity(documentClass).getCollection();
     }
 
 

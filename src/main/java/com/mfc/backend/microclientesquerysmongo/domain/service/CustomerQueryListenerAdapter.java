@@ -1,19 +1,17 @@
 package com.mfc.backend.microclientesquerysmongo.domain.service;
 
-import com.mfc.backend.microclientesquerysmongo.domain.model.CustomerOrderDocument;
+import com.mfc.backend.microclientesquerysmongo.domain.model.CustomerDocument;
 import com.mfc.infra.event.Event;
-import com.mfc.infra.input.port.QueryDomainListenerPort;
-import com.mfc.infra.output.adapter.MongoRepositoryAdapter;
+import com.mfc.infra.input.adapter.QueryDomainDomainListenerAdapter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-
 @Service
 @ConditionalOnProperty(name = "arch.event-broker-active", havingValue = "true", matchIfMissing = false)
-public class CustomerOrderQueryServiceConsumerAdapter extends MongoRepositoryAdapter<CustomerOrderDocument> {
+public class CustomerQueryListenerAdapter extends QueryDomainDomainListenerAdapter<CustomerDocument> {
 
-    private static final String GROUP_ID = "cqrs-query-adapter-1";
+    private static final String GROUP_ID = "cqrs-query-adapter-2";
     @KafkaListener(topics = Event.EVENT_TOPIC, groupId = GROUP_ID)
     public void listen(Event<?> event) {
         super.procesarEvento(event);
