@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "diploma")
+@RequestMapping(value = "diplomasFacade")
 public class DiplomaWithFacadeAPI extends BaseRestController {
     @Autowired
     DiplomaFacade diplomaFacade;
 
     @GetMapping(value = "allDiplomas", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<DiplomaDTO> getAllDiplomas() {
+
         return this.diplomaFacade.consultarTodosLosDiplomas();
     }
 

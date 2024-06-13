@@ -2,12 +2,10 @@ package com.mfc.backend.microdiplomas.api.command;
 
 import com.mfc.backend.microdiplomas.api.dto.DiplomaDTO;
 import com.mfc.backend.microdiplomas.api.usecases.BorrarTodosLosDiplomasUseCase;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class BorrarDiplomaCommand implements Command<DiplomaDTO> {
 
-    @Autowired
-    BorrarTodosLosDiplomasUseCase borrarTodosLosDiplomasUseCase;
+    private final BorrarTodosLosDiplomasUseCase borrarTodosLosDiplomasUseCase;
 
     DiplomaDTO diplomaDTO;
 
@@ -15,7 +13,8 @@ public class BorrarDiplomaCommand implements Command<DiplomaDTO> {
         return diplomaDTO;
     }
 
-    public BorrarDiplomaCommand(DiplomaDTO diplomaDTO) {
+    public BorrarDiplomaCommand(BorrarTodosLosDiplomasUseCase borrarTodosLosDiplomasUseCase, DiplomaDTO diplomaDTO) {
+        this.borrarTodosLosDiplomasUseCase = borrarTodosLosDiplomasUseCase;
         this.diplomaDTO = diplomaDTO;
     }
 

@@ -2,12 +2,10 @@ package com.mfc.backend.microdiplomas.api.command;
 
 import com.mfc.backend.microdiplomas.api.dto.DiplomaDTO;
 import com.mfc.backend.microdiplomas.api.usecases.ActualizarDiplomaUseCase;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class ActualizarDiplomaCommand implements Command<DiplomaDTO> {
 
-    @Autowired
-    ActualizarDiplomaUseCase actualizarDiplomaUseCase;
+    private final ActualizarDiplomaUseCase actualizarDiplomaUseCase;
 
     DiplomaDTO diplomaDTO;
 
@@ -15,7 +13,8 @@ public class ActualizarDiplomaCommand implements Command<DiplomaDTO> {
         return diplomaDTO;
     }
 
-    public ActualizarDiplomaCommand(DiplomaDTO diplomaDTO) {
+    public ActualizarDiplomaCommand(ActualizarDiplomaUseCase actualizarDiplomaUseCase, DiplomaDTO diplomaDTO) {
+        this.actualizarDiplomaUseCase = actualizarDiplomaUseCase;
         this.diplomaDTO = diplomaDTO;
     }
 
