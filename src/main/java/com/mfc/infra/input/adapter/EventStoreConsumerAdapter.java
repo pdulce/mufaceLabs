@@ -40,28 +40,31 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
             logger.error("Debe tener activa la configuración de uso de mensajería en la arquitectura");
             return;
         }
-        this.saveEvent(eventArch.getContextInfo().getApplicationId(), eventArch.getContextInfo().getAlmacen(),
+        this.saveEvent("audit",
+                eventArch.getContextInfo().getApplicationId(), eventArch.getContextInfo().getAlmacen(),
                 eventArch.getId(), eventArch);
     }
 
-    public void saveEvent(String applicationId, String store, String id, Event<?> eventArch) {
+    public void saveEvent(String typeStore, String applicationId, String store, String id, Event<?> eventArch) {
         HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
-        if (hashOps.entries(ConversionUtils.getKeyAlmacen(applicationId,store)).get(id) == null) {
+        if (hashOps.entries(ConversionUtils.getKeyAlmacen(typeStore,applicationId,store)).get(id) == null) {
             List<Object> agregados = new ArrayList<>();
-            hashOps.put(ConversionUtils.getKeyAlmacen(applicationId,store), id, agregados);
+            hashOps.put(ConversionUtils.getKeyAlmacen(typeStore,applicationId,store), id, agregados);
         }
-        List<Object> listaDelAgregado = hashOps.entries(ConversionUtils.getKeyAlmacen(applicationId,store)).get(id);
+        List<Object> listaDelAgregado = hashOps.entries(ConversionUtils.getKeyAlmacen(typeStore,
+                applicationId,store)).get(id);
         listaDelAgregado.add(eventArch);
-        hashOps.put(ConversionUtils.getKeyAlmacen(applicationId,store), id, listaDelAgregado);
+        hashOps.put(ConversionUtils.getKeyAlmacen(typeStore,applicationId,store), id, listaDelAgregado);
     }
 
-    public void update(String applicationId, String store, String id, String idObjectSearched, Event<?> eventArch) {
+    public void update(String typeStore, String applicationId, String store, String id, String idObjectSearched, Event<?> eventArch) {
         HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
-        if (hashOps.entries(ConversionUtils.getKeyAlmacen(applicationId, store)).get(id) == null) {
+        if (hashOps.entries(ConversionUtils.getKeyAlmacen(typeStore,applicationId, store)).get(id) == null) {
             List<Object> agregados = new ArrayList<>();
-            hashOps.put(ConversionUtils.getKeyAlmacen(applicationId, store), id, agregados);
+            hashOps.put(ConversionUtils.getKeyAlmacen(typeStore,applicationId, store), id, agregados);
         }
-        List<Object> listaDelAgregado = hashOps.entries(ConversionUtils.getKeyAlmacen(applicationId,store)).get(id);
+        List<Object> listaDelAgregado = hashOps.entries(ConversionUtils.getKeyAlmacen(typeStore,
+                applicationId,store)).get(id);
         boolean found = false;
         int i = 0;
         while (!found && i < listaDelAgregado.size()) {
@@ -73,22 +76,22 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
             }
         }
         listaDelAgregado.add(eventArch);
-        hashOps.put(ConversionUtils.getKeyAlmacen(applicationId,ConversionUtils.getKeyAlmacen(applicationId,store)),
-                id, listaDelAgregado);
+        hashOps.put(ConversionUtils.getKeyAlmacen(typeStore,applicationId,store), id, listaDelAgregado);
     }
 
-    public List<Object> findAllByAppAndStoreAndAggregatedId(String applicationId, String store, String id) {
+    public List<Object> findAllByAppAndStoreAndAggregatedId(String typeStore, String applicationId, String store, String id) {
         HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
-        return hashOps.entries(ConversionUtils.getKeyAlmacen(applicationId,store)).get(id);
+        return hashOps.entries(ConversionUtils.getKeyAlmacen(typeStore,applicationId,store)).get(id);
     }
 
-    public Map<String, List<Object>> findAllByAppAndStore(String applicationId, String store) {
+    public Map<String, List<Object>> findAllByAppAndStore(String typeStore, String applicationId, String store) {
         HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
-        return hashOps.entries(ConversionUtils.getKeyAlmacen(applicationId,store));
+        return hashOps.entries(ConversionUtils.getKeyAlmacen(typeStore,applicationId,store));
     }
 
-    public List<Map<String, List<Object>>> findAllByApp(String applicationId) {
+    public List<Map<String, List<Object>>> findAllByApp(String typeStore, String applicationId) {
         HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
+        //hashOps.
 
         return null;
         //return hashOps.entries(ConversionUtils.getKeyAlmacen(applicationId,store));

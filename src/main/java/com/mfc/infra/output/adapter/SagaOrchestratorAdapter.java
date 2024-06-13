@@ -70,7 +70,7 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T> {
             }
         } else {
             // ingresamos el evento de esta step-transaction en el agregado de esta transacción
-            this.eventStoreConsumer.saveEvent(event.getContextInfo().getApplicationId(),
+            this.eventStoreConsumer.saveEvent("transac-distrib", event.getContextInfo().getApplicationId(),
                     event.getSagaStepInfo().getSagaName(),
                     String.valueOf(event.getSagaStepInfo().getTransactionIdentifier()), event);
 
@@ -94,8 +94,8 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T> {
 
     public String[] getLastStateOfTansactionInSaga(String applicationId, String saganame, String transaccId) {
         String[] msgAndArgs = new String[3];
-        List<Object> objetos = this.eventStoreConsumer.findAllByAppAndStoreAndAggregatedId(applicationId,
-                saganame, transaccId);
+        List<Object> objetos = this.eventStoreConsumer.findAllByAppAndStoreAndAggregatedId("transac-distrib",
+                applicationId, saganame, transaccId);
         if (objetos == null || objetos.isEmpty()) {
             msgAndArgs[0] = ConstantMessages.ERROR_NOT_FOUND;
             msgAndArgs[1] = "núm. transaction: " + transaccId + " in saga: " + saganame;
@@ -164,7 +164,7 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T> {
                 event.getSagaStepInfo().getStepNumber(), event.getSagaStepInfo().getTransactionIdentifier());
         if (eventoTransaccion != null) {
             eventoTransaccion.setSagaStepInfo(event.getSagaStepInfo());
-            this.eventStoreConsumer.update(event.getContextInfo().getApplicationId(),
+            this.eventStoreConsumer.update("transac-distrib", event.getContextInfo().getApplicationId(),
                     event.getSagaStepInfo().getSagaName(),
                     String.valueOf(event.getSagaStepInfo().getTransactionIdentifier()),
                     Event.STEP_ID_PREFIX + event.getSagaStepInfo().getStepNumber(), event);
@@ -194,7 +194,8 @@ public class SagaOrchestratorAdapter<T> implements SagaOrchestratorPort<T> {
     private Event searchStepInTransaction(String applicationId, String sagaName, Integer stepNumber,
                                           Long transactionIdentifier) {
         List<Object> objetosTransaccionados = this.eventStoreConsumer.
-                findAllByAppAndStoreAndAggregatedId(applicationId, sagaName, String.valueOf(transactionIdentifier));
+                findAllByAppAndStoreAndAggregatedId("transac-distrib",
+                        applicationId, sagaName, String.valueOf(transactionIdentifier));
         if (objetosTransaccionados == null || objetosTransaccionados.isEmpty()) {
             return null;
         }

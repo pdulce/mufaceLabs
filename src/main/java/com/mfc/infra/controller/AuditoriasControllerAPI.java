@@ -3,7 +3,6 @@ package com.mfc.infra.controller;
 import com.mfc.infra.input.port.EventStoreInputPort;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import jakarta.validation.constraints.NotEmpty;
-import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,8 @@ import java.util.Map;
 @RequestMapping(value = "auditorias")
 public class AuditoriasControllerAPI {
 
+    protected static final String TYPE_OF_STORE_AUDIT = "audit";
+    protected static final String TYPE_OF_STORE_TRANSAC_DISTRIB = "transac-distrib";
     Logger logger = LoggerFactory.getLogger(AuditoriasControllerAPI.class);
     @Autowired
     protected MessageSource messageSource;
@@ -32,13 +33,13 @@ public class AuditoriasControllerAPI {
 
     @GetMapping(value = "{applicationId}", produces= MediaType.APPLICATION_JSON_VALUE)
     public List<Map<String, List<Object>>> getAllFromEventStoreCustomers(@PathVariable @NotEmpty String applicationId) {
-        return this.eventStoreConsumerAdapter.findAllByApp(applicationId);
+        return this.eventStoreConsumerAdapter.findAllByApp(TYPE_OF_STORE_AUDIT, applicationId);
     }
 
     @GetMapping(value = "{applicationId}/{almacen}", produces= MediaType.APPLICATION_JSON_VALUE)
     public Map<String, List<Object>> getAllFromEventStoreCustomers(@PathVariable @NotEmpty String applicationId,
                                                                    @PathVariable @NotEmpty String almacen) {
-        return this.eventStoreConsumerAdapter.findAllByAppAndStore(applicationId, almacen);
+        return this.eventStoreConsumerAdapter.findAllByAppAndStore(TYPE_OF_STORE_AUDIT, applicationId, almacen);
     }
 
     @GetMapping(value = "{applicationId}/{almacen}/{idAgregado}",
@@ -46,7 +47,8 @@ public class AuditoriasControllerAPI {
     public List<Object> getAllEventsFromIdFromRedis(@PathVariable @NotEmpty String applicationId,
                                                     @PathVariable @NotEmpty String almacen,
                                                     @PathVariable @NotEmpty String idAgregado) {
-        return this.eventStoreConsumerAdapter.findAllByAppAndStoreAndAggregatedId(applicationId, almacen, idAgregado);
+        return this.eventStoreConsumerAdapter.findAllByAppAndStoreAndAggregatedId(TYPE_OF_STORE_AUDIT, applicationId,
+                almacen, idAgregado);
     }
 
     /** ENDPOINTS QUE DAN ACCESO A LA INFORMACIÓN DE CUALQUIER TRANSACCION EN CUALQUIER APLICACION **/
@@ -54,13 +56,13 @@ public class AuditoriasControllerAPI {
     @GetMapping(value = "transacciones-distribuidas/{applicationId}", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<Map<String, List<Object>>> getAllTransactionsOfApplication(@PathVariable @NotEmpty String applicationId,
                                                                      @PathVariable @NotEmpty String saga) {
-        return this.eventStoreConsumerAdapter.findAllByApp(applicationId);
+        return this.eventStoreConsumerAdapter.findAllByApp(TYPE_OF_STORE_TRANSAC_DISTRIB, applicationId);
     }
 
     @GetMapping(value = "transacciones-distribuidas/{applicationId}/{saga}", produces=MediaType.APPLICATION_JSON_VALUE)
     public Map<String, List<Object>> getAllTransactionsOfSagaInApp(@PathVariable @NotEmpty String applicationId,
                                                                    @PathVariable @NotEmpty String saga) {
-        return this.eventStoreConsumerAdapter.findAllByAppAndStore(applicationId, saga);
+        return this.eventStoreConsumerAdapter.findAllByAppAndStore(TYPE_OF_STORE_TRANSAC_DISTRIB, applicationId, saga);
     }
 
     @GetMapping(value = "transacciones-distribuidas/{applicationId}/{saga}/{transactionId}",
@@ -68,7 +70,8 @@ public class AuditoriasControllerAPI {
     public List<Object> getAllStepsInSagaTransactionId(@PathVariable @NotEmpty String applicationId,
                                                        @PathVariable @NotEmpty String saga,
                                                        @PathVariable @NotEmpty String transactionId) {
-        return this.eventStoreConsumerAdapter.findAllByAppAndStoreAndAggregatedId(applicationId, saga, transactionId);
+        return this.eventStoreConsumerAdapter.
+                findAllByAppAndStoreAndAggregatedId(TYPE_OF_STORE_TRANSAC_DISTRIB, applicationId, saga, transactionId);
     }
 
 

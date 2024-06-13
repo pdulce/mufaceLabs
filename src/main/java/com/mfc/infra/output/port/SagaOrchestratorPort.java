@@ -4,6 +4,7 @@ import com.mfc.infra.event.Event;
 
 public interface SagaOrchestratorPort<T> {
 
+    void listen(Event<?> event);
     Event startSaga(String applicationId, String sagaName, String operation, T data);
 
     String[] getLastStateOfTansactionInSaga(String applicationId, String saganame, String transaccId);
