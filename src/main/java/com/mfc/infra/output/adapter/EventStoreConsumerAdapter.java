@@ -36,6 +36,8 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
                 applicationId,store)).get(id);
         listaDelAgregado.add(eventArch);
         hashOps.put(ConversionUtils.getKeyAlmacen(typeStore,applicationId,store), id, listaDelAgregado);
+        logger.info("evento: " + eventArch.getId() + " grabado correctamente en tipo de store: " + typeStore
+        + " : aplicación: " +  applicationId + " almacén : " + store + " en el agregado: " + id);
     }
 
     @Override
@@ -60,6 +62,8 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
         }
         listaDelAgregado.add(eventArch);
         hashOps.put(ConversionUtils.getKeyAlmacen(typeStore,applicationId,store), id, listaDelAgregado);
+        logger.info("evento: " + eventArch.getId() + " actualizado correctamente en tipo de store: " + typeStore
+                + " : aplicación: " +  applicationId + " almacén : " + store + " el agregado: " + id);
     }
 
     @Override

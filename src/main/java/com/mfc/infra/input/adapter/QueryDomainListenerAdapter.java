@@ -12,11 +12,11 @@ import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 import java.lang.reflect.ParameterizedType;
 import java.util.LinkedHashMap;
 
-public abstract class QueryDomainDomainListenerAdapter<T> implements QueryDomainListenerPort<T> {
-    Logger logger = LoggerFactory.getLogger(QueryDomainDomainListenerAdapter.class);
+public abstract class QueryDomainListenerAdapter<T> implements QueryDomainListenerPort<T> {
+    Logger logger = LoggerFactory.getLogger(QueryDomainListenerAdapter.class);
 
     @Autowired
-    MongoRepositoryPort mongoRepositoryPort;
+    MongoRepositoryPort<T> mongoRepositoryPort;
 
     @Autowired
     private MongoMappingContext mongoMappingContext;
