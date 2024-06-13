@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 @ConditionalOnProperty(name = "arch.event-broker-active", havingValue = "true", matchIfMissing = false)
-public class CommandCommandEventListenerAdapter implements CommandEventListenerPort {
+public class CommandEventListenerAdapter implements CommandEventListenerPort {
 
     protected static final String GROUP_ID = "event-adapter";
-    Logger logger = LoggerFactory.getLogger(CommandCommandEventListenerAdapter.class);
+    Logger logger = LoggerFactory.getLogger(CommandEventListenerAdapter.class);
 
     @Autowired
     ConfigProperties configProperties;
