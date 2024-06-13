@@ -2,7 +2,7 @@ package com.mfc.infra.output.adapter;
 
 import com.mfc.infra.event.Event;
 import com.mfc.infra.event.SagaStepInfo;
-import com.mfc.infra.input.port.EventStoreInputPort;
+import com.mfc.infra.output.port.EventStoreInputPort;
 import com.mfc.infra.output.port.CommandEventPublisherPort;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import com.mfc.infra.utils.ConstantMessages;

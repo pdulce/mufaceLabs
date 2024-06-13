@@ -1,8 +1,8 @@
-package com.mfc.infra.input.adapter;
+package com.mfc.infra.output.adapter;
 
 import com.mfc.infra.configuration.ConfigProperties;
 import com.mfc.infra.event.Event;
-import com.mfc.infra.input.port.EventStoreInputPort;
+import com.mfc.infra.output.port.EventStoreInputPort;
 import com.mfc.infra.utils.ConversionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

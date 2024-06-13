@@ -2,28 +2,27 @@ package com.mfc.infra.input.adapter;
 
 import com.mfc.infra.configuration.ConfigProperties;
 import com.mfc.infra.event.Event;
-import com.mfc.infra.input.port.QueryInputPort;
-import com.mfc.infra.utils.ConversionUtils;
+import com.mfc.infra.output.port.MongoRepositoryPort;
+import com.mfc.infra.input.port.QueryListenerPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
-import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Optional;
 
-public abstract class QueryInputConsumerAdapter<T> implements QueryInputPort<T> {
-    Logger logger = LoggerFactory.getLogger(QueryInputConsumerAdapter.class);
+public abstract class QueryListenerAdapter<T> implements QueryListenerPort<T> {
+    Logger logger = LoggerFactory.getLogger(QueryListenerAdapter.class);
+
+    @Autowired
+    MongoRepositoryPort mongoRepositoryPort;
 
     @Autowired
     private MongoMappingContext mongoMappingContext;
     @Autowired
     ConfigProperties configProperties;
-    @Autowired
-    MongoRepository<T, String> repository;
+
 
     public abstract void listen(Event<?> eventArch);
 
@@ -49,33 +48,12 @@ public abstract class QueryInputConsumerAdapter<T> implements QueryInputPort<T> 
                 && collectionName.equals(event.getContextInfo().getAlmacen())) {
             if (event.getInnerEvent().getTypeOfEvent().contentEquals(Event.EVENT_TYPE_CREATE)
                     || event.getInnerEvent().getTypeOfEvent().contentEquals(Event.EVENT_TYPE_UPDATE)) {
-                saveReg((LinkedHashMap) event.getInnerEvent().getData(), entityClass);
+                this.mongoRepositoryPort.saveReg((LinkedHashMap) event.getInnerEvent().getData(), entityClass);
             } else if (event.getInnerEvent().getTypeOfEvent().contentEquals(Event.EVENT_TYPE_DELETE)) {
-                this.deleteReg(event.getId());
+                this.mongoRepositoryPort.deleteReg(event.getId());
             }
         } // else::  //dejo pasar este mensaje porque no es para este consumidor
     }
 
-    @Override
-    public void saveReg(LinkedHashMap deserialized, Class<T> entityClass) {
-        T document = ConversionUtils.jsonStringToObject(ConversionUtils.map2Jsonstring(deserialized), entityClass);
-        this.repository.save(document);
-    }
-
-    @Override
-    public void deleteReg(String id) {
-        this.repository.deleteById(id);
-    }
-
-    @Override
-    public T findById(String id) {
-        Optional<T> searched = this.repository.findById(id);
-        return searched.isPresent() ? searched.get() : null;
-    }
-
-    @Override
-    public List<T> findAll() {
-        return this.repository.findAll();
-    }
 
 }

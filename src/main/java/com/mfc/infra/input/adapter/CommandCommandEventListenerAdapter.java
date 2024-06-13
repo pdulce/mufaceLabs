@@ -3,7 +3,7 @@ package com.mfc.infra.input.adapter;
 import com.mfc.infra.configuration.ConfigProperties;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.input.port.CommandEventListenerPort;
-import com.mfc.infra.input.port.EventStoreInputPort;
+import com.mfc.infra.output.port.EventStoreInputPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

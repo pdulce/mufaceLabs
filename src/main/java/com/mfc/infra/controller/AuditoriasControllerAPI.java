@@ -1,6 +1,6 @@
 package com.mfc.infra.controller;
 
-import com.mfc.infra.input.port.EventStoreInputPort;
+import com.mfc.infra.output.port.EventStoreInputPort;
 import com.mfc.infra.output.port.SagaOrchestratorPort;
 import jakarta.validation.constraints.NotEmpty;
 import org.slf4j.Logger;
