@@ -3,7 +3,7 @@ package com.mfc.backend.microdiplomas.domain.service;
 import com.mfc.backend.microdiplomas.api.dto.DiplomaDTO;
 import com.mfc.backend.microdiplomas.domain.model.Diploma;
 import com.mfc.backend.microdiplomas.domain.repository.DiplomaCommandRepository;
-import com.mfc.infra.output.adapter.RelationalServiceAdapter;
+import com.mfc.infra.output.adapter.RelationalOperationsAdapter;
 import com.mfc.infra.output.port.GenericRepositoryPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class DiplomaServiceAdapter extends RelationalServiceAdapter<Diploma, Long> implements DiplomaServicePort {
+public class DiplomaServiceAdapter extends RelationalOperationsAdapter<Diploma, Long> implements DiplomaServicePort {
 
     @Autowired
     private DiplomaCommandRepository repository;

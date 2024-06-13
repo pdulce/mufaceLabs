@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 @Transactional
-public abstract class RelationalServiceStepSagaAdapter<T, ID> extends RelationalServiceAdapter<T, ID>
+public abstract class RelationalServiceStepSagaAdapter<T, ID> extends RelationalOperationsAdapter<T, ID>
         implements SagaStepPort<T, ID> {
 
     protected Logger logger = LoggerFactory.getLogger(RelationalServiceStepSagaAdapter.class);

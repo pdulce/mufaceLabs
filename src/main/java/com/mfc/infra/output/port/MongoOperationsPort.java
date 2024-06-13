@@ -3,7 +3,7 @@ package com.mfc.infra.output.port;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public interface MongoRepositoryPort<T> {
+public interface MongoOperationsPort<T> {
     
     void deleteReg(String id);
     void saveReg(LinkedHashMap deserialized, Class<T> entityClass);

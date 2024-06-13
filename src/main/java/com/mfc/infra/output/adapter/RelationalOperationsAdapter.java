@@ -4,7 +4,7 @@ import com.mfc.infra.configuration.ConfigProperties;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.exceptions.NotExistException;
 import com.mfc.infra.output.port.CommandEventPublisherPort;
-import com.mfc.infra.output.port.RelationalServicePort;
+import com.mfc.infra.output.port.RelationalOperationsPort;
 import com.mfc.infra.output.port.GenericRepositoryPort;
 import com.mfc.infra.utils.ConversionUtils;
 import jakarta.transaction.Transactional;
@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Transactional
-public abstract class RelationalServiceAdapter<T, ID> implements RelationalServicePort<T, ID> {
-    Logger logger = LoggerFactory.getLogger(RelationalServiceAdapter.class);
+public abstract class RelationalOperationsAdapter<T, ID> implements RelationalOperationsPort<T, ID> {
+    Logger logger = LoggerFactory.getLogger(RelationalOperationsAdapter.class);
     @Autowired
     ConfigProperties configProperties;
 
