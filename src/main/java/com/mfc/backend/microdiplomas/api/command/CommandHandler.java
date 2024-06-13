@@ -11,10 +11,10 @@ public class CommandHandler<R> {
     public void registerCommand (Class<? extends Command> commandClass, Command command) {
         commandMap.put(commandClass, command);
     }
-    public Object executeCommand(Class<? extends Command> commandClass) {
+    public R executeCommand(Class<? extends Command> commandClass) {
         Command command = commandMap.get(commandClass);
         if (command != null) {
-            return command.execute();
+            return (R) command.execute();
         } else {
             throw new IllegalArgumentException("No command registered for " + commandClass.getName());
         }
