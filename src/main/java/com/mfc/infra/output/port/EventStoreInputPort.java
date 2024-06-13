@@ -11,10 +11,12 @@ public interface EventStoreInputPort {
 
     void update(String type, String applicationId, String almacen, String id, String idEntry, Event<?> eventArch);
 
-    List<Object> findAllByAppAndStoreAndAggregatedId(String type, String applicationid, String almacen, String id);
+    List<Event<?>> findAllByAppAndStoreAndAggregatedId(String type, String applicationid, String almacen, String id);
 
-    Map<String, List<Object>> findAllByAppAndStore(String type, String applicationid, String almacen);
+    List<Event<?>> findAllByAppAndStore(String type, String applicationid, String almacen);
 
-    List<Map<String, List<Object>>> findAllByApp(String type, String applicationId);
+    List<Event<?>> findAllByApp(String type, String applicationId);
+    
+    List<Event<?>> findAllStoreType(String type);
 
 }

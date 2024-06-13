@@ -1,6 +1,5 @@
 package com.mfc.infra.output.adapter;
 
-import com.mfc.infra.configuration.ConfigProperties;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.output.port.EventStoreInputPort;
 import com.mfc.infra.utils.ConversionUtils;
@@ -10,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,27 +23,9 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
     Logger logger = LoggerFactory.getLogger(EventStoreConsumerAdapter.class);
 
     @Autowired
-    ConfigProperties configProperties;
-    protected static final String GROUP_ID = "event-adapter";
-
-    @Autowired
     RedisTemplate<String, Event<?>> redisTemplate;
 
-    @KafkaListener(topics = Event.EVENT_TOPIC, groupId = GROUP_ID)
-    public void listen(Event<?> eventArch) {
-        procesarEvento(eventArch);
-    }
-
-    public void procesarEvento(Event<?> eventArch) {
-        if (!configProperties.isEventBrokerActive()) {
-            logger.error("Debe tener activa la configuración de uso de mensajería en la arquitectura");
-            return;
-        }
-        this.saveEvent("audit",
-                eventArch.getContextInfo().getApplicationId(), eventArch.getContextInfo().getAlmacen(),
-                eventArch.getId(), eventArch);
-    }
-
+    @Override
     public void saveEvent(String typeStore, String applicationId, String store, String id, Event<?> eventArch) {
         HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
         if (hashOps.entries(ConversionUtils.getKeyAlmacen(typeStore,applicationId,store)).get(id) == null) {
@@ -57,7 +38,9 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
         hashOps.put(ConversionUtils.getKeyAlmacen(typeStore,applicationId,store), id, listaDelAgregado);
     }
 
-    public void update(String typeStore, String applicationId, String store, String id, String idObjectSearched, Event<?> eventArch) {
+    @Override
+    public void update(String typeStore, String applicationId, String store, String id, String idObjectSearched,
+                       Event<?> eventArch) {
         HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
         if (hashOps.entries(ConversionUtils.getKeyAlmacen(typeStore,applicationId, store)).get(id) == null) {
             List<Object> agregados = new ArrayList<>();
@@ -79,25 +62,66 @@ public class EventStoreConsumerAdapter implements EventStoreInputPort {
         hashOps.put(ConversionUtils.getKeyAlmacen(typeStore,applicationId,store), id, listaDelAgregado);
     }
 
-    public List<Object> findAllByAppAndStoreAndAggregatedId(String typeStore, String applicationId, String store, String id) {
-        HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
+    @Override
+    public List<Event<?>> findAllByAppAndStoreAndAggregatedId(String typeStore, String applicationId, String store,
+                                                              String id) {
+        HashOperations<String, String, List<Event<?>>> hashOps = redisTemplate.opsForHash();
         return hashOps.entries(ConversionUtils.getKeyAlmacen(typeStore,applicationId,store)).get(id);
     }
 
-    public Map<String, List<Object>> findAllByAppAndStore(String typeStore, String applicationId, String store) {
-        HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
-        return hashOps.entries(ConversionUtils.getKeyAlmacen(typeStore,applicationId,store));
+    @Override
+    public List<Event<?>> findAllByAppAndStore(String typeStore, String applicationId, String store) {
+        List<Event<?>> allEvents = new ArrayList<>();
+
+        // Obtener todas las claves que empiecen por typeStore
+        ScanOptions scanOptions = ScanOptions.scanOptions().match(typeStore + "*").build();
+        for (String key : redisTemplate.keys("*")) {
+            if (key.startsWith(typeStore + ":" + applicationId + ":" + store)) {
+                Map<Object, Object> entries = redisTemplate.opsForHash().entries(key);
+                for (Map.Entry<Object, Object> entry : entries.entrySet()) {
+                    List<Event<?>> events = (List<Event<?>>) entry.getValue();
+                    allEvents.addAll(events);
+                }
+            }
+        }
+        return allEvents;
     }
 
-    public List<Map<String, List<Object>>> findAllByApp(String typeStore, String applicationId) {
-        HashOperations<String, String, List<Object>> hashOps = redisTemplate.opsForHash();
-        //hashOps.
+    @Override
+    public List<Event<?>> findAllByApp(String typeStore, String applicationId) {
+        List<Event<?>> allEvents = new ArrayList<>();
 
-        return null;
-        //return hashOps.entries(ConversionUtils.getKeyAlmacen(applicationId,store));
+        // Obtener todas las claves que empiecen por typeStore
+        ScanOptions scanOptions = ScanOptions.scanOptions().match(typeStore + "*").build();
+        for (String key : redisTemplate.keys("*")) {
+            if (key.startsWith(typeStore + ":" + applicationId)) {
+                Map<Object, Object> entries = redisTemplate.opsForHash().entries(key);
+                for (Map.Entry<Object, Object> entry : entries.entrySet()) {
+                    List<Event<?>> events = (List<Event<?>>) entry.getValue();
+                    allEvents.addAll(events);
+                }
+            }
+        }
+        return allEvents;
     }
 
 
+    @Override
+    public List<Event<?>> findAllStoreType(String typeStore) {
+        List<Event<?>> allEvents = new ArrayList<>();
 
+        // Obtener todas las claves que empiecen por typeStore
+        ScanOptions scanOptions = ScanOptions.scanOptions().match(typeStore + "*").build();
+        for (String key : redisTemplate.keys("*")) {
+            if (key.startsWith(typeStore)) {
+                Map<Object, Object> entries = redisTemplate.opsForHash().entries(key);
+                for (Map.Entry<Object, Object> entry : entries.entrySet()) {
+                    List<Event<?>> events = (List<Event<?>>) entry.getValue();
+                    allEvents.addAll(events);
+                }
+            }
+        }
+        return allEvents;
+    }
 
 }
