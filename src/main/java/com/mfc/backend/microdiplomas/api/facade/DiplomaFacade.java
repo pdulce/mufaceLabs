@@ -31,15 +31,15 @@ public class DiplomaFacade {
     }
 
     public List<DiplomaDTO> consultarTodosLosDiplomas() {
-        return this.consultasDiplomasUseCase.ejecutar();
+        return this.consultasDiplomasUseCase.consultarTodos();
     }
 
     public List<DiplomaDTO> consultaDiplomasDeCliente(Long idCustomer) {
-        return this.consultasDiplomasUseCase.ejecutar(idCustomer);
+        return this.consultasDiplomasUseCase.consultarDiplomasDeCliente(idCustomer);
     }
 
     public List<DiplomaDTO> consultaDiplomasDeClientesConNombre(String name) {
-        return this.consultasDiplomasUseCase.ejecutar(name);
+        return this.consultasDiplomasUseCase.consultarDiplomasPorNombreClientes(name);
     }
 
 

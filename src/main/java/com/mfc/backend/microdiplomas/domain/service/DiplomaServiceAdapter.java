@@ -29,15 +29,30 @@ public class DiplomaServiceAdapter extends CommandServiceAdapter<Diploma, Long> 
         dFilter.setRegion("Provenza");
         Example<Diploma> example = Example.of(dFilter);
         repository.findAll(example).forEach((diploma -> {
-            diplomaDTOS.add(new DiplomaDTO(diploma));
+            diplomaDTOS.add(new DiplomaDTO(diploma.getId(), diploma.getIdcustomer(), diploma.getName(), diploma.getTitulo(),
+                    diploma.getRegion()));
         }));
         return diplomaDTOS;
+    }
+
+    @Override
+    public DiplomaDTO actualizarDiploma(DiplomaDTO diplomaDTO) {
+        Diploma diploma = new Diploma(diplomaDTO);
+        diploma = this.actualizar(diploma);
+        return new DiplomaDTO(diploma.getId(), diploma.getIdcustomer(), diploma.getName(), diploma.getTitulo(),
+                diploma.getRegion());
+    }
+
+    @Override
+    public void borrarDiplomas() {
+
     }
 
     public List<DiplomaDTO> buscarDiplomasDeCustomer(Long customerId) {
         List<DiplomaDTO> diplomas = new ArrayList<>();
         this.buscarPorCampoValor("idcustomer", customerId).forEach((diploma -> {
-            diplomas.add(new DiplomaDTO(diploma));
+            diplomas.add(new DiplomaDTO(diploma.getId(), diploma.getIdcustomer(), diploma.getName(), diploma.getTitulo(),
+                    diploma.getRegion()));
         }));
         return diplomas;
     }
@@ -45,7 +60,8 @@ public class DiplomaServiceAdapter extends CommandServiceAdapter<Diploma, Long> 
     public List<DiplomaDTO> buscarDiplomasPorNombreCustomer(String name) {
         List<DiplomaDTO> diplomas = new ArrayList<>();
         this.buscarPorCampoValor("name", name).forEach((diploma -> {
-            diplomas.add(new DiplomaDTO(diploma));
+            diplomas.add(new DiplomaDTO(diploma.getId(), diploma.getIdcustomer(), diploma.getName(), diploma.getTitulo(),
+                    diploma.getRegion()));
         }));
         return diplomas;
     }
@@ -53,20 +69,11 @@ public class DiplomaServiceAdapter extends CommandServiceAdapter<Diploma, Long> 
     public List<DiplomaDTO> buscarTodosLosDiplomas() {
         List<DiplomaDTO> diplomas = new ArrayList<>();
         this.buscar().forEach((diploma -> {
-            diplomas.add(new DiplomaDTO(diploma));
+            diplomas.add(new DiplomaDTO(diploma.getId(), diploma.getIdcustomer(), diploma.getName(), diploma.getTitulo(),
+                    diploma.getRegion()));
         }));
         return diplomas;
     }
-
-
-    public DiplomaDTO updateDiploma(DiplomaDTO diplomaDTO) {
-        Diploma diploma = new Diploma(diplomaDTO);
-        diploma = this.actualizar(diploma);
-        return new DiplomaDTO(diploma);
-    }
-
-
-
 
 
 }

@@ -1,6 +1,5 @@
 package com.mfc.backend.microdiplomas.api.dto;
 
-import com.mfc.backend.microdiplomas.domain.model.Diploma;
 import lombok.Data;
 
 @Data
@@ -18,12 +17,12 @@ public class DiplomaDTO {
 
     public DiplomaDTO() {}
 
-    public DiplomaDTO(Diploma diploma) {
-        this.id = diploma.getId();
-        this.idcustomer = diploma.getIdcustomer();
-        this.name = diploma.getName();
-        this.titulo = diploma.getTitulo();
-        this.region = diploma.getRegion();
+    public DiplomaDTO(Long id, Long idcustomer, String name, String titulo, String region) {
+        this.id = id;
+        this.idcustomer = idcustomer;
+        this.name = name;
+        this.titulo = titulo;
+        this.region = region;
     }
 
 

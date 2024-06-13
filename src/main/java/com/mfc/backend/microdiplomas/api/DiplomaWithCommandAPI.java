@@ -1,9 +1,7 @@
 package com.mfc.backend.microdiplomas.api;
 
+import com.mfc.backend.microdiplomas.api.command.DiplomaCommandService;
 import com.mfc.backend.microdiplomas.api.dto.DiplomaDTO;
-import com.mfc.backend.microdiplomas.api.usecases.ActualizarDiplomaUseCase;
-import com.mfc.backend.microdiplomas.api.usecases.BorrarTodosLosDiplomasUseCase;
-import com.mfc.backend.microdiplomas.api.usecases.ConsultasDiplomasUseCase;
 import com.mfc.infra.controller.BaseRestController;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,45 +12,41 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "diploma")
-public class DiplomaAPI extends BaseRestController {
+public class DiplomaWithCommandAPI extends BaseRestController {
     @Autowired
-    ConsultasDiplomasUseCase consultasDiplomasUseCase;
-    @Autowired
-    BorrarTodosLosDiplomasUseCase borrarTodosLosDiplomasUseCase;
-    @Autowired
-    ActualizarDiplomaUseCase actualizarDiplomaUseCase;
+    DiplomaCommandService diplomaCommandService;
 
     @GetMapping(value = "allDiplomas", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<DiplomaDTO> getAllDiplomas() {
-        return this.consultasDiplomasUseCase.ejecutar();
+        return this.diplomaCommandService.buscarTodosLosDiplomas();
     }
 
 
     @GetMapping(value = "allDiplomasByCustomerName", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<DiplomaDTO> getAllDiplomasByCustomerName(@RequestParam String name) {
-        return this.consultasDiplomasUseCase.ejecutar(name);
+        return this.diplomaCommandService.buscarDiplomasPorNombreCustomer(name);
     }
 
     @GetMapping(value = "allDiplomasByCustomerID", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<DiplomaDTO> getAllDiplomasByCustomerID(@RequestParam Long customerid) {
-        return this.consultasDiplomasUseCase.ejecutar(customerid);
+        return this.diplomaCommandService.buscarDiplomasDeCustomer(customerid);
     }
 
     @PutMapping(produces=MediaType.APPLICATION_JSON_VALUE)
     public DiplomaDTO update(@RequestBody @NotNull DiplomaDTO diplomaDTO) {
-        return this.actualizarDiplomaUseCase.ejecutar(diplomaDTO);
+        return this.diplomaCommandService.actualizarDiploma(diplomaDTO);
     }
 
     @DeleteMapping(value = "deleteAll", produces=MediaType.APPLICATION_JSON_VALUE)
     public void deleteAll() {
-        this.borrarTodosLosDiplomasUseCase.ejecutar();
+        this.diplomaCommandService.borrarDiplomas();
     }
 
     /*** **/
 
     @GetMapping(value = "getDiplomasDeLaRegionProvenza", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<DiplomaDTO> getDiplomasDeLaRegionProvenza() {
-        return this.consultasDiplomasUseCase.getDiplomasDeLaRegionProvenza();
+        return this.diplomaCommandService.getDiplomasDeLaRegionProvenza();
     }
 
 

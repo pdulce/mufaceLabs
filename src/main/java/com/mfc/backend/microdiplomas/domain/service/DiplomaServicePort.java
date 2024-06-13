@@ -10,7 +10,9 @@ public interface DiplomaServicePort extends CommandServicePort<Diploma, Long> {
 
     List<DiplomaDTO> getDiplomasDeLaRegionProvenza();
 
-    DiplomaDTO updateDiploma(DiplomaDTO diplomaDTO);
+    DiplomaDTO actualizarDiploma(DiplomaDTO diplomaDTO);
+
+    void borrarDiplomas();
 
 
     List<DiplomaDTO> buscarDiplomasDeCustomer(Long id);

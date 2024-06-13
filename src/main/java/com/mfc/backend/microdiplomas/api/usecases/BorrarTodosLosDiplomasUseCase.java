@@ -2,9 +2,10 @@ package com.mfc.backend.microdiplomas.api.usecases;
 
 import com.mfc.backend.microdiplomas.domain.service.DiplomaServicePort;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Service
+@Component
 public class BorrarTodosLosDiplomasUseCase {
 
     @Autowired

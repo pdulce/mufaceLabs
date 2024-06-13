@@ -3,7 +3,7 @@ package com.mfc.infra.input.adapter;
 import com.mfc.infra.configuration.ConfigProperties;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.output.port.MongoRepositoryPort;
-import com.mfc.infra.input.port.QueryListenerPort;
+import com.mfc.infra.input.port.QueryDomainListenerPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +12,8 @@ import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 import java.lang.reflect.ParameterizedType;
 import java.util.LinkedHashMap;
 
-public abstract class QueryListenerAdapter<T> implements QueryListenerPort<T> {
-    Logger logger = LoggerFactory.getLogger(QueryListenerAdapter.class);
+public abstract class QueryDomainDomainListenerAdapter<T> implements QueryDomainListenerPort<T> {
+    Logger logger = LoggerFactory.getLogger(QueryDomainDomainListenerAdapter.class);
 
     @Autowired
     MongoRepositoryPort mongoRepositoryPort;
