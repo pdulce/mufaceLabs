@@ -2,7 +2,7 @@ package com.mfc.infra.input.adapter;
 
 import com.mfc.infra.configuration.ConfigProperties;
 import com.mfc.infra.event.Event;
-import com.mfc.infra.input.port.EventListenerPort;
+import com.mfc.infra.input.port.CommandEventListenerPort;
 import com.mfc.infra.input.port.EventStoreInputPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 @ConditionalOnProperty(name = "arch.event-broker-active", havingValue = "true", matchIfMissing = false)
-public class EventListenerAdapter implements EventListenerPort {
+public class CommandCommandEventListenerAdapter implements CommandEventListenerPort {
 
     protected static final String GROUP_ID = "event-adapter";
-    Logger logger = LoggerFactory.getLogger(EventListenerAdapter.class);
+    Logger logger = LoggerFactory.getLogger(CommandCommandEventListenerAdapter.class);
 
     @Autowired
     ConfigProperties configProperties;
