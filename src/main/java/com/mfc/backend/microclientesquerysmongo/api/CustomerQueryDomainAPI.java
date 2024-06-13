@@ -26,14 +26,16 @@ public class CustomerQueryDomainAPI extends BaseRestController {
     @GetMapping(value = "get", produces=MediaType.APPLICATION_JSON_VALUE)
     public CustomerDocumentDTO get(@RequestParam String customerId) {
         CustomerDocument customerDocument = this.queriesOptimizedUseCase.ejecutar(customerId);
-        return new CustomerDocumentDTO(customerDocument);
+        return new CustomerDocumentDTO(customerDocument.getId(), customerDocument.getName(),
+                customerDocument.getCountry());
     }
 
     @GetMapping(value = "getAll", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<CustomerDocumentDTO> getAll() {
         List<CustomerDocumentDTO> lista = new ArrayList<>();
         this.queriesOptimizedUseCase.ejecutar().forEach((customerDocument -> {
-            lista.add(new CustomerDocumentDTO(customerDocument));
+            lista.add(new CustomerDocumentDTO(customerDocument.getId(), customerDocument.getName(),
+                    customerDocument.getCountry()));
         }));
         return lista;
     }

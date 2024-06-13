@@ -21,7 +21,9 @@ public class CustomerOrderCommandAdapterService extends CommandServiceAdapter<Cu
 
     @Override
     public CustomerOrderDTO crearPedido(CustomerOrderDTO customerOrderDTO) {
-        return new CustomerOrderDTO(this.crear(new CustomerOrder(customerOrderDTO)));
+        CustomerOrder order = this.crear(new CustomerOrder(customerOrderDTO));
+        return new CustomerOrderDTO(order.getId(), order.getCustomer().getId(), order.getCustomer().getName(),
+                order.getTotal());
     }
 
 }

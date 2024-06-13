@@ -23,14 +23,16 @@ public class RegaloAdapterService extends CommandServiceAdapter<Regalo, Long>
     }
 
     public RegaloDTO actualizarRegalo(RegaloDTO regaloDTO) {
-        Regalo regalo = new Regalo(regaloDTO);
-        return new RegaloDTO(this.actualizar(regalo));
+        Regalo regalo = this.actualizar(new Regalo(regaloDTO));
+        return new RegaloDTO(regalo.getId(), regalo.getCustomerid(), regalo.getColor_caja(), regalo.getTexto_tarjeta(),
+                regalo.getValor_bono_regalo());
     }
 
     public List<RegaloDTO> consultarRegalosDeCustomer(Long customerId) {
         List<RegaloDTO> regalos = new ArrayList<>();
         this.buscarPorCampoValor("customerid", customerId).forEach((regalo -> {
-            regalos.add(new RegaloDTO(regalo));
+            regalos.add(new RegaloDTO(regalo.getId(), regalo.getCustomerid(), regalo.getColor_caja(),
+                    regalo.getTexto_tarjeta(), regalo.getValor_bono_regalo()));
         }));
         return regalos;
     }
@@ -38,7 +40,8 @@ public class RegaloAdapterService extends CommandServiceAdapter<Regalo, Long>
     public List<RegaloDTO> consultarTodosLosRegalodEntregados() {
         List<RegaloDTO> regalos = new ArrayList<>();
         this.buscar().forEach((regalo -> {
-            regalos.add(new RegaloDTO(regalo));
+            regalos.add(new RegaloDTO(regalo.getId(), regalo.getCustomerid(), regalo.getColor_caja(),
+                    regalo.getTexto_tarjeta(), regalo.getValor_bono_regalo()));
         }));
         return regalos;
     }

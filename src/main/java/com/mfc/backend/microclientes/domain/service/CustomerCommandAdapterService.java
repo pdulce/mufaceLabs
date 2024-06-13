@@ -26,7 +26,7 @@ public class CustomerCommandAdapterService extends CommandServiceAdapter<Custome
     public CustomerDTO actualizarCliente(CustomerDTO customerDTO) {
         Customer customer = new Customer(customerDTO);
         customer = this.actualizar(customer);
-        return new CustomerDTO(customer);
+        return new CustomerDTO(customer.getId(), customer.getName(), customer.getCountry());
     }
 
     public void borrarCliente(CustomerDTO customerDTO) {
@@ -39,19 +39,20 @@ public class CustomerCommandAdapterService extends CommandServiceAdapter<Custome
     public List<CustomerDTO> consultarTodosLosClientes() {
         List<CustomerDTO> customers = new ArrayList<>();
         this.buscar().forEach((customer -> {
-            customers.add(new CustomerDTO(customer));
+            customers.add(new CustomerDTO(customer.getId(), customer.getName(), customer.getCountry()));
         }));
         return customers;
     }
 
     public CustomerDTO consultarPorIdCliente(Long id) {
-        return new CustomerDTO(this.buscarPorId(id));
+        Customer customer = this.buscarPorId(id);
+        return new CustomerDTO(customer.getId(), customer.getName(), customer.getCountry());
     }
 
     public List<CustomerDTO> buscarPorNombreCliente(String name){
         List<CustomerDTO> customers = new ArrayList<>();
         this.buscarPorCampoValor("name", name).forEach((customer -> {
-            customers.add(new CustomerDTO(customer));
+            customers.add(new CustomerDTO(customer.getId(), customer.getName(), customer.getCountry()));
         }));
         return customers;
     }
@@ -59,7 +60,7 @@ public class CustomerCommandAdapterService extends CommandServiceAdapter<Custome
     public List<CustomerDTO> dameListaCustomersDePaises(String prefixpais){
         List<CustomerDTO> customers = new ArrayList<>();
         repository.findAllByCountryContains(prefixpais).forEach((customer -> {
-            customers.add(new CustomerDTO(customer));
+            customers.add(new CustomerDTO(customer.getId(), customer.getName(), customer.getCountry()));
         }));
         return customers;
     }

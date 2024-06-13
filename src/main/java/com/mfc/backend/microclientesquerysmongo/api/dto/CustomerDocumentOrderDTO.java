@@ -7,18 +7,21 @@ import java.math.BigDecimal;
 @Data
 public class CustomerDocumentOrderDTO {
 
-    private Long id;
+    private String id;
 
-    private CustomerDocumentOrderDTO customer;
+    private Long customerId;
+
+    private String customerName;
 
     private BigDecimal total;
 
     public CustomerDocumentOrderDTO() { }
 
-    public CustomerDocumentOrderDTO(CustomerDocumentOrderDTO customerOrder) {
-        this.id = customerOrder.getId();
-        this.customer = customerOrder.getCustomer();
-        this.total = customerOrder.getTotal();
+    public CustomerDocumentOrderDTO(String id, Long customerId, String customerName, BigDecimal total) {
+        this.id = id;
+        this.customerId = customerId;
+        this.customerName =  customerName;
+        this.total = total;
     }
 
 }

@@ -26,7 +26,9 @@ public class CustomerOrder {
 
     public CustomerOrder(CustomerOrderDTO customerOrderDTO) {
         this.id = customerOrderDTO.getId();
-        this.customer = customerOrderDTO.getCustomer();
+        Customer customer = new Customer();
+        customer.setId(customerOrderDTO.getCustomerId());
+        this.customer = customer;
         this.total = customerOrderDTO.getTotal();
     }
 

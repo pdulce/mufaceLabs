@@ -34,7 +34,7 @@ public class Customer {
     public Customer(CustomerDTO customer) {
         this.id = customer.getId();
         this.name = customer.getName();
-        this.customerOrders = customer.getCustomerOrders();
+        this.customerOrders = null;
         this.country = customer.getCountry();
     }
 

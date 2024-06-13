@@ -1,10 +1,6 @@
 package com.mfc.backend.microclientesquerysmongo.api.dto;
 
-import com.mfc.backend.microclientesquerysmongo.domain.model.CustomerDocument;
-import com.mfc.backend.microclientesquerysmongo.domain.model.CustomerOrderDocument;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 public class CustomerDocumentDTO {
@@ -15,14 +11,11 @@ public class CustomerDocumentDTO {
 
     private String name;
 
-    private List<CustomerOrderDocument> customerOrders;
-
     public CustomerDocumentDTO() {}
-    public CustomerDocumentDTO(CustomerDocument customer) {
-        this.id = customer.getId();
-        this.name = customer.getName();
-        this.customerOrders = customer.getCustomerOrders();
-        this.country = customer.getCountry();
+    public CustomerDocumentDTO(String id, String name, String country) {
+        this.id = id;
+        this.name = name;
+        this.country = country;
     }
 
 }
