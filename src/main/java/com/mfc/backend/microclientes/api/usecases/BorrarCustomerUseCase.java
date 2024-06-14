@@ -12,11 +12,11 @@ public class BorrarCustomerUseCase {
     CustomerRelationalAdapterService customerCommandAdapterService;
 
     public void ejecutar(CustomerDTO customerDTO) {
-        this.customerCommandAdapterService.borrarCliente(customerDTO);
+        this.customerCommandAdapterService.borrar(customerDTO);
     }
 
     public void ejecutar() {
-        this.customerCommandAdapterService.borrarTodosLosClientes();
+        this.customerCommandAdapterService.borrar();
     }
 
 }

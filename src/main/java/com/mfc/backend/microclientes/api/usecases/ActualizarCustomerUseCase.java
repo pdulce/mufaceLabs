@@ -12,7 +12,7 @@ public class ActualizarCustomerUseCase {
     CustomerRelationalServicePort customerCommandServicePort;
 
     public CustomerDTO ejecutar(CustomerDTO customerDTO) {
-        return this.customerCommandServicePort.actualizarCliente(customerDTO);
+        return this.customerCommandServicePort.actualizar(customerDTO);
     }
 
 }

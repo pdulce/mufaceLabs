@@ -1,8 +1,10 @@
 package com.mfc.backend.microregalos.domain.service;
 
+import com.mfc.backend.microregalos.api.dto.RegaloDTO;
 import com.mfc.backend.microregalos.domain.model.DiplomaWrapper;
 import com.mfc.backend.microregalos.domain.model.Regalo;
 import com.mfc.backend.microregalos.domain.repository.RegaloCommandRepository;
+import com.mfc.infra.domain.DTOConverter;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.output.adapter.RelationalServiceStepSagaAdapter;
 import com.mfc.infra.output.port.GenericRepositoryPort;
@@ -17,7 +19,7 @@ import java.math.BigDecimal;
 
 @Service
 @ConditionalOnProperty(name = "arch.event-broker-active", havingValue = "true", matchIfMissing = false)
-public class RegaloStepSagaAdapterService extends RelationalServiceStepSagaAdapter<Regalo, Long> {
+public class RegaloStepSagaAdapterService extends RelationalServiceStepSagaAdapter<Regalo, RegaloDTO, Long> {
 
     private static final String SAGA_NAME = "sagaBienvenidaCustomer";
     private static final int SAGA_STEP_NUMBER = 3;
@@ -67,13 +69,13 @@ public class RegaloStepSagaAdapterService extends RelationalServiceStepSagaAdapt
     public Object doSagaOperation(Event event) {
         DiplomaWrapper customer = (DiplomaWrapper) getWrapper(event);
         Regalo regalo = (Regalo) getNewData(customer);
-        return this.crear(regalo);
+        return this.crear(DTOConverter.convertToDTO(regalo, RegaloDTO.class));
     }
 
     @Override
     public Object doSagaCompensation(Event event) {
         Regalo regalo = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Regalo.class);
-        this.borrar(regalo);
+        this.borrar(DTOConverter.convertToDTO(regalo, RegaloDTO.class));
         return regalo;
     }
 

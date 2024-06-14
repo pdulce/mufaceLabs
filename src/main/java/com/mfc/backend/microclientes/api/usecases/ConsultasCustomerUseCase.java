@@ -14,15 +14,15 @@ public class ConsultasCustomerUseCase {
     CustomerRelationalServicePort customerCommandServicePort;
 
     public List<CustomerDTO> ejecutar(){
-        return this.customerCommandServicePort.consultarTodosLosClientes();
+        return this.customerCommandServicePort.buscarTodos();
     }
 
     public CustomerDTO ejecutar(Long id){
-        return this.customerCommandServicePort.consultarPorIdCliente(id);
+        return this.customerCommandServicePort.buscarPorId(id);
     }
 
     public List<CustomerDTO> ejecutar(String name){
-        return this.customerCommandServicePort.buscarPorNombreCliente(name);
+        return this.customerCommandServicePort.buscarPorCampoValor("name", name);
     }
 
     public List<CustomerDTO> dameListaCustomersDePaises(String prefixpais) {

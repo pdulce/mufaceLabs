@@ -9,15 +9,15 @@ arch:
       encoded: ewzqlzdstujochya
 
 spring:
-
+# local: 192.168.1.137
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://192.168.1.137/auth/realms/mi_realm
+          issuer-uri: http://192.168.1.163/auth/realms/mi_realm
   keycloak:
     realm: mi_realm
-    auth-server-url: http://192.168.1.137/mi_realm
+    auth-server-url: http://192.168.1.163/mi_realm
     resource: mufacearch
     credentials:
       secret: clien-secret-sample
@@ -26,22 +26,22 @@ spring:
   # command domain: 192.168.1.163
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.1.137:3306/sampleCommandDB
+    url: jdbc:mysql://192.168.1.163:3306/sampleCommandDB
     username: test
     password: test
 
   # query domain
   redis:
-    host: 192.168.1.137
+    host: 192.168.1.163
     password: mypass
     port: 6379
 
   # event domain
   data:
     mongodb:
-      host: 192.168.1.137
+      host: 192.168.1.163
       port: 27017
-      uri: mongodb://test:test@miubuntu.home:27017/queryDomainDB
+      uri: mongodb://test:test@192.168.1.163:27017/queryDomainDB
       authentication-database: queryDomainDB
     sql:
       init:
@@ -75,7 +75,7 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
   zipkin:
-    base-url: http://192.168.1.137:9411
+    base-url: http://192.168.1.163:9411
     sleuth:
       sampler:
         probability: 1.0

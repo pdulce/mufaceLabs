@@ -1,10 +1,11 @@
 package com.mfc.infra.output.adapter;
 
 import com.mfc.infra.configuration.ConfigProperties;
+import com.mfc.infra.domain.DTOConverter;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.exceptions.NotExistException;
 import com.mfc.infra.output.port.CommandEventPublisherPort;
-import com.mfc.infra.output.port.RelationalOperationsPort;
+import com.mfc.infra.output.port.RelationalServicePort;
 import com.mfc.infra.output.port.GenericRepositoryPort;
 import com.mfc.infra.utils.ConversionUtils;
 import jakarta.transaction.Transactional;
@@ -19,8 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Transactional
-public abstract class RelationalOperationsAdapter<T, ID> implements RelationalOperationsPort<T, ID> {
-    Logger logger = LoggerFactory.getLogger(RelationalOperationsAdapter.class);
+public abstract class RelationalServiceAdapter<T, D, ID> implements RelationalServicePort<T, D, ID> {
+    Logger logger = LoggerFactory.getLogger(RelationalServiceAdapter.class);
     @Autowired
     ConfigProperties configProperties;
 
@@ -36,11 +37,25 @@ public abstract class RelationalOperationsAdapter<T, ID> implements RelationalOp
         return entityClass.getSimpleName().toLowerCase();
     }
 
+    protected Class<T> getClassOfEntity() {
+        Class<T> entityClass = (Class<T>) ((ParameterizedType) getClass()
+                .getGenericSuperclass())
+                .getActualTypeArguments()[0];
+        return entityClass;
+    }
+
+    protected Class<D> getClassOfDTO() {
+        Class<D> entityClass = (Class<D>) ((ParameterizedType) getClass()
+                .getGenericSuperclass())
+                .getActualTypeArguments()[0];
+        return entityClass;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     @Transactional
-    public T crear(T entity) {
-        T saved = this.getRepository().save(entity);
+    public D crear(D entityDto) {
+        T saved = this.getRepository().save(DTOConverter.convertToEntity(entityDto, getClassOfEntity()));
         if (saved != null && configProperties.isEventBrokerActive()) {
             /*** Mando el evento al bus para que los recojan los dos consumers:
              *  - consumer responsable del dominio de eventos que persiste en MongoDB (patrón Event-Sourcing)
@@ -52,14 +67,15 @@ public abstract class RelationalOperationsAdapter<T, ID> implements RelationalOp
                     Event.EVENT_TYPE_CREATE, saved);
             commandEventPublisherPort.publish(Event.EVENT_TOPIC, eventArch);
         }
-        return saved;
+        return DTOConverter.convertToDTO(saved, getClassOfDTO());
     }
 
 
     @SuppressWarnings("unchecked")
     @Override
     @Transactional
-    public T actualizar(T entity) {
+    public D actualizar(D entityDto) {
+        T entity = DTOConverter.convertToEntity(entityDto, getClassOfEntity());
         ID id = (ID) ConversionUtils.convertToMap(entity).get("id");
         if (!this.getRepository().findById(id).isPresent()) {
             NotExistException e = new NotExistException();
@@ -75,13 +91,14 @@ public abstract class RelationalOperationsAdapter<T, ID> implements RelationalOp
                     Event.EVENT_TYPE_UPDATE, updated);
             commandEventPublisherPort.publish(Event.EVENT_TOPIC, eventArch);
         }
-        return updated;
+        return DTOConverter.convertToDTO(updated, getClassOfDTO());
     }
 
     @SuppressWarnings("unchecked")
     @Override
     @Transactional
-    public void borrar(T entity) {
+    public void borrar(D entityDto) {
+        T entity = DTOConverter.convertToEntity(entityDto, getClassOfEntity());
         ID id = (ID) ConversionUtils.convertToMap(entity).get("id");
         if (!this.getRepository().findById(id).isPresent()) {
             NotExistException e = new NotExistException();
@@ -102,7 +119,7 @@ public abstract class RelationalOperationsAdapter<T, ID> implements RelationalOp
     @SuppressWarnings("unchecked")
     @Override
     @Transactional
-    public void borrar(List<T> entities) {
+    public void borrar(List<D> entities) {
         entities.forEach((record) -> {
             this.borrar(record);
             if (configProperties.isEventBrokerActive()) {
@@ -120,7 +137,7 @@ public abstract class RelationalOperationsAdapter<T, ID> implements RelationalOp
     @Transactional
     public void borrar() {
         List<Event> events = new ArrayList<>();
-        buscar().forEach((record) -> {
+        buscarTodos().forEach((record) -> {
             events.add(new Event(getDocumentEntityClassname(), "author",
                     configProperties.getApplicationId(),
                     ConversionUtils.convertToMap(record).get("id").toString(),
@@ -136,38 +153,45 @@ public abstract class RelationalOperationsAdapter<T, ID> implements RelationalOp
 
     @SuppressWarnings("unchecked")
     @Override
-    public T buscarPorId(ID id) {
-        if (this.getRepository().findById(id).isPresent()) {
-           return this.getRepository().findById(id).get();
+    public D buscarPorId(ID id) {
+        if (!this.getRepository().findById(id).isPresent()) {
+            logger.info("buscarPorId no localizó el id: " + id);
+            NotExistException e = new NotExistException();
+            e.setMsgError("id: " + id);
+            RuntimeException exc = new RuntimeException(e);
+            throw exc;
         }
-        logger.info("buscarPorId no localizó el id: " + id);
-        NotExistException e = new NotExistException();
-        e.setMsgError("id: " + id);
-        RuntimeException exc = new RuntimeException(e);
-        throw exc;
+        return DTOConverter.convertToDTO(this.getRepository().findById(id).get(), getClassOfDTO());
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<T> buscar() {
-        return this.getRepository().findAll().stream().toList();
+    public List<D> buscarTodos() {
+        List<D> resultado = new ArrayList<>();
+        this.getRepository().findAll().stream().toList().forEach((entity) -> {
+            resultado.add(DTOConverter.convertToDTO(entity, getClassOfDTO()));
+        });
+        return resultado;
     }
 
     /** método generíco para buscar dentro de cualquier campo de un entidad T **/
 
     @SuppressWarnings("unchecked")
-    public List<T> buscarPorCampoValor(String fieldName, Object fieldValue) {
+    public List<D> buscarPorCampoValor(String fieldName, Object fieldValue) {
 
         try {
-            Class<T> entityClass = (Class<T>) ((ParameterizedType) getClass()
-                    .getGenericSuperclass())
-                    .getActualTypeArguments()[0];
+            Class<T> entityClass = getClassOfEntity();
             T instance = entityClass.getDeclaredConstructor().newInstance();
             // llenamos esta instancia con el field y value recibidos
             Field field = entityClass.getDeclaredField(fieldName);
             field.setAccessible(true);
             field.set(instance, fieldValue);
-            return this.getRepository().findAll(Example.of(instance));
+
+            List<D> resultado = new ArrayList<>();
+            this.getRepository().findAll(Example.of(instance)).forEach((entity) -> {
+                resultado.add(DTOConverter.convertToDTO(entity, getClassOfDTO()));
+            });
+            return resultado;
         } catch (Throwable exc1) {
             logger.error("Error in buscarPorCampoValor method: ", exc1.getCause());
             NotExistException e = new NotExistException();

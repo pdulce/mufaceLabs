@@ -12,7 +12,7 @@ public class ActualizarDiplomaUseCase {
     DiplomaServicePort diplomaCommandServicePort;
 
     public DiplomaDTO ejecutar(DiplomaDTO diplomaDTO) {
-        return diplomaCommandServicePort.actualizarDiploma(diplomaDTO);
+        return diplomaCommandServicePort.actualizar(diplomaDTO);
     }
 
 }

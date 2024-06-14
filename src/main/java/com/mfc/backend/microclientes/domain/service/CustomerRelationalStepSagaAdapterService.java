@@ -1,7 +1,9 @@
 package com.mfc.backend.microclientes.domain.service;
 
+import com.mfc.backend.microclientes.api.dto.CustomerDTO;
 import com.mfc.backend.microclientes.domain.model.Customer;
 import com.mfc.backend.microclientes.domain.repository.CustomerCommandRepositoryPort;
+import com.mfc.infra.domain.DTOConverter;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.output.adapter.RelationalServiceStepSagaAdapter;
 import com.mfc.infra.output.port.GenericRepositoryPort;
@@ -14,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @ConditionalOnProperty(name = "arch.event-broker-active", havingValue = "true", matchIfMissing = false)
-public class CustomerRelationalStepSagaAdapterService extends RelationalServiceStepSagaAdapter<Customer, Long> {
+public class CustomerRelationalStepSagaAdapterService extends RelationalServiceStepSagaAdapter<Customer, CustomerDTO, Long> {
     private static final String SAGA_NAME = "sagaBienvenidaCustomer";
     private static final int SAGA_STEP_NUMBER = 1;
     private static final String APP_ID = "application-Id-sample";
@@ -71,13 +73,14 @@ public class CustomerRelationalStepSagaAdapterService extends RelationalServiceS
     @Override
     public Object doSagaOperation(Event event) {
         Customer customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Customer.class);
-        return this.crear(customer);
+        CustomerDTO dto = this.crear(DTOConverter.convertToDTO(customer, getClassOfDTO()));
+        return DTOConverter.convertToEntity(dto, getClassOfEntity());
     }
 
     @Override
     public Object doSagaCompensation(Event event) {
         Customer customer = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Customer.class);
-        this.borrar(customer);
+        this.borrar(DTOConverter.convertToDTO(customer, getClassOfDTO()));
         return customer;
     }
 

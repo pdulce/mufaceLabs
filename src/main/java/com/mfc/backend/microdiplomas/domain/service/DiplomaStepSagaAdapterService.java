@@ -1,8 +1,10 @@
 package com.mfc.backend.microdiplomas.domain.service;
 
+import com.mfc.backend.microdiplomas.api.dto.DiplomaDTO;
 import com.mfc.backend.microdiplomas.domain.model.CustomerWrapper;
 import com.mfc.backend.microdiplomas.domain.model.Diploma;
 import com.mfc.backend.microdiplomas.domain.repository.DiplomaCommandRepository;
+import com.mfc.infra.domain.DTOConverter;
 import com.mfc.infra.event.Event;
 import com.mfc.infra.output.adapter.RelationalServiceStepSagaAdapter;
 import com.mfc.infra.output.port.GenericRepositoryPort;
@@ -15,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @ConditionalOnProperty(name = "arch.event-broker-active", havingValue = "true", matchIfMissing = false)
-public class DiplomaStepSagaAdapterService extends RelationalServiceStepSagaAdapter<Diploma, Long> {
+public class DiplomaStepSagaAdapterService extends RelationalServiceStepSagaAdapter<Diploma, DiplomaDTO, Long> {
 
     private static final String SAGA_NAME = "sagaBienvenidaCustomer";
     private static final int SAGA_STEP_NUMBER = 2;
@@ -72,13 +74,13 @@ public class DiplomaStepSagaAdapterService extends RelationalServiceStepSagaAdap
             throw new Throwable ("Error de negocio: " +
                     "exception por país FORBIDDEN en SAGA step 2 para probar la arquitectura");
         }
-        return this.crear(diploma);
+        return this.crear(DTOConverter.convertToDTO(diploma, DiplomaDTO.class));
     }
 
     @Override
     public Object doSagaCompensation(Event event) {
         Diploma diploma = ConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Diploma.class);
-        this.borrar(diploma);
+        this.borrar(DTOConverter.convertToDTO(diploma, DiplomaDTO.class));
         return diploma;
     }
 

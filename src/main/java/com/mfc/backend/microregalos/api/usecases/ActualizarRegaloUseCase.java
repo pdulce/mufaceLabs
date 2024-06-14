@@ -12,7 +12,7 @@ public class ActualizarRegaloUseCase {
     RegaloServicePort regaloServicePort;
 
     public RegaloDTO ejecutar(RegaloDTO regaloDTO) {
-        return regaloServicePort.actualizarRegalo(regaloDTO);
+        return regaloServicePort.actualizar(regaloDTO);
     }
 
 }

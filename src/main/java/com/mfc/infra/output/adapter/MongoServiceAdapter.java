@@ -1,6 +1,6 @@
 package com.mfc.infra.output.adapter;
 
-import com.mfc.infra.output.port.MongoOperationsPort;
+import com.mfc.infra.output.port.MongoServicePort;
 import com.mfc.infra.utils.ConversionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +11,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class MongoOperationsAdapter<T> implements MongoOperationsPort<T> {
-    Logger logger = LoggerFactory.getLogger(MongoOperationsAdapter.class);
+public abstract class MongoServiceAdapter<T> implements MongoServicePort<T> {
+    Logger logger = LoggerFactory.getLogger(MongoServiceAdapter.class);
 
     @Autowired
     MongoRepository<T, String> repository;

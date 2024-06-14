@@ -12,7 +12,7 @@ public class CrearPedidoUseCase {
     CustomerOrderServicePort customerOrderServicePort;
 
     public CustomerOrderDTO ejecutar(CustomerOrderDTO customerOrderDTO) {
-        return this.customerOrderServicePort.crearPedido(customerOrderDTO);
+        return this.customerOrderServicePort.crear(customerOrderDTO);
     }
 
 

@@ -14,11 +14,11 @@ public class ConsultasRegalosUseCase {
     RegaloServicePort regaloServicePort;
 
     public List<RegaloDTO> ejecutar(Long customerId) {
-        return this.regaloServicePort.consultarRegalosDeCustomer(customerId);
+        return this.regaloServicePort.buscarPorCampoValor("customerId", customerId);
     }
 
     public List<RegaloDTO> ejecutar() {
-        return this.regaloServicePort.consultarTodosLosRegalodEntregados();
+        return this.regaloServicePort.buscarTodos();
     }
 
 }

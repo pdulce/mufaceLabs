@@ -2,7 +2,7 @@ package com.mfc.infra.input.adapter;
 
 import com.mfc.infra.configuration.ConfigProperties;
 import com.mfc.infra.event.Event;
-import com.mfc.infra.output.port.MongoOperationsPort;
+import com.mfc.infra.output.port.MongoServicePort;
 import com.mfc.infra.input.port.QueryDomainListenerPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,7 @@ public abstract class QueryDomainListenerAdapter<T> implements QueryDomainListen
     Logger logger = LoggerFactory.getLogger(QueryDomainListenerAdapter.class);
 
     @Autowired
-    MongoOperationsPort<T> mongoRepositoryPort;
+    MongoServicePort<T> mongoRepositoryPort;
 
     @Autowired
     private MongoMappingContext mongoMappingContext;
