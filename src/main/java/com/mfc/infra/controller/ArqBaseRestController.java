@@ -1,5 +1,6 @@
 package com.mfc.infra.controller;
 
+import com.mfc.infra.output.port.ArqSagaOrchestratorPort;
 import com.mfc.infra.utils.ArqConstantMessages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +13,8 @@ public abstract class ArqBaseRestController {
 
     Logger logger = LoggerFactory.getLogger(ArqBaseRestController.class);
 
-    /*@Autowired(required=false)
-    protected ArqSagaOrchestratorPort orchestratorManager;*/
+    @Autowired(required=false)
+    protected ArqSagaOrchestratorPort orchestratorManager;
 
     @Autowired
     protected MessageSource messageSource;

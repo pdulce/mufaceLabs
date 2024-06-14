@@ -14,7 +14,9 @@ public class ConsultasRegalosUseCase {
     RegaloServicePort regaloServicePort;
 
     public List<RegaloDTO> ejecutar(Long customerId) {
-        return this.regaloServicePort.buscarPorCampoValor("customerId", customerId);
+        RegaloDTO regaloDTO = new RegaloDTO();
+        regaloDTO.setCustomerid(customerId);
+        return this.regaloServicePort.buscarCoincidenciasEstricto(regaloDTO);
     }
 
     public List<RegaloDTO> ejecutar() {

@@ -22,7 +22,9 @@ public class ConsultasCustomerUseCase {
     }
 
     public List<CustomerDTO> ejecutar(String name){
-        return this.customerCommandServicePort.buscarPorCampoValor("name", name);
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setName(name);
+        return this.customerCommandServicePort.buscarCoincidenciasNoEstricto(customerDTO);
     }
 
     public List<CustomerDTO> dameListaCustomersDePaises(String prefixpais) {

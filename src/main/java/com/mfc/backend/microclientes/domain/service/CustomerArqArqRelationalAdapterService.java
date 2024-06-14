@@ -25,7 +25,7 @@ public class CustomerArqArqRelationalAdapterService extends ArqRelationalService
     public List<CustomerDTO> dameListaCustomersDePaises(String prefixpais){
         List<CustomerDTO> customers = new ArrayList<>();
         repository.findAllByCountryContains(prefixpais).forEach((customer -> {
-            customers.add(new CustomerDTO(customer.getId(), customer.getName(), customer.getCountry()));
+            customers.add(CustomerDTO.convertToDTO(customer, CustomerDTO.class));
         }));
         return customers;
     }
