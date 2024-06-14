@@ -1,9 +1,12 @@
 package com.mfc.backend.microclientesquerysmongo.api.dto;
 
+import com.mfc.infra.dto.ArqAbstractDTO;
 import lombok.Data;
 
+import java.util.Map;
+
 @Data
-public class CustomerDocumentDTO {
+public class CustomerDocumentDTO extends ArqAbstractDTO {
 
     private String id;
 
@@ -12,10 +15,10 @@ public class CustomerDocumentDTO {
     private String name;
 
     public CustomerDocumentDTO() {}
-    public CustomerDocumentDTO(String id, String name, String country) {
-        this.id = id;
-        this.name = name;
-        this.country = country;
-    }
 
+
+    @Override
+    public Map<String, String> getMapaConversion() {
+        return null;
+    }
 }

@@ -3,7 +3,7 @@ package com.mfc.backend.microclientes.domain.service;
 import com.mfc.backend.microclientes.api.dto.CustomerDTO;
 import com.mfc.backend.microclientes.domain.model.Customer;
 import com.mfc.backend.microclientes.domain.repository.CustomerCommandRepositoryPort;
-import com.mfc.infra.domain.ArqDTOConverter;
+import com.mfc.infra.dto.ArqAbstractDTO;
 import com.mfc.infra.event.ArqEvent;
 import com.mfc.infra.output.adapter.ArqRelationalServiceStepArqSagaAdapter;
 import com.mfc.infra.output.port.ArqSagaOrchestratorPort;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @ConditionalOnProperty(name = "arch.event-broker-active", havingValue = "true", matchIfMissing = false)
-public class CustomerArqRelationalStepArqSagaAdapterService extends ArqRelationalServiceStepArqSagaAdapter<Customer, CustomerDTO, Long> {
+public class CustomerStepSagaServiceAdapter extends ArqRelationalServiceStepArqSagaAdapter<Customer, CustomerDTO, Long> {
     private static final String SAGA_NAME = "sagaBienvenidaCustomer";
     private static final int SAGA_STEP_NUMBER = 1;
     private static final String APP_ID = "application-Id-sample";
@@ -27,7 +27,7 @@ public class CustomerArqRelationalStepArqSagaAdapterService extends ArqRelationa
     protected CustomerCommandRepositoryPort repository;
 
     @Autowired
-    public CustomerArqRelationalStepArqSagaAdapterService(CustomerCommandRepositoryPort customerCommandRepositoryPortP) {
+    public CustomerStepSagaServiceAdapter(CustomerCommandRepositoryPort customerCommandRepositoryPortP) {
         this.repository = customerCommandRepositoryPortP;
     }
 
@@ -73,14 +73,14 @@ public class CustomerArqRelationalStepArqSagaAdapterService extends ArqRelationa
     @Override
     public Object doSagaOperation(ArqEvent event) {
         Customer customer = ArqConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Customer.class);
-        CustomerDTO dto = this.crear(ArqDTOConverter.convertToDTO(customer, getClassOfDTO()));
-        return ArqDTOConverter.convertToEntity(dto, getClassOfEntity());
+        CustomerDTO dto = this.crear(ArqAbstractDTO.convertToDTO(customer, getClassOfDTO()));
+        return ArqAbstractDTO.convertToEntity(dto, getClassOfEntity());
     }
 
     @Override
     public Object doSagaCompensation(ArqEvent event) {
         Customer customer = ArqConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Customer.class);
-        this.borrar(ArqDTOConverter.convertToDTO(customer, getClassOfDTO()));
+        this.borrar(ArqAbstractDTO.convertToDTO(customer, getClassOfDTO()));
         return customer;
     }
 

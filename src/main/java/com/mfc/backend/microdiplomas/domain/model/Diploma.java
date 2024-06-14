@@ -26,5 +26,4 @@ public class Diploma {
     public Diploma() {}
 
 
-
 }

@@ -10,7 +10,7 @@ import java.util.Map;
 @Data
 public class DiplomaDTO extends ArqAbstractDTO {
 
-    private Long identificador;
+    private Long id;
 
     private Long idCliente;
 
@@ -20,9 +20,7 @@ public class DiplomaDTO extends ArqAbstractDTO {
 
     private String regionOComarca;
 
-    /**
-     * campo calculado transiet que no está en el modelo (entidad-relacional o document-non-relational)
-     **/
+    /** campo calculado transiet que no está en el modelo (entidad-relacional o document-non-relational) **/
     private String continente;
 
     @JsonIgnore
@@ -32,17 +30,18 @@ public class DiplomaDTO extends ArqAbstractDTO {
         // Keys: los miembros del DTO
         // Values: los miembros del Entity
         mapaConversion = new HashMap<>();
-        mapaConversion.put("identificador", "id");
+        mapaConversion.put("id", "id");
         mapaConversion.put("idCliente", "idcustomer");
         mapaConversion.put("nombreCompleto", "name");
         mapaConversion.put("titulacion", "titulo");
         mapaConversion.put("regionOComarca", "region");
     }
-
-    public DiplomaDTO() {
-    }
+    public DiplomaDTO(){}
 
     public Map<String, String> getMapaConversion() {
         return mapaConversion;
     }
+
+
+
 }

@@ -1,7 +1,8 @@
 package com.mfc.backend.microclientesquerysmongo.api.usecases;
 
+import com.mfc.backend.microclientesquerysmongo.api.dto.CustomerDocumentDTO;
 import com.mfc.backend.microclientesquerysmongo.domain.model.CustomerDocument;
-import com.mfc.backend.microclientesquerysmongo.domain.service.CustomerQueryServiceConsumerAdapterArqArq;
+import com.mfc.backend.microclientesquerysmongo.domain.service.CustomerServiceAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,13 +12,13 @@ import java.util.List;
 public class QueriesOptimizedUseCase {
 
     @Autowired
-    CustomerQueryServiceConsumerAdapterArqArq customerQueryServiceConsumerAdapter;
-    public List<CustomerDocument> ejecutar() {
-        return customerQueryServiceConsumerAdapter.findAll();
+    CustomerServiceAdapter customerQueryServiceConsumerAdapter;
+    public List<CustomerDocumentDTO> ejecutar() {
+        return customerQueryServiceConsumerAdapter.buscarTodos();
     }
 
-    public CustomerDocument ejecutar(String id) {
-        return customerQueryServiceConsumerAdapter.findById(id);
+    public CustomerDocumentDTO ejecutar(String id) {
+        return customerQueryServiceConsumerAdapter.buscarPorId(id);
     }
 
 

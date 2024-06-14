@@ -1,11 +1,13 @@
 package com.mfc.backend.microclientesquerysmongo.api.dto;
 
+import com.mfc.infra.dto.ArqAbstractDTO;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 @Data
-public class CustomerDocumentOrderDTO {
+public class CustomerDocumentOrderDTO extends ArqAbstractDTO {
 
     private String id;
 
@@ -17,11 +19,9 @@ public class CustomerDocumentOrderDTO {
 
     public CustomerDocumentOrderDTO() { }
 
-    public CustomerDocumentOrderDTO(String id, Long customerId, String customerName, BigDecimal total) {
-        this.id = id;
-        this.customerId = customerId;
-        this.customerName =  customerName;
-        this.total = total;
-    }
 
+    @Override
+    public Map<String, String> getMapaConversion() {
+        return null;
+    }
 }

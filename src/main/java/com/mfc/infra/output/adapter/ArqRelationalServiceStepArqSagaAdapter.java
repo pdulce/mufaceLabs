@@ -14,8 +14,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 @Transactional
-public abstract class ArqRelationalServiceStepArqSagaAdapter<T, D extends IArqDTO, ID> extends ArqRelationalServiceAdapter<T, D, ID>
-        implements ArqSagaStepPort<T, ID> {
+public abstract class ArqRelationalServiceStepArqSagaAdapter<T, D extends IArqDTO, ID>
+        extends ArqServiceRelationalDBAdapter<T, D, ID> implements ArqSagaStepPort<T, ID> {
 
     protected Logger logger = LoggerFactory.getLogger(ArqRelationalServiceStepArqSagaAdapter.class);
     @Autowired(required = false)

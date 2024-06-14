@@ -25,17 +25,15 @@ public class CustomerQueryDomainAPI extends ArqBaseRestController {
 
     @GetMapping(value = "get", produces=MediaType.APPLICATION_JSON_VALUE)
     public CustomerDocumentDTO get(@RequestParam String customerId) {
-        CustomerDocument customerDocument = this.queriesOptimizedUseCase.ejecutar(customerId);
-        return new CustomerDocumentDTO(customerDocument.getId(), customerDocument.getName(),
-                customerDocument.getCountry());
+        CustomerDocumentDTO customerDocumentDTO = this.queriesOptimizedUseCase.ejecutar(customerId);
+        return customerDocumentDTO;
     }
 
     @GetMapping(value = "getAll", produces=MediaType.APPLICATION_JSON_VALUE)
     public List<CustomerDocumentDTO> getAll() {
         List<CustomerDocumentDTO> lista = new ArrayList<>();
         this.queriesOptimizedUseCase.ejecutar().forEach((customerDocument -> {
-            lista.add(new CustomerDocumentDTO(customerDocument.getId(), customerDocument.getName(),
-                    customerDocument.getCountry()));
+            lista.add(CustomerDocumentDTO.convertToDTO(customerDocument, CustomerDocumentDTO.class));
         }));
         return lista;
     }

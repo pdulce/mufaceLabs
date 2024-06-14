@@ -1,9 +1,10 @@
 package com.mfc.infra.input.adapter;
 
 import com.mfc.infra.configuration.ArqConfigProperties;
+import com.mfc.infra.dto.IArqDTO;
 import com.mfc.infra.event.ArqEvent;
-import com.mfc.infra.output.port.ArqMongoServicePort;
 import com.mfc.infra.input.port.ArqQueryDomainListenerPort;
+import com.mfc.infra.output.adapter.ArqMongoServiceAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +13,12 @@ import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 import java.lang.reflect.ParameterizedType;
 import java.util.LinkedHashMap;
 
-public abstract class ArqArqQueryDomainListenerAdapter<T> implements ArqQueryDomainListenerPort<T> {
-    Logger logger = LoggerFactory.getLogger(ArqArqQueryDomainListenerAdapter.class);
+public abstract class ArqQueryDomainListenerAdapter<T, D extends IArqDTO, ID>
+        implements ArqQueryDomainListenerPort<T, D, ID> {
+    Logger logger = LoggerFactory.getLogger(ArqQueryDomainListenerAdapter.class);
 
     @Autowired
-    ArqMongoServicePort<T> mongoRepositoryPort;
+    ArqMongoServiceAdapter<T, D, ID> mongoRepositoryPort;
 
     @Autowired
     private MongoMappingContext mongoMappingContext;
@@ -44,9 +46,9 @@ public abstract class ArqArqQueryDomainListenerAdapter<T> implements ArqQueryDom
                 && collectionName.equals(event.getArqContextInfo().getAlmacen())) {
             if (event.getInnerEvent().getTypeOfEvent().contentEquals(ArqEvent.EVENT_TYPE_CREATE)
                     || event.getInnerEvent().getTypeOfEvent().contentEquals(ArqEvent.EVENT_TYPE_UPDATE)) {
-                this.mongoRepositoryPort.saveReg((LinkedHashMap) event.getInnerEvent().getData(), entityClass);
+                this.mongoRepositoryPort.crear((LinkedHashMap) event.getInnerEvent().getData(), entityClass);
             } else if (event.getInnerEvent().getTypeOfEvent().contentEquals(ArqEvent.EVENT_TYPE_DELETE)) {
-                this.mongoRepositoryPort.deleteReg(event.getId());
+                this.mongoRepositoryPort.borrar(event.getId());
             }
         } // else::  //dejo pasar este mensaje porque no es para este consumidor
     }

@@ -3,7 +3,7 @@ package com.mfc.backend.microclientes.domain.service;
 import com.mfc.backend.microclientes.api.dto.CustomerDTO;
 import com.mfc.backend.microclientes.domain.model.Customer;
 import com.mfc.backend.microclientes.domain.repository.CustomerCommandRepositoryPort;
-import com.mfc.infra.output.adapter.ArqRelationalServiceAdapter;
+import com.mfc.infra.output.adapter.ArqServiceRelationalDBAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CustomerArqArqRelationalAdapterService extends ArqRelationalServiceAdapter<Customer, CustomerDTO, Long>
+public class CustomerServiceAdapter extends ArqServiceRelationalDBAdapter<Customer, CustomerDTO, Long>
         implements CustomerArqRelationalServicePort {
 
     @Autowired

@@ -4,7 +4,7 @@ import com.mfc.backend.microregalos.api.dto.RegaloDTO;
 import com.mfc.backend.microregalos.domain.model.DiplomaWrapper;
 import com.mfc.backend.microregalos.domain.model.Regalo;
 import com.mfc.backend.microregalos.domain.repository.RegaloCommandRepository;
-import com.mfc.infra.domain.ArqDTOConverter;
+import com.mfc.infra.dto.ArqAbstractDTO;
 import com.mfc.infra.event.ArqEvent;
 import com.mfc.infra.output.adapter.ArqRelationalServiceStepArqSagaAdapter;
 import com.mfc.infra.output.port.ArqSagaOrchestratorPort;
@@ -69,13 +69,13 @@ public class RegaloStepSagaAdapterService extends ArqRelationalServiceStepArqSag
     public Object doSagaOperation(ArqEvent event) {
         DiplomaWrapper customer = (DiplomaWrapper) getWrapper(event);
         Regalo regalo = (Regalo) getNewData(customer);
-        return this.crear(ArqDTOConverter.convertToDTO(regalo, RegaloDTO.class));
+        return this.crear(ArqAbstractDTO.convertToDTO(regalo, RegaloDTO.class));
     }
 
     @Override
     public Object doSagaCompensation(ArqEvent event) {
         Regalo regalo = ArqConversionUtils.convertMapToObject(event.getInnerEvent().getData(), Regalo.class);
-        this.borrar(ArqDTOConverter.convertToDTO(regalo, RegaloDTO.class));
+        this.borrar(ArqAbstractDTO.convertToDTO(regalo, RegaloDTO.class));
         return regalo;
     }
 

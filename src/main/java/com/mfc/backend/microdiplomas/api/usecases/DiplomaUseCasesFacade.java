@@ -1,10 +1,6 @@
 package com.mfc.backend.microdiplomas.api.usecases;
 
-import com.mfc.microdiplomas.api.dto.DiplomaDTO;
-import com.mfc.microdiplomas.api.usecases.ActualizarDiplomaUseCase;
-import com.mfc.microdiplomas.api.usecases.BorrarTodosLosDiplomasUseCase;
-import com.mfc.microdiplomas.api.usecases.ConsultasDiplomasUseCase;
-import com.mfc.microdiplomas.api.usecases.CrearDiplomaUseCase;
+import com.mfc.backend.microdiplomas.api.dto.DiplomaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
