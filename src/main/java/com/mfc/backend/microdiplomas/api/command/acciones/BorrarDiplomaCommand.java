@@ -1,25 +1,25 @@
 package com.mfc.backend.microdiplomas.api.command.acciones;
 
-import com.mfc.backend.microdiplomas.api.dto.DiplomaDTO;
+import com.mfc.backend.microdiplomas.api.dto.DiplomaDTOArq;
 import com.mfc.backend.microdiplomas.api.usecases.BorrarTodosLosDiplomasUseCase;
 
-public class BorrarDiplomaCommand implements Command<DiplomaDTO> {
+public class BorrarDiplomaCommand implements Command<DiplomaDTOArq> {
 
     private final BorrarTodosLosDiplomasUseCase borrarTodosLosDiplomasUseCase;
 
-    DiplomaDTO diplomaDTO;
+    DiplomaDTOArq diplomaDTO;
 
-    public DiplomaDTO getDiplomaDTO() {
+    public DiplomaDTOArq getDiplomaDTO() {
         return diplomaDTO;
     }
 
-    public BorrarDiplomaCommand(BorrarTodosLosDiplomasUseCase borrarTodosLosDiplomasUseCase, DiplomaDTO diplomaDTO) {
+    public BorrarDiplomaCommand(BorrarTodosLosDiplomasUseCase borrarTodosLosDiplomasUseCase, DiplomaDTOArq diplomaDTO) {
         this.borrarTodosLosDiplomasUseCase = borrarTodosLosDiplomasUseCase;
         this.diplomaDTO = diplomaDTO;
     }
 
     @Override
-    public DiplomaDTO execute() {
+    public DiplomaDTOArq execute() {
         this.borrarTodosLosDiplomasUseCase.ejecutar();
         return null;
     }

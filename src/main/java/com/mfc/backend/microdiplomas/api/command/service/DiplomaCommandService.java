@@ -5,7 +5,7 @@ import com.mfc.backend.microdiplomas.api.command.acciones.ActualizarDiplomaComma
 import com.mfc.backend.microdiplomas.api.command.acciones.BorrarDiplomaCommand;
 import com.mfc.backend.microdiplomas.api.command.acciones.BuscarDiplomasDeCliente;
 import com.mfc.backend.microdiplomas.api.command.acciones.BuscarTodosLosDiplomasCommand;
-import com.mfc.backend.microdiplomas.api.dto.DiplomaDTO;
+import com.mfc.backend.microdiplomas.api.dto.DiplomaDTOArq;
 import com.mfc.backend.microdiplomas.api.usecases.ActualizarDiplomaUseCase;
 import com.mfc.backend.microdiplomas.api.usecases.BorrarTodosLosDiplomasUseCase;
 import com.mfc.backend.microdiplomas.api.usecases.ConsultasDiplomasUseCase;
@@ -27,43 +27,43 @@ public class DiplomaCommandService {
     @Autowired
     ConsultasDiplomasUseCase consultasDiplomasUseCase;
 
-    public List<DiplomaDTO> getDiplomasDeLaRegionProvenza() {
+    public List<DiplomaDTOArq> getDiplomasDeLaRegionProvenza() {
         return null;
     }
 
-    public DiplomaDTO actualizarDiploma(DiplomaDTO diplomaDTO) {
+    public DiplomaDTOArq actualizarDiploma(DiplomaDTOArq diplomaDTO) {
         ActualizarDiplomaCommand command = new ActualizarDiplomaCommand(actualizarDiplomaUseCase, diplomaDTO);
         commandHandler.registerCommand(ActualizarDiplomaCommand.class, command);
-        return (DiplomaDTO) commandHandler.executeCommand(ActualizarDiplomaCommand.class);
+        return (DiplomaDTOArq) commandHandler.executeCommand(ActualizarDiplomaCommand.class);
     }
 
     public void borrarDiplomas() {
-        BorrarDiplomaCommand command = new BorrarDiplomaCommand(borrarTodosLosDiplomasUseCase, new DiplomaDTO());
+        BorrarDiplomaCommand command = new BorrarDiplomaCommand(borrarTodosLosDiplomasUseCase, new DiplomaDTOArq());
         commandHandler.registerCommand(BorrarDiplomaCommand.class, command);
         commandHandler.executeCommand(BorrarDiplomaCommand.class);
     }
 
-    public List<DiplomaDTO> buscarDiplomasDeCustomer(Long id) {
-        DiplomaDTO search = new DiplomaDTO();
+    public List<DiplomaDTOArq> buscarDiplomasDeCustomer(Long id) {
+        DiplomaDTOArq search = new DiplomaDTOArq();
         search.setId(id);
         BuscarDiplomasDeCliente command = new BuscarDiplomasDeCliente(consultasDiplomasUseCase, search);
         commandHandler.registerCommand(BuscarDiplomasDeCliente.class, command);
-        return (List<DiplomaDTO>) commandHandler.executeCommand(BuscarDiplomasDeCliente.class);
+        return (List<DiplomaDTOArq>) commandHandler.executeCommand(BuscarDiplomasDeCliente.class);
     }
 
-    public List<DiplomaDTO> buscarDiplomasPorNombreCustomer(String name) {
-        DiplomaDTO search = new DiplomaDTO();
+    public List<DiplomaDTOArq> buscarDiplomasPorNombreCustomer(String name) {
+        DiplomaDTOArq search = new DiplomaDTOArq();
         search.setName(name);
         BuscarTodosLosDiplomasCommand command = new BuscarTodosLosDiplomasCommand(consultasDiplomasUseCase, search);
         commandHandler.registerCommand(BuscarTodosLosDiplomasCommand.class, command);
-        return (List<DiplomaDTO>) commandHandler.executeCommand(BuscarTodosLosDiplomasCommand.class);
+        return (List<DiplomaDTOArq>) commandHandler.executeCommand(BuscarTodosLosDiplomasCommand.class);
     }
 
-    public List<DiplomaDTO> buscarTodosLosDiplomas() {
+    public List<DiplomaDTOArq> buscarTodosLosDiplomas() {
         BuscarTodosLosDiplomasCommand command = new BuscarTodosLosDiplomasCommand(consultasDiplomasUseCase,
-                new DiplomaDTO());
+                new DiplomaDTOArq());
         commandHandler.registerCommand(BuscarTodosLosDiplomasCommand.class, command);
-        return (List<DiplomaDTO>) commandHandler.executeCommand(BuscarTodosLosDiplomasCommand.class);
+        return (List<DiplomaDTOArq>) commandHandler.executeCommand(BuscarTodosLosDiplomasCommand.class);
     }
 
 

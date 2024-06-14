@@ -1,6 +1,6 @@
 package com.mfc.backend.microdiplomas.api.facade;
 
-import com.mfc.backend.microdiplomas.api.dto.DiplomaDTO;
+import com.mfc.backend.microdiplomas.api.dto.DiplomaDTOArq;
 import com.mfc.backend.microdiplomas.api.usecases.ActualizarDiplomaUseCase;
 import com.mfc.backend.microdiplomas.api.usecases.BorrarTodosLosDiplomasUseCase;
 import com.mfc.backend.microdiplomas.api.usecases.ConsultasDiplomasUseCase;
@@ -21,7 +21,7 @@ public class DiplomaFacade {
     @Autowired
     private ConsultasDiplomasUseCase consultasDiplomasUseCase;
 
-    public DiplomaDTO actualizarDiploma(DiplomaDTO diplomaDTO) {
+    public DiplomaDTOArq actualizarDiploma(DiplomaDTOArq diplomaDTO) {
         return this.actualizarDiplomaUseCase.ejecutar(diplomaDTO);
     }
 
@@ -30,20 +30,20 @@ public class DiplomaFacade {
         this.borrarTodosLosDiplomasUseCase.ejecutar();
     }
 
-    public List<DiplomaDTO> consultarTodosLosDiplomas() {
+    public List<DiplomaDTOArq> consultarTodosLosDiplomas() {
         return this.consultasDiplomasUseCase.consultarTodos();
     }
 
-    public List<DiplomaDTO> consultaDiplomasDeCliente(Long idCustomer) {
+    public List<DiplomaDTOArq> consultaDiplomasDeCliente(Long idCustomer) {
         return this.consultasDiplomasUseCase.consultarDiplomasDeCliente(idCustomer);
     }
 
-    public List<DiplomaDTO> consultaDiplomasDeClientesConNombre(String name) {
+    public List<DiplomaDTOArq> consultaDiplomasDeClientesConNombre(String name) {
         return this.consultasDiplomasUseCase.consultarDiplomasPorNombreClientes(name);
     }
 
 
-    public List<DiplomaDTO> consultaDiplomasDeRegionProvenza() {
+    public List<DiplomaDTOArq> consultaDiplomasDeRegionProvenza() {
         return this.consultasDiplomasUseCase.getDiplomasDeLaRegionProvenza();
     }
 

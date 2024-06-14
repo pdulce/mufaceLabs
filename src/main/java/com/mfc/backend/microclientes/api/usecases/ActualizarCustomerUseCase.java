@@ -1,7 +1,7 @@
 package com.mfc.backend.microclientes.api.usecases;
 
 import com.mfc.backend.microclientes.api.dto.CustomerDTO;
-import com.mfc.backend.microclientes.domain.service.CustomerRelationalServicePort;
+import com.mfc.backend.microclientes.domain.service.CustomerArqRelationalServicePort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class ActualizarCustomerUseCase {
 
     @Autowired
-    CustomerRelationalServicePort customerCommandServicePort;
+    CustomerArqRelationalServicePort customerCommandServicePort;
 
     public CustomerDTO ejecutar(CustomerDTO customerDTO) {
         return this.customerCommandServicePort.actualizar(customerDTO);

@@ -1,7 +1,7 @@
 package com.mfc.backend.microclientes.domain.model;
 
 import com.mfc.backend.microclientes.api.dto.CustomerDTO;
-import com.mfc.infra.utils.ConstantMessages;
+import com.mfc.infra.utils.ArqConstantMessages;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
@@ -18,7 +18,7 @@ public class Customer {
     private Long id;
 
     @Column
-    @NotEmpty(message = "{" + ConstantMessages.NOT_EMPTY_LET + "}")
+    @NotEmpty(message = "{" + ArqConstantMessages.NOT_EMPTY_LET + "}")
     private String country;
 
     @Column

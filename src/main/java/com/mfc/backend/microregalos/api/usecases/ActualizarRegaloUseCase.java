@@ -1,7 +1,7 @@
 package com.mfc.backend.microregalos.api.usecases;
 
 import com.mfc.backend.microregalos.api.dto.RegaloDTO;
-import com.mfc.backend.microregalos.domain.service.RegaloServicePort;
+import com.mfc.backend.microregalos.domain.service.RegaloServicePortArq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class ActualizarRegaloUseCase {
 
     @Autowired
-    RegaloServicePort regaloServicePort;
+    RegaloServicePortArq regaloServicePort;
 
     public RegaloDTO ejecutar(RegaloDTO regaloDTO) {
         return regaloServicePort.actualizar(regaloDTO);

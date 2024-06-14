@@ -6,7 +6,7 @@ import java.util.List;
 import com.mfc.backend.microclientes.api.dto.CustomerDTO;
 import com.mfc.backend.microclientes.api.usecases.BorrarCustomerUseCase;
 import com.mfc.backend.microclientes.api.usecases.ConsultasCustomerUseCase;
-import com.mfc.infra.controller.BaseRestController;
+import com.mfc.infra.controller.ArqBaseRestController;
 import com.mfc.backend.microclientes.api.usecases.ActualizarCustomerUseCase;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "customer")
-public class CustomerAPI extends BaseRestController {
+public class CustomerAPI extends ArqBaseRestController {
 
     @Autowired
     ActualizarCustomerUseCase actualizarCustomerUseCase;

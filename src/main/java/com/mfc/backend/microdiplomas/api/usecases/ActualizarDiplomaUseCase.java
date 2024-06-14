@@ -1,7 +1,7 @@
 package com.mfc.backend.microdiplomas.api.usecases;
 
-import com.mfc.backend.microdiplomas.api.dto.DiplomaDTO;
-import com.mfc.backend.microdiplomas.domain.service.DiplomaServicePort;
+import com.mfc.backend.microdiplomas.api.dto.DiplomaDTOArq;
+import com.mfc.backend.microdiplomas.domain.service.DiplomaServicePortArq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 public class ActualizarDiplomaUseCase {
 
     @Autowired
-    DiplomaServicePort diplomaCommandServicePort;
+    DiplomaServicePortArq diplomaCommandServicePort;
 
-    public DiplomaDTO ejecutar(DiplomaDTO diplomaDTO) {
+    public DiplomaDTOArq ejecutar(DiplomaDTOArq diplomaDTO) {
         return diplomaCommandServicePort.actualizar(diplomaDTO);
     }
 

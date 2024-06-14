@@ -1,7 +1,7 @@
 package com.mfc.backend.microclientes.api.usecases;
 
 import com.mfc.backend.microclientes.api.dto.CustomerDTO;
-import com.mfc.backend.microclientes.domain.service.CustomerRelationalServicePort;
+import com.mfc.backend.microclientes.domain.service.CustomerArqRelationalServicePort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,7 @@ import java.util.List;
 public class ConsultasCustomerUseCase {
 
     @Autowired
-    CustomerRelationalServicePort customerCommandServicePort;
+    CustomerArqRelationalServicePort customerCommandServicePort;
 
     public List<CustomerDTO> ejecutar(){
         return this.customerCommandServicePort.buscarTodos();

@@ -1,8 +1,7 @@
 package com.mfc.backend.microdiplomas.domain.model;
 
-import com.mfc.backend.microdiplomas.api.dto.DiplomaDTO;
+import com.mfc.backend.microdiplomas.api.dto.DiplomaDTOArq;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Entity
@@ -27,7 +26,7 @@ public class Diploma {
 
     public Diploma() {}
 
-    public Diploma(DiplomaDTO diplomaDTO) {
+    public Diploma(DiplomaDTOArq diplomaDTO) {
         this.id = diplomaDTO.getId();
         this.idcustomer = diplomaDTO.getIdcustomer();
         this.name = diplomaDTO.getName();

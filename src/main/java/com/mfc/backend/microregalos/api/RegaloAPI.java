@@ -4,8 +4,7 @@ import com.mfc.backend.microregalos.api.dto.RegaloDTO;
 import com.mfc.backend.microregalos.api.usecases.ActualizarRegaloUseCase;
 import com.mfc.backend.microregalos.api.usecases.BorrarTodosLosRegalosUseCase;
 import com.mfc.backend.microregalos.api.usecases.ConsultasRegalosUseCase;
-import com.mfc.backend.microregalos.domain.model.Regalo;
-import com.mfc.infra.controller.BaseRestController;
+import com.mfc.infra.controller.ArqBaseRestController;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -15,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "regalo")
-public class RegaloAPI extends BaseRestController {
+public class RegaloAPI extends ArqBaseRestController {
     @Autowired
     ActualizarRegaloUseCase actualizarRegaloUseCase;
     @Autowired

@@ -1,7 +1,7 @@
 package com.mfc.backend.microdiplomas.domain.repository;
 
 import com.mfc.backend.microdiplomas.domain.model.Diploma;
-import com.mfc.infra.output.port.GenericRepositoryPort;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface DiplomaCommandRepository extends GenericRepositoryPort<Diploma, Long> {
+public interface DiplomaCommandRepository extends JpaRepository<Diploma, Long> {
 
 
 

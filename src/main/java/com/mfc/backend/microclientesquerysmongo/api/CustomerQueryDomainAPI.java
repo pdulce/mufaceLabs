@@ -4,7 +4,7 @@ package com.mfc.backend.microclientesquerysmongo.api;
 import com.mfc.backend.microclientesquerysmongo.api.dto.CustomerDocumentDTO;
 import com.mfc.backend.microclientesquerysmongo.api.usecases.QueriesOptimizedUseCase;
 import com.mfc.backend.microclientesquerysmongo.domain.model.CustomerDocument;
-import com.mfc.infra.controller.BaseRestController;
+import com.mfc.infra.controller.ArqBaseRestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "customersquery")
-public class CustomerQueryDomainAPI extends BaseRestController {
+public class CustomerQueryDomainAPI extends ArqBaseRestController {
     @Autowired
     QueriesOptimizedUseCase queriesOptimizedUseCase;
 
