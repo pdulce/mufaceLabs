@@ -30,13 +30,13 @@ spring:
     username: test
     password: test
 
-  # query domain
+  # event domain
   redis:
     host: 192.168.1.137
     password: mypass
     port: 6379
 
-  # event domain
+  # query domain
   data:
     mongodb:
       host: 192.168.1.137
