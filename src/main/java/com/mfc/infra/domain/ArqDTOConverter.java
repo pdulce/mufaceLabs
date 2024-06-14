@@ -1,8 +1,6 @@
 package com.mfc.infra.domain;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ArqDTOConverter {
 
@@ -51,27 +49,11 @@ public class ArqDTOConverter {
             } else {
                 //TODO
             }
-
             return entity;
         } catch (Exception e) {
             throw new RuntimeException("Error converting DTO to entity", e);
         }
     }
 
-    /*public static <T, IArqDTO> List<IArqDTO> convertToDTOList(List<T> entities, Class<IArqDTO> dtoClass) {
-        List<IArqDTO> dtoList = new ArrayList<>();
-        for (T entity : entities) {
-            dtoList.add(convertToDTO(entity, dtoClass));
-        }
-        return dtoList;
-    }
-
-    public static <T, IArqDTO> List<T> convertToEntityList(List<IArqDTO> dtoList, Class<T> entityClass) {
-        List<T> entityList = new ArrayList<>();
-        for (IArqDTO dto : dtoList) {
-            entityList.add(convertToEntity(dto, entityClass));
-        }
-        return entityList;
-    }*/
 }
 
