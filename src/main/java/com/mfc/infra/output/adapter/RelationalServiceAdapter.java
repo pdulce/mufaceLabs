@@ -47,7 +47,14 @@ public abstract class RelationalServiceAdapter<T, D, ID> implements RelationalSe
     protected Class<D> getClassOfDTO() {
         Class<D> entityClass = (Class<D>) ((ParameterizedType) getClass()
                 .getGenericSuperclass())
-                .getActualTypeArguments()[0];
+                .getActualTypeArguments()[1];
+        return entityClass;
+    }
+
+    protected Class<ID> getClassOfID() {
+        Class<ID> entityClass = (Class<ID>) ((ParameterizedType) getClass()
+                .getGenericSuperclass())
+                .getActualTypeArguments()[2];
         return entityClass;
     }
 
