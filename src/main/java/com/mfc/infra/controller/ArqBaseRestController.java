@@ -1,22 +1,19 @@
 package com.mfc.infra.controller;
 
-import com.mfc.infra.output.port.ArqSagaOrchestratorPort;
 import com.mfc.infra.utils.ArqConstantMessages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-@RestController
 public abstract class ArqBaseRestController {
 
     Logger logger = LoggerFactory.getLogger(ArqBaseRestController.class);
 
-    @Autowired(required=false)
-    protected ArqSagaOrchestratorPort orchestratorManager;
+    /*@Autowired(required=false)
+    protected ArqSagaOrchestratorPort orchestratorManager;*/
 
     @Autowired
     protected MessageSource messageSource;
@@ -41,7 +38,7 @@ public abstract class ArqBaseRestController {
     }
 
     public String saludar() {
-        logger.info("orchestratorManager charged ? " +  (this.orchestratorManager != null));
+        //logger.info("orchestratorManager charged ? " +  (this.orchestratorManager != null));
         String message = messageSource.getMessage(ArqConstantMessages.GREETING, null, getLocale(CASTELLANO));
         logger.info("mapLocales charged ? " +  mapLocales.isEmpty());
         return message == null ? messageSource.getMessage(ArqConstantMessages.ERROR_NOT_FOUND, null,

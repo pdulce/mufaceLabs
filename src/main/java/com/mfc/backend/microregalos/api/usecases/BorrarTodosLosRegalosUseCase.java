@@ -1,6 +1,6 @@
 package com.mfc.backend.microregalos.api.usecases;
 
-import com.mfc.backend.microregalos.domain.service.RegaloServicePortArq;
+import com.mfc.backend.microregalos.domain.service.RegaloServicePort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 public class BorrarTodosLosRegalosUseCase {
 
     @Autowired
-    RegaloServicePortArq regaloServicePort;
+    RegaloServicePort regaloServicePort;
 
     public void ejecutar() {
         regaloServicePort.borrar();

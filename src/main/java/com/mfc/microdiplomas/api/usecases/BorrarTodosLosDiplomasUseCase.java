@@ -1,4 +1,4 @@
-package com.mfc.backend.microdiplomas.api.usecases;
+package com.mfc.microdiplomas.api.usecases;
 
 import com.mfc.microdiplomas.domain.service.DiplomaServicePort;
 import org.springframework.beans.factory.annotation.Autowired;

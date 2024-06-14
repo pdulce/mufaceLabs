@@ -1,24 +1,28 @@
 package com.mfc.infra.output.port;
 
+import com.mfc.infra.dto.IArqDTO;
+
 import java.util.List;
 
 
-public interface ArqRelationalServicePort<T, IDTO, ID> {
+public interface ArqRelationalServicePort<T, D extends IArqDTO, ID> {
 
-    IDTO crear(IDTO entity);
+    D crear(D entity);
 
-    IDTO actualizar(IDTO entity);
+    D actualizar(D entity);
 
-    void borrar(IDTO entity);
+    int borrar(D entity);
 
-    void borrar(List<IDTO> entities);
+    int borrar(List<D> entities);
     void borrar();
 
-    IDTO buscarPorId(ID id);
+    D buscarPorId(ID id);
 
-    List<IDTO> buscarTodos();
+    List<D> buscarTodos();
 
-    List<IDTO> buscarPorCampoValor(String fieldName, Object fieldValue);
+    List<D> buscarCoincidenciasEstricto(D filterObject);
+
+    List<D> buscarCoincidenciasNoEstricto(D filterObject);
 
     String getDocumentEntityClassname();
 

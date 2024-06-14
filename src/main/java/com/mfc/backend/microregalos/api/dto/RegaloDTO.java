@@ -1,11 +1,13 @@
 package com.mfc.backend.microregalos.api.dto;
 
+import com.mfc.infra.dto.ArqAbstractDTO;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 @Data
-public class RegaloDTO {
+public class RegaloDTO extends ArqAbstractDTO {
 
     private Long id;
 
@@ -19,13 +21,9 @@ public class RegaloDTO {
 
     public RegaloDTO() {}
 
-    public RegaloDTO(Long id, Long customerid, String colorCaja, String textotarjeta, BigDecimal valorBono) {
-        this.id = id;
-        this.customerid = customerid;
-        this.color_caja = colorCaja;
-        this.texto_tarjeta = textotarjeta;
-        this.valor_bono_regalo = valorBono;
+
+    @Override
+    public Map<String, String> getMapaConversion() {
+        return null;
     }
-
-
 }

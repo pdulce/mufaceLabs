@@ -1,4 +1,4 @@
-package com.mfc.backend.microdiplomas.domain.model;
+package com.mfc.microdiplomas.domain.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -24,7 +24,6 @@ public class Diploma {
     private String region;
 
     public Diploma() {}
-
 
 
 }

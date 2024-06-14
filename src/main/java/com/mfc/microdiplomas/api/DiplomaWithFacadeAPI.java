@@ -1,8 +1,8 @@
-package com.mfc.backend.microdiplomas.api;
+package com.mfc.microdiplomas.api;
 
-import com.mfc.infra.controller.ArqBaseRestController;
 import com.mfc.microdiplomas.api.dto.DiplomaDTO;
 import com.mfc.microdiplomas.api.usecases.DiplomaUseCasesFacade;
+import com.mfc.infra.controller.ArqBaseRestController;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

@@ -1,7 +1,7 @@
 package com.mfc.backend.microregalos.api.usecases;
 
 import com.mfc.backend.microregalos.api.dto.RegaloDTO;
-import com.mfc.backend.microregalos.domain.service.RegaloServicePortArq;
+import com.mfc.backend.microregalos.domain.service.RegaloServicePort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,7 @@ import java.util.List;
 public class ConsultasRegalosUseCase {
 
     @Autowired
-    RegaloServicePortArq regaloServicePort;
+    RegaloServicePort regaloServicePort;
 
     public List<RegaloDTO> ejecutar(Long customerId) {
         return this.regaloServicePort.buscarPorCampoValor("customerId", customerId);

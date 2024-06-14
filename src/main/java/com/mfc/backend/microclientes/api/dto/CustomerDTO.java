@@ -1,10 +1,13 @@
 package com.mfc.backend.microclientes.api.dto;
 
+import com.mfc.infra.dto.ArqAbstractDTO;
 import lombok.Data;
+
+import java.util.Map;
 
 
 @Data
-public class CustomerDTO {
+public class CustomerDTO extends ArqAbstractDTO {
 
     private Long id;
 
@@ -13,10 +16,10 @@ public class CustomerDTO {
     private String name;
 
     public CustomerDTO() {}
-    public CustomerDTO(Long id, String name, String country) {
-        this.id = id;
-        this.name = name;
-        this.country = country;
-    }
 
+
+    @Override
+    public Map<String, String> getMapaConversion() {
+        return null;
+    }
 }
